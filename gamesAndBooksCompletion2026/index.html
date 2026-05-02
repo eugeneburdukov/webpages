@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Media Log</title>
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #2d3436;
+            --accent-game: #6c5ce7;
+            --accent-book: #00b894;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #1e272e;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .line {
+            flex-grow: 1;
+            height: 1px;
+            background: #dfe6e9;
+            margin-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        /* UPDATED: Matches 392 x 500 dimensions */
+        .cover {
+            width: 100%;
+            aspect-ratio: 392 / 500;
+            background: #f1f1f1; /* Light grey placeholder background */
+            object-fit: cover; /* Change to 'contain' if you don't want any cropping at all */
+            border-bottom: 1px solid #f1f1f1;
+            display: block;
+        }
+
+        .info {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        .info strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .tag-game { background: var(--accent-game); }
+        .tag-book { background: var(--accent-book); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Finished in 2026</h1>
+        <p>A gallery of my completed adventures and stories.</p>
+    </header>
+
+    <!-- GAMES SECTION -->
+    <div class="section-header">
+        <h2 style="color: var(--accent-game)">Games</h2>
+        <div class="line"></div>
+    </div>
+    
+    <div class="grid">
+                <div class="card">
+            <img src="images/re_requiem.jpg" alt="Resident Evil Requiem" class="cover">
+            <div class="info">
+                <span class="tag tag-game">GAME</span>
+                <strong>Resident Evil Requiem</strong>
+            </div>
+        </div>
+        <div class="card">
+            <img src="images/alan_wake_2.jpg" alt="Alan Wake 2" class="cover">
+            <div class="info">
+                <span class="tag tag-game">GAME</span>
+                <strong>Alan Wake 2</strong>
+            </div>
+        </div>
+        <div class="card">
+            <img src="images/astrobot.jpg" alt="Astrobot" class="cover">
+            <div class="info">
+                <span class="tag tag-game">GAME</span>
+                <strong>Astrobot</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKS SECTION -->
+    <div class="section-header">
+        <h2 style="color: var(--accent-book)">Books</h2>
+        <div class="line"></div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <img src="images/monte_cristo.jpg" alt="Граф Монте-Кристо" class="cover">
+            <div class="info">
+                <span class="tag tag-book">BOOK</span>
+                <strong>Граф Монте-Кристо</strong>
+            </div>
+        </div>
+        <div class="card">
+            <img src="images/wuthering_heights.jpg" alt="Грозовой перевал" class="cover">
+            <div class="info">
+                <span class="tag tag-book">BOOK</span>
+                <strong>Грозовой перевал</strong>
+            </div>
+        </div>
+        <div class="card">
+            <img src="images/shvejk.jpg" alt="Похождения бравого солдата Швейка" class="cover">
+            <div class="info">
+                <span class="tag tag-book">BOOK</span>
+                <strong>Похождения бравого солдата Швейка</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
