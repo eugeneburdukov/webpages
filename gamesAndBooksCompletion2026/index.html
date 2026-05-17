@@ -246,7 +246,8 @@
                 </div>
             </div>
         </div>
-                <div class="card">
+
+        <div class="card">
             <img src="images/reanimal.jpg" alt="Reanimal" class="cover">
             <div class="info">
                 <span class="tag tag-game">GAME</span>
@@ -254,6 +255,18 @@
                 <div class="card-meta">
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     <span class="duration-val">8h</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/sh2.jpg" alt="Silent Hill 2" class="cover">
+            <div class="info">
+                <span class="tag tag-game">GAME</span>
+                <strong>Silent Hill 2</strong>
+                <div class="card-meta">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span class="duration-val">10h</span>
                 </div>
             </div>
         </div>
@@ -305,9 +318,7 @@
 </div>
 
 <script>
-    // Automate the sums so you don't have to do the math!
     function calculateTotals() {
-        // Calculate Game Hours
         const gameElements = document.querySelectorAll('.duration-val');
         let totalHours = 0;
         gameElements.forEach(el => {
@@ -315,7 +326,6 @@
         });
         document.getElementById('total-game-time').innerText = totalHours + 'h';
 
-        // Calculate Book Pages
         const bookElements = document.querySelectorAll('.page-val');
         let totalPages = 0;
         bookElements.forEach(el => {
@@ -324,7 +334,6 @@
         document.getElementById('total-pages').innerText = totalPages.toLocaleString();
     }
 
-    // Run on load
     window.onload = calculateTotals;
 </script>
 
