@@ -12,6 +12,7 @@
             --text-light: #636e72;
             --accent-game: #6c5ce7;
             --accent-book: #00b894;
+            --accent-steelbook: #e17055;
             --shadow: 0 4px 6px rgba(0,0,0,0.05);
             --border: #dfe6e9;
         }
@@ -39,6 +40,11 @@
             font-size: 2.5rem;
             margin-bottom: 10px;
             color: #1e272e;
+        }
+
+        header p {
+            color: var(--text-light);
+            margin: 0;
         }
 
         /* NAVIGATION TABS */
@@ -90,6 +96,7 @@
 
         .stat-card.games { border-color: var(--accent-game); }
         .stat-card.books { border-color: var(--accent-book); }
+        .stat-card.steelbooks { border-color: var(--accent-steelbook); }
 
         .stat-value {
             display: block;
@@ -133,6 +140,7 @@
         }
 
         .card {
+            position: relative; /* Required for the stretched link */
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
@@ -140,15 +148,26 @@
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
+            color: var(--text);
         }
 
         .card:hover {
             transform: translateY(-8px);
         }
 
-        /* JavaScript toggles this to hide non-matching years */
-        .card.hidden {
-            display: none;
+        /* STRETCHED LINK TRICK */
+        .stretched-link::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         .cover {
@@ -193,6 +212,7 @@
 
         .tag-game { background: var(--accent-game); }
         .tag-book { background: var(--accent-book); }
+        .tag-steelbook { background: var(--accent-steelbook); }
 
         .sub-tag {
             font-size: 0.65rem;
@@ -207,6 +227,7 @@
         .card-meta {
             display: flex;
             align-items: center;
+            justify-content: space-between; /* Spreads out the meta info and the blu-ray link */
             margin-top: auto;
             padding-top: 10px;
             border-top: 1px dashed #eee;
@@ -215,13 +236,32 @@
             font-weight: 500;
         }
 
-        .card-meta svg {
+        .meta-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .meta-left svg {
             width: 14px;
             height: 14px;
             margin-right: 6px;
             stroke: currentColor;
             stroke-width: 2.5;
             fill: none;
+        }
+
+        /* BLU-RAY TEXT LINK */
+        .bluray-link {
+            position: relative;
+            z-index: 2; /* Puts it ABOVE the stretched link so it can be clicked directly */
+            color: var(--accent-steelbook);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .bluray-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -230,16 +270,17 @@
 <div class="container">
     <header>
         <h1 id="page-title">Finished in 2026</h1>
-        <p>A gallery of my completed adventures and stories.</p>
+        <p id="page-subtitle">A gallery of my completed adventures and stories.</p>
     </header>
 
     <div class="nav-tabs">
-        <button class="tab-btn" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025')">2022-2025</button>
-        <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026')">2026</button>
+        <button class="tab-btn" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">2022-2025</button>
+        <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
+        <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Steelbooks</button>
     </div>
 
-    <!-- STATS SECTION -->
-    <div class="stats-bar">
+    <!-- STATS SECTION FOR GAMES & BOOKS -->
+    <div class="stats-bar" id="stats-games-books">
         <div class="stat-card games">
             <span class="stat-value" id="game-count">0</span>
             <span class="stat-label">Games Completed</span>
@@ -258,453 +299,668 @@
         </div>
     </div>
 
-    <!-- GAMES SECTION -->
-    <div class="section-header">
-        <h2 style="color: var(--accent-game)">Games</h2>
-        <div class="line"></div>
+    <!-- STATS SECTION FOR STEELBOOKS -->
+    <div class="stats-bar hidden" id="stats-steelbooks">
+        <div class="stat-card steelbooks">
+            <span class="stat-value" id="steelbook-count">0</span>
+            <span class="stat-label">Steelbooks Collected</span>
+        </div>
+        <div class="stat-card steelbooks">
+            <span class="stat-value">4K UHD</span>
+            <span class="stat-label">Primary Format</span>
+        </div>
     </div>
-    
-    <div class="grid">
-        <!-- 2026 Items -->
-        <div class="card" data-year="2026">
-            <img src="images/re_requiem.jpg" alt="Resident Evil Requiem" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">Digital</span>
+
+    <!-- GAMES & BOOKS CONTENT CONTAINER -->
+    <div id="section-games-books">
+        <!-- GAMES SECTION -->
+        <div class="section-header">
+            <h2 style="color: var(--accent-game)">Games</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="grid">
+            <!-- 2026 Items -->
+            <div class="card" data-year="2026">
+                <img src="images/re_requiem.jpg" alt="Resident Evil Requiem" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Resident Evil Requiem</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">13h</span>
+                        </div>
+                    </div>
                 </div>
-                <strong>Resident Evil Requiem</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">13h</span>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/alan_wake_2.jpg" alt="Alan Wake 2" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">Physical</span>
+                    </div>
+                    <strong>Alan Wake 2</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">30h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/astrobot.jpg" alt="Astrobot" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">Physical</span>
+                    </div>
+                    <strong>Astrobot</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">26h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/revillage.jpg" alt="Resident Evil Village" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Resident Evil Village</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">11h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/reanimal.jpg" alt="Reanimal" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Reanimal</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">8h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/sh2.jpg" alt="Silent Hill 2" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">Physical</span>
+                    </div>
+                    <strong>Silent Hill 2</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">18h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/soma.jpg" alt="Soma" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Soma</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">12h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/first_light.jpg" alt="007 First Light" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">PHYSICAL</span>
+                    </div>
+                    <strong>007 First Light</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">23h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2026">
+                <img src="images/lego_batman_ldk.png" alt="Lego Batman: Legacy of the Dark Knight" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PS5</span>
+                        <span class="sub-tag">PHYSICAL</span>
+                    </div>
+                    <strong>Lego Batman: Legacy of the Dark Knight</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">15h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Archive Games -->
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/residentevil4.jpg" alt="Resident Evil 4 Remake" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Resident Evil 4 Remake</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">13.2h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/godofwarragnarok.jpg" alt="God of War: Ragnarok" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC</span>
+                        <span class="sub-tag">Free</span>
+                    </div>
+                    <strong>God of War: Ragnarok</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">30h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/ittakestwo.jpg" alt="It Takes Two" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>It Takes Two</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">35.9h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/portal2.jpg" alt="Portal 2" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Portal 2</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">14.1h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/IndianaJonesandtheGreatCircle.jpg" alt="Indiana Jones and the Great Circle" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC</span>
+                        <span class="sub-tag">Free</span>
+                    </div>
+                    <strong>Indiana Jones and the Great Circle</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">30h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/Warhammer40000DawnofWarSoulstorm.jpg" alt="Warhammer 40,000: Dawn of War - Soulstorm" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Warhammer 40k: Dawn of War - Soulstorm</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">310.3h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/Warhammer40000SpaceMarine2.jpg" alt="Warhammer 40,000: Space Marine 2" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Warhammer 40k: Space Marine 2</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">10.1h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/awayout.jpg" alt="A Way Out" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>A Way Out</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">6.6h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/modernwarfare.jpg" alt="Call of Duty: Modern Warfare" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Call of Duty: Modern Warfare Remastered</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">8.8h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/modernwarfare2.jpg" alt="Call of Duty: Modern Warfare 2" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Epic</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Call of Duty: Modern Warfare 2</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">0h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/modernwarfare3.jpg" alt="Call of Duty: Modern Warfare 3" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Epic</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Call of Duty: Modern Warfare 3</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">0h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/riskofrain2.jpg" alt="Risk of Rain 2" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Risk of Rain 2</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">36.3h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/styx.jpg" alt="Styx: Master of Shadows" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Styx: Master of Shadows</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">28.2h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/fortnite.jpg" alt="Fortnite" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Epic</span>
+                        <span class="sub-tag">Digital Free</span>
+                    </div>
+                    <strong>Fortnite</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">0h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-year="2022-2025">
+                <img src="images/archive-2022-2025/splitfiction.jpg" alt="Split Fiction" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-game">GAME</span>
+                        <span class="sub-tag">PC-Steam</span>
+                        <span class="sub-tag">Digital</span>
+                    </div>
+                    <strong>Split Fiction</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="duration-val">23.1h</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="card" data-year="2026">
-            <img src="images/alan_wake_2.jpg" alt="Alan Wake 2" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">Physical</span>
-                </div>
-                <strong>Alan Wake 2</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">30h</span>
-                </div>
-            </div>
+        <!-- BOOKS SECTION -->
+        <div class="section-header">
+            <h2 style="color: var(--accent-book)">Books</h2>
+            <div class="line"></div>
         </div>
 
-        <div class="card" data-year="2026">
-            <img src="images/astrobot.jpg" alt="Astrobot" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">Physical</span>
-                </div>
-                <strong>Astrobot</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">26h</span>
+        <div class="grid">
+            <!-- 2026 Items -->
+            <div class="card" data-year="2026">
+                <img src="images/monte_cristo.jpg" alt="Граф Монте-Кристо" class="cover">
+                <div class="info">
+                    <span class="tag tag-book">BOOK</span>
+                    <strong>Граф Монте-Кристо</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                            <span class="page-val">1200 pages</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card" data-year="2026">
-            <img src="images/revillage.jpg" alt="Resident Evil Village" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Resident Evil Village</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">11h</span>
+            <div class="card" data-year="2026">
+                <img src="images/wuthering_heights.jpg" alt="Грозовой перевал" class="cover">
+                <div class="info">
+                    <span class="tag tag-book">BOOK</span>
+                    <strong>Грозовой перевал</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                            <span class="page-val">400 pages</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card" data-year="2026">
-            <img src="images/reanimal.jpg" alt="Reanimal" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Reanimal</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">8h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2026">
-            <img src="images/sh2.jpg" alt="Silent Hill 2" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">Physical</span>
-                </div>
-                <strong>Silent Hill 2</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">18h</span>
+            <div class="card" data-year="2026">
+                <img src="images/shvejk.jpg" alt="Похождения бравого солдата Швейка" class="cover">
+                <div class="info">
+                    <span class="tag tag-book">BOOK</span>
+                    <strong>Похождения бравого солдата Швейка</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                            <span class="page-val">750 pages</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-                <div class="card" data-year="2026">
-            <img src="images/soma.jpg" alt="Soma" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Soma</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">12h</span>
-                </div>
-            </div>
-        </div>
 
                         <div class="card" data-year="2026">
-            <img src="images/first_light.jpg" alt="007 First Light" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">PHYSICAL</span>
-                </div>
-                <strong>007 First Light</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">23h</span>
+                <img src="images/The_Code_of_the_Woosters.jpg" alt="Фамильная честь Вустеров" class="cover">
+                <div class="info">
+                    <span class="tag tag-book">BOOK</span>
+                    <strong>Фамильная честь Вустеров</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                            <span class="page-val">320 pages</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-                                <div class="card" data-year="2026">
-            <img src="images/lego_batman_ldk.png" alt="Lego Batman: Legacy of the Dark Knight" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PS5</span>
-                    <span class="sub-tag">PHYSICAL</span>
-                </div>
-                <strong>Lego Batman: Legacy of the Dark Knight</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">15h</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Lenovo LOQ Games under 2022-2025 Archive -->
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/residentevil4.jpg" alt="Resident Evil 4 Remake" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Resident Evil 4 Remake</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">13.2h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/godofwarragnarok.jpg" alt="God of War: Ragnarok" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC</span>
-                    <span class="sub-tag">Free</span>
-                </div>
-                <strong>God of War: Ragnarok</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">30h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/ittakestwo.jpg" alt="It Takes Two" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>It Takes Two</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">35.9h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/portal2.jpg" alt="Portal 2" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Portal 2</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">14.1h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/IndianaJonesandtheGreatCircle.jpg" alt="Indiana Jones and the Great Circle" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC</span>
-                    <span class="sub-tag">Free</span>
-                </div>
-                <strong>Indiana Jones and the Great Circle</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">30h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/Warhammer40000DawnofWarSoulstorm.jpg" alt="Warhammer 40,000: Dawn of War - Soulstorm" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Warhammer 40k: Dawn of War - Soulstorm</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">310.3h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/Warhammer40000SpaceMarine2.jpg" alt="Warhammer 40,000: Space Marine 2" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Warhammer 40k: Space Marine 2</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">10.1h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/awayout.jpg" alt="A Way Out" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>A Way Out</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">6.6h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/modernwarfare.jpg" alt="Call of Duty: Modern Warfare" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Call of Duty: Modern Warfare Remastered</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">8.8h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/modernwarfare2.jpg" alt="Call of Duty: Modern Warfare 2" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Epic</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Call of Duty: Modern Warfare 2</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">0h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/modernwarfare3.jpg" alt="Call of Duty: Modern Warfare 3" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Epic</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Call of Duty: Modern Warfare 3</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">0h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/riskofrain2.jpg" alt="Risk of Rain 2" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Risk of Rain 2</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">36.3h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/styx.jpg" alt="Styx: Master of Shadows" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Styx: Master of Shadows</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">28.2h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/fortnite.jpg" alt="Fortnite" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Epic</span>
-                    <span class="sub-tag">Digital Free</span>
-                </div>
-                <strong>Fortnite</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">0h</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" data-year="2022-2025">
-            <img src="images/archive-2022-2025/splitfiction.jpg" alt="Split Fiction" class="cover">
-            <div class="info">
-                <div class="tag-container">
-                    <span class="tag tag-game">GAME</span>
-                    <span class="sub-tag">PC-Steam</span>
-                    <span class="sub-tag">Digital</span>
-                </div>
-                <strong>Split Fiction</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="duration-val">23.1h</span>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- BOOKS SECTION -->
-    <div class="section-header">
-        <h2 style="color: var(--accent-book)">Books</h2>
-        <div class="line"></div>
-    </div>
-
-    <div class="grid">
-        <!-- 2026 Items -->
-        <div class="card" data-year="2026">
-            <img src="images/monte_cristo.jpg" alt="Граф Монте-Кристо" class="cover">
-            <div class="info">
-                <span class="tag tag-book">BOOK</span>
-                <strong>Граф Монте-Кристо</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    <span class="page-val">1200 pages</span>
-                </div>
-            </div>
+    <!-- STEELBOOKS SECTION CONTAINER -->
+    <div id="section-steelbooks" class="hidden">
+        <div class="section-header">
+            <h2 style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
+            <div class="line"></div>
         </div>
 
-        <div class="card" data-year="2026">
-            <img src="images/wuthering_heights.jpg" alt="Грозовой перевал" class="cover">
-            <div class="info">
-                <span class="tag tag-book">BOOK</span>
-                <strong>Грозовой перевал</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    <span class="page-val">400 pages</span>
+        <div class="grid">
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="Batman Begins"></a>
+                <img src="images/steelbooks/batman_begins.jpg" alt="Batman Begins" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>Batman Begins</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card" data-year="2026">
-            <img src="images/shvejk.jpg" alt="Похождения бравого солдата Швейка" class="cover">
-            <div class="info">
-                <span class="tag tag-book">BOOK</span>
-                <strong>Похождения бравого солдата Швейка</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    <span class="page-val">750 pages</span>
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="The Dark Knight"></a>
+                <img src="images/steelbooks/dark_kniight.jpg" alt="The Dark Knight" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>The Dark Knight</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Zavvi Exclusive SteelBook </span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Archive Book Example -->
-        <div class="card" data-year="2022-2025">
-            <img src="images/1984.jpg" alt="1984" class="cover">
-            <div class="info">
-                <span class="tag tag-book">BOOK</span>
-                <strong>1984</strong>
-                <div class="card-meta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    <span class="page-val">328 pages</span>
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="The Dark Knight Rises"></a>
+                <img src="images/steelbooks/dark_knight_rises.jpg" alt="The Dark Knight Rises" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>The Dark Knight Rises</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Zavvi Exclusive SteelBook </span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/The-Prestige-4K-Blu-ray/400574/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="The Prestige"></a>
+                <img src="images/steelbooks/the_prestige.jpg" alt="The Prestige" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>The Prestige</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Limited Edition</span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/The-Prestige-4K-Blu-ray/400574/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/Inception-4K-Blu-ray/385817/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="Inception"></a>
+                <img src="images/steelbooks/inception.jpg" alt="Inception" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>Inception</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Limited Edition</span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/Inception-4K-Blu-ray/385817/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/Dunkirk-4K-Blu-ray/235808/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="Dunkirk"></a>
+                <img src="images/steelbooks/dunkirk.jpg" alt="Dunkirk" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>Dunkirk</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/Dunkirk-4K-Blu-ray/235808/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <a href="https://www.blu-ray.com/movies/Interstellar-4K-Blu-ray/277619/" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="Interstellar"></a>
+                <img src="images/steelbooks/interstellar.jpg" alt="Interstellar" class="cover">
+                <div class="info">
+                    <div class="tag-container">
+                        <span class="tag tag-steelbook">STEELBOOK</span>
+                        <span class="sub-tag">4K UHD</span>
+                    </div>
+                    <strong>Interstellar</strong>
+                    <div class="card-meta">
+                        <div class="meta-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
+                            <span class="steelbook-item">Best Buy Exclusive SteelBook</span>
+                        </div>
+                        <a href="https://www.blu-ray.com/movies/Interstellar-4K-Blu-ray/277619/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -712,33 +968,50 @@
 </div>
 
 <script>
-    function switchPage(year, headerTitle) {
+    function switchPage(page, headerTitle, subtitle) {
         document.getElementById('page-title').innerText = headerTitle;
+        document.getElementById('page-subtitle').innerText = subtitle;
 
         const buttons = document.querySelectorAll('.tab-btn');
         buttons.forEach(btn => {
-            if (btn.getAttribute('data-page') === year) {
+            if (btn.getAttribute('data-page') === page) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
         });
 
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            if (card.getAttribute('data-year') === year) {
-                card.classList.remove('hidden');
-            } else {
-                card.classList.add('hidden');
-            }
-        });
+        const gbStats = document.getElementById('stats-games-books');
+        const sbStats = document.getElementById('stats-steelbooks');
+        const gbSection = document.getElementById('section-games-books');
+        const sbSection = document.getElementById('section-steelbooks');
 
-        calculateTotals();
+        if (page === 'steelbooks') {
+            gbStats.classList.add('hidden');
+            sbStats.classList.remove('hidden');
+            gbSection.classList.add('hidden');
+            sbSection.classList.remove('hidden');
+            calculateSteelbookTotals();
+        } else {
+            gbStats.classList.remove('hidden');
+            sbStats.classList.add('hidden');
+            gbSection.classList.remove('hidden');
+            sbSection.classList.add('hidden');
+
+            const cards = document.querySelectorAll('#section-games-books .card');
+            cards.forEach(card => {
+                if (card.getAttribute('data-year') === page) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            calculateTotals();
+        }
     }
 
     function calculateTotals() {
-        // --- GAMES COUNT & HOURS ---
-        const activeGames = document.querySelectorAll('.card:not(.hidden) .duration-val');
+        const activeGames = document.querySelectorAll('#section-games-books .card:not(.hidden) .duration-val');
         let totalHours = 0;
         activeGames.forEach(el => {
             totalHours += parseFloat(el.innerText) || 0;
@@ -747,8 +1020,7 @@
         document.getElementById('game-count').innerText = activeGames.length;
         document.getElementById('total-game-time').innerText = Number(totalHours.toFixed(1)) + 'h';
 
-        // --- BOOKS COUNT & PAGES ---
-        const activeBooks = document.querySelectorAll('.card:not(.hidden) .page-val');
+        const activeBooks = document.querySelectorAll('#section-games-books .card:not(.hidden) .page-val');
         let totalPages = 0;
         activeBooks.forEach(el => {
             totalPages += parseInt(el.innerText.replace(/,/g, '')) || 0;
@@ -758,8 +1030,13 @@
         document.getElementById('total-pages').innerText = totalPages.toLocaleString();
     }
 
+    function calculateSteelbookTotals() {
+        const steelbooks = document.querySelectorAll('#section-steelbooks .card');
+        document.getElementById('steelbook-count').innerText = steelbooks.length;
+    }
+
     window.onload = function() {
-        switchPage('2026', 'Finished in 2026');
+        switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.');
     };
 </script>
 
