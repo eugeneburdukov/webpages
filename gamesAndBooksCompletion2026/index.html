@@ -140,7 +140,7 @@
         }
 
         .card {
-            position: relative; /* Required for the stretched link */
+            position: relative;
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
@@ -155,7 +155,6 @@
             transform: translateY(-8px);
         }
 
-        /* STRETCHED LINK TRICK */
         .stretched-link::after {
             content: "";
             position: absolute;
@@ -193,7 +192,6 @@
             line-height: 1.2;
         }
 
-        /* TAG CONTAINERS */
         .tag-container {
             display: flex;
             flex-wrap: wrap;
@@ -227,7 +225,7 @@
         .card-meta {
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Spreads out the meta info and the blu-ray link */
+            justify-content: space-between;
             margin-top: auto;
             padding-top: 10px;
             border-top: 1px dashed #eee;
@@ -250,10 +248,9 @@
             fill: none;
         }
 
-        /* BLU-RAY TEXT LINK */
         .bluray-link {
             position: relative;
-            z-index: 2; /* Puts it ABOVE the stretched link so it can be clicked directly */
+            z-index: 2;
             color: var(--accent-steelbook);
             text-decoration: none;
             font-size: 0.75rem;
@@ -262,6 +259,18 @@
 
         .bluray-link:hover {
             text-decoration: underline;
+        }
+
+        .price-container {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #b2bec3;
+        }
+
+        .price-usd {
+            font-size: 0.75rem;
+            font-weight: normal;
         }
     </style>
 </head>
@@ -302,11 +311,19 @@
     <!-- STATS SECTION FOR STEELBOOKS -->
     <div class="stats-bar hidden" id="stats-steelbooks">
         <div class="stat-card steelbooks">
-            <span class="stat-value" id="steelbook-count">0</span>
+            <span class="stat-value" id="steelbook-count" style="font-size: 1.5rem;">0</span>
             <span class="stat-label">Steelbooks Collected</span>
         </div>
         <div class="stat-card steelbooks">
-            <span class="stat-value">4K UHD</span>
+            <span class="stat-value" id="total-spent-uah" style="font-size: 1.5rem;">0 UAH</span>
+            <span class="stat-label">Total Spent (UAH)</span>
+        </div>
+        <div class="stat-card steelbooks">
+            <span class="stat-value" id="total-spent-usd" style="font-size: 1.5rem;">0 US$</span>
+            <span class="stat-label">Total Spent (USD)</span>
+        </div>
+        <div class="stat-card steelbooks">
+            <span class="stat-value" style="font-size: 1.5rem;">4K UHD</span>
             <span class="stat-label">Primary Format</span>
         </div>
     </div>
@@ -320,7 +337,6 @@
         </div>
         
         <div class="grid">
-            <!-- 2026 Items -->
             <div class="card" data-year="2026">
                 <img src="images/re_requiem.jpg" alt="Resident Evil Requiem" class="cover">
                 <div class="info">
@@ -762,7 +778,6 @@
         </div>
 
         <div class="grid">
-            <!-- 2026 Items -->
             <div class="card" data-year="2026">
                 <img src="images/monte_cristo.jpg" alt="Граф Монте-Кристо" class="cover">
                 <div class="info">
@@ -805,7 +820,7 @@
                 </div>
             </div>
 
-                        <div class="card" data-year="2026">
+            <div class="card" data-year="2026">
                 <img src="images/The_Code_of_the_Woosters.jpg" alt="Фамильная честь Вустеров" class="cover">
                 <div class="info">
                     <span class="tag tag-book">BOOK</span>
@@ -818,8 +833,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 
@@ -840,10 +853,13 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>Batman Begins</strong>
+                    <div class="price-container" data-uah="1909.58" data-usd="42.44">
+                        1909,58 UAH <span class="price-usd">(42,44 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
-                            <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
+                            <span class="steelbook-item">Trilogy Part</span>
                         </div>
                         <a href="https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
                     </div>
@@ -859,10 +875,13 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>The Dark Knight</strong>
+                    <div class="price-container" data-uah="1909.58" data-usd="42.44">
+                        1909,58 UAH <span class="price-usd">(42,44 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
-                            <span class="steelbook-item">Zavvi Exclusive SteelBook </span>
+                            <span class="steelbook-item">Trilogy Part</span>
                         </div>
                         <a href="https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
                     </div>
@@ -878,10 +897,13 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>The Dark Knight Rises</strong>
+                    <div class="price-container" data-uah="1909.57" data-usd="42.43">
+                        1909,57 UAH <span class="price-usd">(42,43 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
-                            <span class="steelbook-item">Zavvi Exclusive SteelBook </span>
+                            <span class="steelbook-item">Trilogy Part</span>
                         </div>
                         <a href="https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/" target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
                     </div>
@@ -897,6 +919,9 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>The Prestige</strong>
+                    <div class="price-container" data-uah="2300.00" data-usd="51.11">
+                        2300,00 UAH <span class="price-usd">(51,11 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
@@ -916,6 +941,9 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>Inception</strong>
+                    <div class="price-container" data-uah="1700.00" data-usd="37.78">
+                        1700,00 UAH <span class="price-usd">(37,78 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
@@ -935,6 +963,9 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>Dunkirk</strong>
+                    <div class="price-container" data-uah="1700.00" data-usd="37.78">
+                        1700,00 UAH <span class="price-usd">(37,78 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
@@ -954,6 +985,9 @@
                         <span class="sub-tag">4K UHD</span>
                     </div>
                     <strong>Interstellar</strong>
+                    <div class="price-container" data-uah="2000.00" data-usd="44.44">
+                        2000,00 UAH <span class="price-usd">(44,44 US$)</span>
+                    </div>
                     <div class="card-meta">
                         <div class="meta-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>
@@ -1033,6 +1067,20 @@
     function calculateSteelbookTotals() {
         const steelbooks = document.querySelectorAll('#section-steelbooks .card');
         document.getElementById('steelbook-count').innerText = steelbooks.length;
+
+        let totalUah = 0;
+        let totalUsd = 0;
+
+        steelbooks.forEach(card => {
+            const priceEl = card.querySelector('.price-container');
+            if (priceEl) {
+                totalUah += parseFloat(priceEl.getAttribute('data-uah')) || 0;
+                totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
+            }
+        });
+
+        document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
+        document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
     }
 
     window.onload = function() {
