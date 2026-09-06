@@ -14,8 +14,6 @@
             --accent-game: #6c5ce7;
             --accent-book: #00b894;
             --accent-steelbook: #e17055;
-            --accent-ps: #0070d1;
-            --accent-switch: #e60012;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             --border: #dfe6e9;
         }
@@ -56,7 +54,6 @@
             justify-content: center;
             gap: 15px;
             margin-bottom: 40px;
-            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -108,10 +105,6 @@
 
         .stat-card.steelbooks {
             border-color: var(--accent-steelbook);
-        }
-
-        .stat-card.ps-discs {
-            border-color: var(--accent-ps);
         }
 
         .stat-value {
@@ -236,14 +229,6 @@
             background: var(--accent-steelbook);
         }
 
-        .tag-ps {
-            background: var(--accent-ps);
-        }
-
-        .tag-switch {
-            background: var(--accent-switch);
-        }
-
         .sub-tag {
             font-size: 0.65rem;
             font-weight: 600;
@@ -297,13 +282,12 @@
             margin-top: 6px;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #1e272e;
+            color: #b2bec3;
         }
 
         .price-usd {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--accent-ps);
+            font-size: 0.75rem;
+            font-weight: normal;
         }
     </style>
 </head>
@@ -323,8 +307,6 @@
                 onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
             <button class="tab-btn" data-page="steelbooks"
                 onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Steelbooks</button>
-            <button class="tab-btn" data-page="ps-discs"
-                onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
         </div>
 
         <!-- STATS SECTION FOR GAMES & BOOKS -->
@@ -364,22 +346,6 @@
             <div class="stat-card steelbooks">
                 <span class="stat-value" style="font-size: 1.5rem;">4K UHD</span>
                 <span class="stat-label">Primary Format</span>
-            </div>
-        </div>
-
-        <!-- STATS SECTION FOR PLAYSTATION DISCS -->
-        <div class="stats-bar hidden" id="stats-ps-discs">
-            <div class="stat-card ps-discs">
-                <span class="stat-value" id="ps-disc-count" style="font-size: 1.5rem;">0</span>
-                <span class="stat-label">Physical Games</span>
-            </div>
-            <div class="stat-card ps-discs">
-                <span class="stat-value" id="total-ps-spent" style="font-size: 1.5rem;">$0.00</span>
-                <span class="stat-label">Total spent</span>
-            </div>
-            <div class="stat-card ps-discs">
-                <span class="stat-value" style="font-size: 1.5rem;">Switch / PS3 / PS4 / PS5</span>
-                <span class="stat-label">Platforms</span>
             </div>
         </div>
 
@@ -576,27 +542,6 @@
                                     <polyline points="12 6 12 12 16 14"></polyline>
                                 </svg>
                                 <span class="duration-val">15h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/acresynced.jpg" alt="Assassin's Creed Black Flag Resynced" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">PHYSICAL</span>
-                        </div>
-                        <strong>Assassin's Creed Black Flag Resynced</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">31h</span>
                             </div>
                         </div>
                     </div>
@@ -1008,48 +953,6 @@
 
         <!-- STEELBOOKS SECTION CONTAINER -->
         <div id="section-steelbooks" class="hidden">
-
-            <!-- PREMIUM MANTA LAB SECTION -->
-            <div class="section-header">
-                <h2 style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
-                <div class="line"></div>
-            </div>
-
-            <div class="grid">
-                <div class="card">
-                    <a href="images/steelbooks/bluraylife.pdf" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link"
-                        aria-label="The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A"></a>
-                    <img src="images/steelbooks/DK_DLSA_front.jpg"
-                        alt="The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A"
-                        class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                            <span class="sub-tag">MANTA LAB</span>
-                        </div>
-                        <strong>The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A</strong>
-                        <div class="price-container" data-uah="13765.77" data-usd="299.19">
-                            13765,77 UAH <span class="price-usd">(299.19 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Manta Lab Exclusive</span>
-                            </div>
-                            <a href="images/steelbooks/bluraylife.pdf" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">bluraylife.com</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="section-header">
                 <h2 style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
                 <div class="line"></div>
@@ -1279,6 +1182,7 @@
                             <span class="sub-tag">4K UHD</span>
                         </div>
                         <strong>Indiana Jones 4-Movie Collection</strong>
+                        <!-- UPDATED DATA ATTRIBUTES BELOW -->
                         <div class="price-container" data-uah="5000.00" data-usd="111.00">
                             5000,00 UAH <span class="price-usd">(111,00 US$)</span>
                         </div>
@@ -1301,369 +1205,6 @@
             </div>
         </div>
 
-        <!-- GAME DISCS & CARDS SECTION CONTAINER -->
-        <div id="section-ps-discs" class="hidden">
-            <!-- NINTENDO SWITCH -->
-            <div class="section-header">
-                <h2 style="color: var(--accent-switch)">Nintendo Switch</h2>
-                <div class="line"></div>
-            </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/witcher_3_switch.jpg" alt="The Witcher 3: Wild Hunt Complete Edition" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-switch">Switch</span>
-                            <span class="sub-tag">Game Card</span>
-                        </div>
-                        <strong>The Witcher 3: Wild Hunt Complete Edition</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PLAYSTATION 3 -->
-            <div class="section-header">
-                <h2 style="color: var(--accent-ps)">PlayStation 3</h2>
-                <div class="line"></div>
-            </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/uncharted_3.jpg" alt="Uncharted 3: Drake's Deception (Special Edition)" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS3</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Uncharted 3: Drake's Deception (Special Edition)</strong>
-                        <div class="price-container" data-usd="29.00">
-                            <span class="price-usd">$29.00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PLAYSTATION 4 -->
-            <div class="section-header">
-                <h2 style="color: var(--accent-ps)">PlayStation 4</h2>
-                <div class="line"></div>
-            </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/rdr2.jpg" alt="Red Dead Redemption 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Red Dead Redemption 2</strong>
-                        <div class="price-container" data-usd="33.70">
-                            <span class="price-usd">$33.70</span>
-                        </div>
-                    </div>
-                </div>
-
-                                <div class="card">
-                    <img src="images/ps_discs/witcher3_blood_and_wine_dlc.jpg" alt="The Witcher 3 Wild Hunt Expansion Pack Blood and Wine" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Digital code</span>
-                        </div>
-                        <strong>The Witcher 3 Wild Hunt Expansion Pack Blood and Wine</strong>
-                        <div class="price-container" data-usd="30.00">
-                            <span class="price-usd">$30.00</span>
-                        </div>
-                    </div>
-                </div>
-        
-
-                <div class="card">
-                    <img src="images/ps_discs/it_takes_two.jpg" alt="It Takes Two" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>It Takes Two</strong>
-                        <div class="price-container" data-usd="37.00">
-                            <span class="price-usd">$37.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/uncharted_4.jpg" alt="Uncharted 4: A Thief's End" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Uncharted 4: A Thief's End</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/rise_tomb_raider.jpg" alt="Rise of the Tomb Raider" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Rise of the Tomb Raider</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/tlou2.jpg" alt="The Last of Us Part II" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>The Last of Us Part II</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/horizon_zero_dawn.jpg" alt="Horizon Zero Dawn" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Horizon Zero Dawn</strong>
-                        <div class="price-container" data-usd="30.99">
-                            <span class="price-usd">$30.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/the_order_1886.jpg" alt="The Order: 1886" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>The Order: 1886</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PLAYSTATION 5 -->
-            <div class="section-header">
-                <h2 style="color: var(--accent-ps)">PlayStation 5</h2>
-                <div class="line"></div>
-            </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/re2.jpg" alt="Resident Evil 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 2</strong>
-                        <div class="price-container" data-usd="19.93">
-                            <span class="price-usd">$19.93</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re3.jpg" alt="Resident Evil 3" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 3</strong>
-                        <div class="price-container" data-usd="19.99">
-                            <span class="price-usd">$19.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re4.jpg" alt="Resident Evil 4" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 4</strong>
-                        <div class="price-container" data-usd="14.99">
-                            <span class="price-usd">$14.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re7.jpg" alt="Resident Evil 7: Biohazard" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 7: Biohazard</strong>
-                        <div class="price-container" data-usd="19.99">
-                            <span class="price-usd">$19.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re_village.jpg" alt="Resident Evil Village" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil Village</strong>
-                        <div class="price-container" data-usd="58.20">
-                            <span class="price-usd">$58.20</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/alan_wake_2.jpg" alt="Alan Wake 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Alan Wake 2</strong>
-                        <div class="price-container" data-usd="34.96">
-                            <span class="price-usd">$34.96</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/silent_hill_2.jpg" alt="Silent Hill 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Silent Hill 2</strong>
-                        <div class="price-container" data-usd="36.29">
-                            <span class="price-usd">$36.29</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/gta_v.jpg" alt="Grand Theft Auto V" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Grand Theft Auto V</strong>
-                        <div class="price-container" data-usd="32.60">
-                            <span class="price-usd">$32.60</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/ac_black_flag_resynced.jpg" alt="Assassin's Creed Black Flag Resynced" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Assassin's Creed Black Flag Resynced</strong>
-                        <div class="price-container" data-usd="77.00">
-                            <span class="price-usd">$77.00</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/lego_batman_ldk.jpg" alt="LEGO Batman: Legacy of the Dark Knight" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>LEGO Batman: Legacy of the Dark Knight</strong>
-                        <div class="price-container" data-usd="89.99">
-                            <span class="price-usd">$89.99</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/007_first_light.jpg" alt="007 First Light" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>007 First Light</strong>
-                        <div class="price-container" data-usd="69.99">
-                            <span class="price-usd">$69.99</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/witcher_3.jpg" alt="The Witcher 3: Wild Hunt" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>The Witcher 3: Wild Hunt</strong>
-                        <div class="price-container" data-usd="48.50">
-                            <span class="price-usd">$48.50</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/mgs_delta.jpg" alt="Metal Gear Solid Δ: Snake Eater (Tactical Edition)" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Metal Gear Solid Δ: Snake Eater (Tactical Edition)</strong>
-                        <div class="price-container" data-usd="29.92">
-                            <span class="price-usd">$29.92</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <script>
             function switchPage(page, headerTitle, subtitle) {
                 document.getElementById('page-title').innerText = headerTitle;
@@ -1680,31 +1221,20 @@
 
                 const gbStats = document.getElementById('stats-games-books');
                 const sbStats = document.getElementById('stats-steelbooks');
-                const psStats = document.getElementById('stats-ps-discs');
-
                 const gbSection = document.getElementById('section-games-books');
                 const sbSection = document.getElementById('section-steelbooks');
-                const psSection = document.getElementById('section-ps-discs');
-
-                // Hide all sections and stats
-                gbStats.classList.add('hidden');
-                sbStats.classList.add('hidden');
-                psStats.classList.add('hidden');
-                gbSection.classList.add('hidden');
-                sbSection.classList.add('hidden');
-                psSection.classList.add('hidden');
 
                 if (page === 'steelbooks') {
+                    gbStats.classList.add('hidden');
                     sbStats.classList.remove('hidden');
+                    gbSection.classList.add('hidden');
                     sbSection.classList.remove('hidden');
                     calculateSteelbookTotals();
-                } else if (page === 'ps-discs') {
-                    psStats.classList.remove('hidden');
-                    psSection.classList.remove('hidden');
-                    calculatePSDiscTotals();
                 } else {
                     gbStats.classList.remove('hidden');
+                    sbStats.classList.add('hidden');
                     gbSection.classList.remove('hidden');
+                    sbSection.classList.add('hidden');
 
                     const cards = document.querySelectorAll('#section-games-books .card');
                     cards.forEach(card => {
@@ -1755,21 +1285,6 @@
 
                 document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
                 document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
-            }
-
-            function calculatePSDiscTotals() {
-                const psDiscs = document.querySelectorAll('#section-ps-discs .card');
-                document.getElementById('ps-disc-count').innerText = psDiscs.length;
-
-                let totalUsd = 0;
-                psDiscs.forEach(card => {
-                    const priceEl = card.querySelector('.price-container');
-                    if (priceEl) {
-                        totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-                    }
-                });
-
-                document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
 
             window.onload = function () {
