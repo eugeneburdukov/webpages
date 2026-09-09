@@ -7,17 +7,49 @@
     <title>Media Log</title>
     <style>
         :root {
-            --bg: #f8f9fa;
+            /* Light Theme Variables */
+            --bg: #f4f6f9;
             --card-bg: #ffffff;
             --text: #2d3436;
-            --text-light: #636e72;
-            --accent-game: #6c5ce7;
-            --accent-book: #00b894;
-            --accent-steelbook: #e17055;
-            --accent-ps: #0070d1;
-            --accent-switch: #e60012;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --border: #dfe6e9;
+            --text-muted: #636e72;
+            --border: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --header-title: #0f172a;
+            --tab-bg: #e2e8f0;
+            --tab-hover: #cbd5e1;
+            --tab-active-bg: #0f172a;
+            --tab-active-text: #ffffff;
+            --subtag-bg: #e2e8f0;
+
+            /* Category Accents */
+            --accent-game: #6366f1;
+            --accent-book: #10b981;
+            --accent-steelbook: #f97316;
+            --accent-ps: #0284c7;
+            --accent-switch: #ef4444;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Variables */
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            --header-title: #f8fafc;
+            --tab-bg: #1e293b;
+            --tab-hover: #334155;
+            --tab-active-bg: #38bdf8;
+            --tab-active-text: #0f172a;
+            --subtag-bg: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         body {
@@ -26,120 +58,141 @@
             color: var(--text);
             margin: 0;
             padding: 40px 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
+        }
+
+        .theme-toggle-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .theme-toggle-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, background-color 0.3s;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: translateY(-2px);
         }
 
         h1 {
             font-weight: 800;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: #1e272e;
+            font-size: 2.75rem;
+            margin: 0 0 10px 0;
+            color: var(--header-title);
+            letter-spacing: -0.025em;
         }
 
         header p {
-            color: var(--text-light);
+            color: var(--text-muted);
             margin: 0;
+            font-size: 1.1rem;
         }
 
-        /* NAVIGATION TABS */
         .nav-tabs {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
+            gap: 12px;
+            margin: 35px 0 45px;
             flex-wrap: wrap;
         }
 
         .tab-btn {
-            background: #e4e7eb;
+            background: var(--tab-bg);
             border: none;
             padding: 10px 24px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-light);
+            color: var(--text-muted);
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .tab-btn:hover {
-            background: #dcdde1;
+            background: var(--tab-hover);
+            color: var(--text);
         }
 
         .tab-btn.active {
-            background: #1e272e;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background: var(--tab-active-bg);
+            color: var(--tab-active-text);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
         }
 
-        /* STATS BAR */
         .stats-bar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
         .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
+            background: var(--card-bg);
+            padding: 22px;
+            border-radius: 16px;
             box-shadow: var(--shadow);
             text-align: center;
+            border: 1px solid var(--border);
             border-bottom: 4px solid var(--border);
         }
 
-        .stat-card.games {
-            border-color: var(--accent-game);
-        }
-
-        .stat-card.books {
-            border-color: var(--accent-book);
-        }
-
-        .stat-card.steelbooks {
-            border-color: var(--accent-steelbook);
-        }
-
-        .stat-card.ps-discs {
-            border-color: var(--accent-ps);
-        }
+        .stat-card.games { border-bottom-color: var(--accent-game); }
+        .stat-card.books { border-bottom-color: var(--accent-book); }
+        .stat-card.steelbooks { border-bottom-color: var(--accent-steelbook); }
+        .stat-card.ps-discs { border-bottom-color: var(--accent-ps); }
 
         .stat-value {
             display: block;
             font-size: 1.8rem;
             font-weight: 800;
-            color: #1e272e;
+            color: var(--text);
         }
 
         .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-light);
+            font-size: 0.75rem;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
+            letter-spacing: 1.2px;
+            margin-top: 6px;
+            font-weight: 700;
         }
 
         .section-header {
             display: flex;
             align-items: center;
-            margin: 40px 0 20px;
+            margin: 45px 0 25px;
         }
 
         .section-header h2 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             margin: 0;
+            font-weight: 700;
         }
 
         .line {
@@ -151,51 +204,47 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 25px;
         }
 
         .card {
             position: relative;
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
             color: var(--text);
+            border: 1px solid var(--border);
         }
 
         .card:hover {
             transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
         }
 
         .stretched-link::after {
             content: "";
             position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
+            top: 0; right: 0; bottom: 0; left: 0;
             z-index: 1;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         .cover {
             width: 100%;
             aspect-ratio: 392 / 500;
-            background: #f1f1f1;
+            background: var(--border);
             object-fit: cover;
-            border-bottom: 1px solid #f1f1f1;
             display: block;
         }
 
         .info {
-            padding: 15px;
+            padding: 18px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -204,53 +253,40 @@
         .info strong {
             display: block;
             font-size: 1rem;
-            margin: 8px 0;
-            line-height: 1.2;
+            margin: 10px 0;
+            line-height: 1.35;
         }
 
         .tag-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 6px;
             align-items: center;
         }
 
         .tag {
-            font-size: 0.7rem;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
             color: white;
             align-self: flex-start;
+            letter-spacing: 0.5px;
         }
 
-        .tag-game {
-            background: var(--accent-game);
-        }
-
-        .tag-book {
-            background: var(--accent-book);
-        }
-
-        .tag-steelbook {
-            background: var(--accent-steelbook);
-        }
-
-        .tag-ps {
-            background: var(--accent-ps);
-        }
-
-        .tag-switch {
-            background: var(--accent-switch);
-        }
+        .tag-game { background: var(--accent-game); }
+        .tag-book { background: var(--accent-book); }
+        .tag-steelbook { background: var(--accent-steelbook); }
+        .tag-ps { background: var(--accent-ps); }
+        .tag-switch { background: var(--accent-switch); }
 
         .sub-tag {
             font-size: 0.65rem;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: #e4e7eb;
-            color: var(--text-light);
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 6px;
+            background: var(--subtag-bg);
+            color: var(--text-muted);
             text-transform: uppercase;
         }
 
@@ -259,10 +295,10 @@
             align-items: center;
             justify-content: space-between;
             margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px dashed #eee;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
             font-size: 0.8rem;
-            color: var(--text-light);
+            color: var(--text-muted);
             font-weight: 500;
         }
 
@@ -272,11 +308,11 @@
         }
 
         .meta-left svg {
-            width: 14px;
-            height: 14px;
+            width: 15px;
+            height: 15px;
             margin-right: 6px;
             stroke: currentColor;
-            stroke-width: 2.5;
+            stroke-width: 2.2;
             fill: none;
         }
 
@@ -289,15 +325,13 @@
             font-weight: 700;
         }
 
-        .bluray-link:hover {
-            text-decoration: underline;
-        }
+        .bluray-link:hover { text-decoration: underline; }
 
         .price-container {
-            margin-top: 6px;
+            margin-top: 8px;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #1e272e;
+            color: var(--text);
         }
 
         .price-usd {
@@ -312,22 +346,24 @@
 
     <div class="container">
         <header>
+            <div class="theme-toggle-wrapper">
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">🌙</span>
+                    <span id="theme-text">Dark</span>
+                </button>
+            </div>
             <h1 id="page-title">Finished in 2026</h1>
             <p id="page-subtitle">A gallery of my completed adventures and stories.</p>
         </header>
 
         <div class="nav-tabs">
-            <button class="tab-btn" data-page="2022-2025"
-                onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">2022-2025</button>
-            <button class="tab-btn active" data-page="2026"
-                onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
-            <button class="tab-btn" data-page="steelbooks"
-                onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Steelbooks</button>
-            <button class="tab-btn" data-page="ps-discs"
-                onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
+            <button class="tab-btn" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">2022-2025</button>
+            <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
+            <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Movie discs</button>
+            <button class="tab-btn" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
         </div>
 
-        <!-- STATS SECTION FOR GAMES & BOOKS -->
+        <!-- STATS SECTIONS -->
         <div class="stats-bar" id="stats-games-books">
             <div class="stat-card games">
                 <span class="stat-value" id="game-count">0</span>
@@ -347,7 +383,6 @@
             </div>
         </div>
 
-        <!-- STATS SECTION FOR STEELBOOKS -->
         <div class="stats-bar hidden" id="stats-steelbooks">
             <div class="stat-card steelbooks">
                 <span class="stat-value" id="steelbook-count" style="font-size: 1.5rem;">0</span>
@@ -367,7 +402,6 @@
             </div>
         </div>
 
-        <!-- STATS SECTION FOR PLAYSTATION DISCS -->
         <div class="stats-bar hidden" id="stats-ps-discs">
             <div class="stat-card ps-discs">
                 <span class="stat-value" id="ps-disc-count" style="font-size: 1.5rem;">0</span>
@@ -383,1400 +417,401 @@
             </div>
         </div>
 
-        <!-- GAMES & BOOKS CONTENT CONTAINER -->
+        <!-- CONTENT CONTAINERS -->
         <div id="section-games-books">
-            <!-- GAMES SECTION -->
             <div class="section-header">
                 <h2 style="color: var(--accent-game)">Games</h2>
                 <div class="line"></div>
             </div>
+            <div class="grid" id="grid-games"></div>
 
-            <div class="grid">
-                <div class="card" data-year="2026">
-                    <img src="images/re_requiem.jpg" alt="Resident Evil Requiem" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Resident Evil Requiem</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">13h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/alan_wake_2.jpg" alt="Alan Wake 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">Physical</span>
-                        </div>
-                        <strong>Alan Wake 2</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">30h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/astrobot.jpg" alt="Astrobot" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">Physical</span>
-                        </div>
-                        <strong>Astrobot</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">26h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/revillage.jpg" alt="Resident Evil Village" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Resident Evil Village</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">11h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/reanimal.jpg" alt="Reanimal" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Reanimal</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">8h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/sh2.jpg" alt="Silent Hill 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">Physical</span>
-                        </div>
-                        <strong>Silent Hill 2</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">18h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/soma.jpg" alt="Soma" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Soma</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">12h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/first_light.jpg" alt="007 First Light" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">PHYSICAL</span>
-                        </div>
-                        <strong>007 First Light</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">23h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/lego_batman_ldk.png" alt="Lego Batman: Legacy of the Dark Knight" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">PHYSICAL</span>
-                        </div>
-                        <strong>Lego Batman: Legacy of the Dark Knight</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">15h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/acresynced.jpg" alt="Assassin's Creed Black Flag Resynced" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PS5</span>
-                            <span class="sub-tag">PHYSICAL</span>
-                        </div>
-                        <strong>Assassin's Creed Black Flag Resynced</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">31h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Archive Games -->
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/residentevil4.jpg" alt="Resident Evil 4 Remake" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Resident Evil 4 Remake</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">13.2h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/godofwarragnarok.jpg" alt="God of War: Ragnarok" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC</span>
-                            <span class="sub-tag">Free</span>
-                        </div>
-                        <strong>God of War: Ragnarok</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">30h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/ittakestwo.jpg" alt="It Takes Two" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>It Takes Two</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">35.9h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/portal2.jpg" alt="Portal 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Portal 2</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">14.1h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/IndianaJonesandtheGreatCircle.jpg"
-                        alt="Indiana Jones and the Great Circle" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC</span>
-                            <span class="sub-tag">Free</span>
-                        </div>
-                        <strong>Indiana Jones and the Great Circle</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">30h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/Warhammer40000DawnofWarSoulstorm.jpg"
-                        alt="Warhammer 40,000: Dawn of War - Soulstorm" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Warhammer 40k: Dawn of War - Soulstorm</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">310.3h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/Warhammer40000SpaceMarine2.jpg"
-                        alt="Warhammer 40,000: Space Marine 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Warhammer 40k: Space Marine 2</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">10.1h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/awayout.jpg" alt="A Way Out" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>A Way Out</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">6.6h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/modernwarfare.jpg" alt="Call of Duty: Modern Warfare"
-                        class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Call of Duty: Modern Warfare Remastered</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">8.8h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/modernwarfare2.jpg" alt="Call of Duty: Modern Warfare 2"
-                        class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Epic</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Call of Duty: Modern Warfare 2</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">0h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/modernwarfare3.jpg" alt="Call of Duty: Modern Warfare 3"
-                        class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Epic</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Call of Duty: Modern Warfare 3</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">0h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/riskofrain2.jpg" alt="Risk of Rain 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Risk of Rain 2</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">36.3h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/styx.jpg" alt="Styx: Master of Shadows" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Styx: Master of Shadows</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">28.2h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/fortnite.jpg" alt="Fortnite" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Epic</span>
-                            <span class="sub-tag">Digital Free</span>
-                        </div>
-                        <strong>Fortnite</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">0h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2022-2025">
-                    <img src="images/archive-2022-2025/splitfiction.jpg" alt="Split Fiction" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            <span class="sub-tag">PC-Steam</span>
-                            <span class="sub-tag">Digital</span>
-                        </div>
-                        <strong>Split Fiction</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span class="duration-val">23.1h</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOOKS SECTION -->
             <div class="section-header">
                 <h2 style="color: var(--accent-book)">Books</h2>
                 <div class="line"></div>
             </div>
-
-            <div class="grid">
-                <div class="card" data-year="2026">
-                    <img src="images/monte_cristo.jpg" alt="Граф Монте-Кристо" class="cover">
-                    <div class="info">
-                        <span class="tag tag-book">BOOK</span>
-                        <strong>Граф Монте-Кристо</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                </svg>
-                                <span class="page-val">1200 pages</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/wuthering_heights.jpg" alt="Грозовой перевал" class="cover">
-                    <div class="info">
-                        <span class="tag tag-book">BOOK</span>
-                        <strong>Грозовой перевал</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                </svg>
-                                <span class="page-val">400 pages</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/shvejk.jpg" alt="Похождения бравого солдата Швейка" class="cover">
-                    <div class="info">
-                        <span class="tag tag-book">BOOK</span>
-                        <strong>Похождения бравого солдата Швейка</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                </svg>
-                                <span class="page-val">750 pages</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" data-year="2026">
-                    <img src="images/The_Code_of_the_Woosters.jpg" alt="Фамильная честь Вустеров" class="cover">
-                    <div class="info">
-                        <span class="tag tag-book">BOOK</span>
-                        <strong>Фамильная честь Вустеров</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                </svg>
-                                <span class="page-val">320 pages</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="grid" id="grid-books"></div>
         </div>
 
-        <!-- STEELBOOKS SECTION CONTAINER -->
         <div id="section-steelbooks" class="hidden">
-
-            <!-- PREMIUM MANTA LAB SECTION -->
             <div class="section-header">
                 <h2 style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
                 <div class="line"></div>
             </div>
-
-            <div class="grid">
-                <div class="card">
-                    <a href="images/steelbooks/bluraylife.pdf" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link"
-                        aria-label="The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A"></a>
-                    <img src="images/steelbooks/DK_DLSA_front.jpg"
-                        alt="The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A"
-                        class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                            <span class="sub-tag">MANTA LAB</span>
-                        </div>
-                        <strong>The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A</strong>
-                        <div class="price-container" data-uah="13765.77" data-usd="299.19">
-                            13765,77 UAH <span class="price-usd">(299.19 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Manta Lab Exclusive</span>
-                            </div>
-                            <a href="images/steelbooks/bluraylife.pdf" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">bluraylife.com</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="grid" id="grid-manta-lab"></div>
 
             <div class="section-header">
                 <h2 style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
                 <div class="line"></div>
             </div>
+            <div class="grid" id="grid-nolan"></div>
 
-            <div class="grid">
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="Batman Begins"></a>
-                    <img src="images/steelbooks/batman_begins.jpg" alt="Batman Begins" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>Batman Begins</strong>
-                        <div class="price-container" data-uah="1909.58" data-usd="42.44">
-                            1909,58 UAH <span class="price-usd">(42,44 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="The Dark Knight"></a>
-                    <img src="images/steelbooks/dark_kniight.jpg" alt="The Dark Knight" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>The Dark Knight</strong>
-                        <div class="price-container" data-uah="1909.58" data-usd="42.44">
-                            1909,58 UAH <span class="price-usd">(42,44 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="The Dark Knight Rises"></a>
-                    <img src="images/steelbooks/dark_knight_rises.jpg" alt="The Dark Knight Rises" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>The Dark Knight Rises</strong>
-                        <div class="price-container" data-uah="1909.57" data-usd="42.43">
-                            1909,57 UAH <span class="price-usd">(42,43 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/"
-                                target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/The-Prestige-4K-Blu-ray/400574/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="The Prestige"></a>
-                    <img src="images/steelbooks/the_prestige.jpg" alt="The Prestige" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>The Prestige</strong>
-                        <div class="price-container" data-uah="2300.00" data-usd="51.11">
-                            2300,00 UAH <span class="price-usd">(51,11 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Limited Edition</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/The-Prestige-4K-Blu-ray/400574/" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/Inception-4K-Blu-ray/385817/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="Inception"></a>
-                    <img src="images/steelbooks/inception.jpg" alt="Inception" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>Inception</strong>
-                        <div class="price-container" data-uah="1700.00" data-usd="37.78">
-                            1700,00 UAH <span class="price-usd">(37,78 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Limited Edition</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/Inception-4K-Blu-ray/385817/" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/Dunkirk-4K-Blu-ray/235808/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="Dunkirk"></a>
-                    <img src="images/steelbooks/dunkirk.jpg" alt="Dunkirk" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>Dunkirk</strong>
-                        <div class="price-container" data-uah="1700.00" data-usd="37.78">
-                            1700,00 UAH <span class="price-usd">(37,78 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Zavvi Exclusive SteelBook</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/Dunkirk-4K-Blu-ray/235808/" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/Interstellar-4K-Blu-ray/277619/" target="_blank"
-                        rel="noopener noreferrer" class="stretched-link" aria-label="Interstellar"></a>
-                    <img src="images/steelbooks/interstellar.jpg" alt="Interstellar" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>Interstellar</strong>
-                        <div class="price-container" data-uah="2000.00" data-usd="44.44">
-                            2000,00 UAH <span class="price-usd">(44,44 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">Best Buy Exclusive SteelBook</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/Interstellar-4K-Blu-ray/277619/" target="_blank"
-                                rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- OTHER STEELBOOKS SECTION -->
             <div class="section-header">
                 <h2 style="color: var(--accent-steelbook)">Other</h2>
                 <div class="line"></div>
             </div>
-
-            <div class="grid">
-                <div class="card">
-                    <a href="https://www.blu-ray.com/movies/Indiana-Jones-4-Movie-Collection-4K-Blu-ray/288048/"
-                        target="_blank" rel="noopener noreferrer" class="stretched-link"
-                        aria-label="Indiana Jones 4-Movie Collection"></a>
-                    <img src="images/steelbooks/Indiana_Jones_4_Movie_Collection.jpg"
-                        alt="Indiana Jones 4-Movie Collection" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-steelbook">STEELBOOK</span>
-                            <span class="sub-tag">4K UHD</span>
-                        </div>
-                        <strong>Indiana Jones 4-Movie Collection</strong>
-                        <div class="price-container" data-uah="5000.00" data-usd="111.00">
-                            5000,00 UAH <span class="price-usd">(111,00 US$)</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z">
-                                    </path>
-                                    <line x1="6" y1="6" x2="18" y2="6"></line>
-                                </svg>
-                                <span class="steelbook-item">4-Movie Collection</span>
-                            </div>
-                            <a href="https://www.blu-ray.com/movies/Indiana-Jones-4-Movie-Collection-4K-Blu-ray/288048/"
-                                target="_blank" rel="noopener noreferrer" class="bluray-link">blu-ray.com</a>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="grid" id="grid-steelbooks-other"></div>
+            
+            <div class="section-header">
+                <h2 style="color: var(--accent-steelbook)">Collector's editions</h2>
+                <div class="line"></div>
             </div>
+            <div class="grid" id="grid-steelbooks-other2"></div>
         </div>
 
-        <!-- GAME DISCS & CARDS SECTION CONTAINER -->
         <div id="section-ps-discs" class="hidden">
-            <!-- NINTENDO SWITCH -->
             <div class="section-header">
                 <h2 style="color: var(--accent-switch)">Nintendo Switch</h2>
                 <div class="line"></div>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/witcher_3_switch.jpg" alt="The Witcher 3: Wild Hunt Complete Edition" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-switch">Switch</span>
-                            <span class="sub-tag">Game Card</span>
-                        </div>
-                        <strong>The Witcher 3: Wild Hunt Complete Edition</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="grid" id="grid-discs-switch"></div>
 
-            <!-- PLAYSTATION 3 -->
             <div class="section-header">
                 <h2 style="color: var(--accent-ps)">PlayStation 3</h2>
                 <div class="line"></div>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/uncharted_3.jpg" alt="Uncharted 3: Drake's Deception (Special Edition)" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS3</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Uncharted 3: Drake's Deception (Special Edition)</strong>
-                        <div class="price-container" data-usd="29.00">
-                            <span class="price-usd">$29.00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="grid" id="grid-discs-ps3"></div>
 
-            <!-- PLAYSTATION 4 -->
             <div class="section-header">
                 <h2 style="color: var(--accent-ps)">PlayStation 4</h2>
                 <div class="line"></div>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/rdr2.jpg" alt="Red Dead Redemption 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Red Dead Redemption 2</strong>
-                        <div class="price-container" data-usd="33.70">
-                            <span class="price-usd">$33.70</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid" id="grid-discs-ps4"></div>
 
-                                <div class="card">
-                    <img src="images/ps_discs/witcher3_blood_and_wine_dlc.jpg" alt="The Witcher 3 Wild Hunt Expansion Pack Blood and Wine" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Digital code</span>
-                        </div>
-                        <strong>The Witcher 3 Wild Hunt Expansion Pack Blood and Wine</strong>
-                        <div class="price-container" data-usd="30.00">
-                            <span class="price-usd">$30.00</span>
-                        </div>
-                    </div>
-                </div>
-        
-
-                <div class="card">
-                    <img src="images/ps_discs/it_takes_two.jpg" alt="It Takes Two" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>It Takes Two</strong>
-                        <div class="price-container" data-usd="37.00">
-                            <span class="price-usd">$37.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/uncharted_4.jpg" alt="Uncharted 4: A Thief's End" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Uncharted 4: A Thief's End</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/rise_tomb_raider.jpg" alt="Rise of the Tomb Raider" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Rise of the Tomb Raider</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/tlou2.jpg" alt="The Last of Us Part II" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>The Last of Us Part II</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/horizon_zero_dawn.jpg" alt="Horizon Zero Dawn" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Horizon Zero Dawn</strong>
-                        <div class="price-container" data-usd="30.99">
-                            <span class="price-usd">$30.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/the_order_1886.jpg" alt="The Order: 1886" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS4</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>The Order: 1886</strong>
-                        <div class="price-container" data-usd="59.99">
-                            <span class="price-usd">$59.99</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PLAYSTATION 5 -->
             <div class="section-header">
                 <h2 style="color: var(--accent-ps)">PlayStation 5</h2>
                 <div class="line"></div>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <img src="images/ps_discs/re2.jpg" alt="Resident Evil 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 2</strong>
-                        <div class="price-container" data-usd="19.93">
-                            <span class="price-usd">$19.93</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re3.jpg" alt="Resident Evil 3" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 3</strong>
-                        <div class="price-container" data-usd="19.99">
-                            <span class="price-usd">$19.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re4.jpg" alt="Resident Evil 4" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 4</strong>
-                        <div class="price-container" data-usd="14.99">
-                            <span class="price-usd">$14.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re7.jpg" alt="Resident Evil 7: Biohazard" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil 7: Biohazard</strong>
-                        <div class="price-container" data-usd="19.99">
-                            <span class="price-usd">$19.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/re_village.jpg" alt="Resident Evil Village" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Resident Evil Village</strong>
-                        <div class="price-container" data-usd="58.20">
-                            <span class="price-usd">$58.20</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/alan_wake_2.jpg" alt="Alan Wake 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Alan Wake 2</strong>
-                        <div class="price-container" data-usd="34.96">
-                            <span class="price-usd">$34.96</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/silent_hill_2.jpg" alt="Silent Hill 2" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Silent Hill 2</strong>
-                        <div class="price-container" data-usd="36.29">
-                            <span class="price-usd">$36.29</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/gta_v.jpg" alt="Grand Theft Auto V" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Grand Theft Auto V</strong>
-                        <div class="price-container" data-usd="32.60">
-                            <span class="price-usd">$32.60</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/ac_black_flag_resynced.jpg" alt="Assassin's Creed Black Flag Resynced" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Assassin's Creed Black Flag Resynced</strong>
-                        <div class="price-container" data-usd="77.00">
-                            <span class="price-usd">$77.00</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/lego_batman_ldk.jpg" alt="LEGO Batman: Legacy of the Dark Knight" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>LEGO Batman: Legacy of the Dark Knight</strong>
-                        <div class="price-container" data-usd="89.99">
-                            <span class="price-usd">$89.99</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/007_first_light.jpg" alt="007 First Light" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>007 First Light</strong>
-                        <div class="price-container" data-usd="69.99">
-                            <span class="price-usd">$69.99</span>
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-left"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/witcher_3.jpg" alt="The Witcher 3: Wild Hunt" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>The Witcher 3: Wild Hunt</strong>
-                        <div class="price-container" data-usd="48.50">
-                            <span class="price-usd">$48.50</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="images/ps_discs/mgs_delta.jpg" alt="Metal Gear Solid Δ: Snake Eater (Tactical Edition)" class="cover">
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-ps">PS5</span>
-                            <span class="sub-tag">Physical Disc</span>
-                        </div>
-                        <strong>Metal Gear Solid Δ: Snake Eater (Tactical Edition)</strong>
-                        <div class="price-container" data-usd="29.92">
-                            <span class="price-usd">$29.92</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="grid" id="grid-discs-ps5"></div>
         </div>
+    </div>
 
-        <script>
-            function switchPage(page, headerTitle, subtitle) {
-                document.getElementById('page-title').innerText = headerTitle;
-                document.getElementById('page-subtitle').innerText = subtitle;
+    <script>
+        const mediaData = {
+          "finished": [
+            { "year": "2026", "type": "game", "title": "Resident Evil Requiem", "cover": "images/re_requiem.jpg", "tags": ["PS5", "Digital"], "val": "13h" },
+            { "year": "2026", "type": "game", "title": "Alan Wake 2", "cover": "images/alan_wake_2.jpg", "tags": ["PS5", "Physical"], "val": "30h" },
+            { "year": "2026", "type": "game", "title": "Astrobot", "cover": "images/astrobot.jpg", "tags": ["PS5", "Physical"], "val": "26h" },
+            { "year": "2026", "type": "game", "title": "Resident Evil Village", "cover": "images/revillage.jpg", "tags": ["PS5", "Digital"], "val": "11h" },
+            { "year": "2026", "type": "game", "title": "Reanimal", "cover": "images/reanimal.jpg", "tags": ["PC-Steam", "Digital"], "val": "8h" },
+            { "year": "2026", "type": "game", "title": "Silent Hill 2", "cover": "images/sh2.jpg", "tags": ["PS5", "Physical"], "val": "18h" },
+            { "year": "2026", "type": "game", "title": "Soma", "cover": "images/soma.jpg", "tags": ["PC-Steam", "Digital"], "val": "12h" },
+            { "year": "2026", "type": "game", "title": "007 First Light", "cover": "images/first_light.jpg", "tags": ["PS5", "PHYSICAL"], "val": "23h" },
+            { "year": "2026", "type": "game", "title": "Lego Batman: Legacy of the Dark Knight", "cover": "images/lego_batman_ldk.png", "tags": ["PS5", "PHYSICAL"], "val": "15h" },
+            { "year": "2026", "type": "game", "title": "Assassin's Creed Black Flag Resynced", "cover": "images/acresynced.jpg", "tags": ["PS5", "PHYSICAL"], "val": "31h" },
+            { "year": "2022-2025", "type": "game", "title": "Resident Evil 4 Remake", "cover": "images/archive-2022-2025/residentevil4.jpg", "tags": ["PC-Steam", "Digital"], "val": "13.2h" },
+            { "year": "2022-2025", "type": "game", "title": "God of War: Ragnarok", "cover": "images/archive-2022-2025/godofwarragnarok.jpg", "tags": ["PC", "Free"], "val": "30h" },
+            { "year": "2022-2025", "type": "game", "title": "It Takes Two", "cover": "images/archive-2022-2025/ittakestwo.jpg", "tags": ["PC-Steam", "Digital"], "val": "35.9h" },
+            { "year": "2022-2025", "type": "game", "title": "Portal 2", "cover": "images/archive-2022-2025/portal2.jpg", "tags": ["PC-Steam", "Digital"], "val": "14.1h" },
+            { "year": "2022-2025", "type": "game", "title": "Indiana Jones and the Great Circle", "cover": "images/archive-2022-2025/IndianaJonesandtheGreatCircle.jpg", "tags": ["PC", "Free"], "val": "30h" },
+            { "year": "2022-2025", "type": "game", "title": "Warhammer 40k: Dawn of War - Soulstorm", "cover": "images/archive-2022-2025/Warhammer40000DawnofWarSoulstorm.jpg", "tags": ["PC-Steam", "Digital"], "val": "310.3h" },
+            { "year": "2022-2025", "type": "game", "title": "Warhammer 40k: Space Marine 2", "cover": "images/archive-2022-2025/Warhammer40000SpaceMarine2.jpg", "tags": ["PC-Steam", "Digital"], "val": "10.1h" },
+            { "year": "2022-2025", "type": "game", "title": "A Way Out", "cover": "images/archive-2022-2025/awayout.jpg", "tags": ["PC-Steam", "Digital"], "val": "6.6h" },
+            { "year": "2022-2025", "type": "game", "title": "Call of Duty: Modern Warfare Remastered", "cover": "images/archive-2022-2025/modernwarfare.jpg", "tags": ["PC-Steam", "Digital"], "val": "8.8h" },
+            { "year": "2022-2025", "type": "game", "title": "Call of Duty: Modern Warfare 2", "cover": "images/archive-2022-2025/modernwarfare2.jpg", "tags": ["PC-Epic", "Digital"], "val": "0h" },
+            { "year": "2022-2025", "type": "game", "title": "Call of Duty: Modern Warfare 3", "cover": "images/archive-2022-2025/modernwarfare3.jpg", "tags": ["PC-Epic", "Digital"], "val": "0h" },
+            { "year": "2022-2025", "type": "game", "title": "Risk of Rain 2", "cover": "images/archive-2022-2025/riskofrain2.jpg", "tags": ["PC-Steam", "Digital"], "val": "36.3h" },
+            { "year": "2022-2025", "type": "game", "title": "Styx: Master of Shadows", "cover": "images/archive-2022-2025/styx.jpg", "tags": ["PC-Steam", "Digital"], "val": "28.2h" },
+            { "year": "2022-2025", "type": "game", "title": "Fortnite", "cover": "images/archive-2022-2025/fortnite.jpg", "tags": ["PC-Epic", "Digital Free"], "val": "0h" },
+            { "year": "2022-2025", "type": "game", "title": "Split Fiction", "cover": "images/archive-2022-2025/splitfiction.jpg", "tags": ["PC-Steam", "Digital"], "val": "23.1h" },
+            { "year": "2026", "type": "book", "title": "Граф Монте-Кристо", "cover": "images/monte_cristo.jpg", "tags": [], "val": "1200 pages" },
+            { "year": "2026", "type": "book", "title": "Грозовой перевал", "cover": "images/wuthering_heights.jpg", "tags": [], "val": "400 pages" },
+            { "year": "2026", "type": "book", "title": "Похождения бравого солдата Швейка", "cover": "images/shvejk.jpg", "tags": [], "val": "750 pages" },
+            { "year": "2026", "type": "book", "title": "Фамильная честь Вустеров", "cover": "images/The_Code_of_the_Woosters.jpg", "tags": [], "val": "320 pages" }
+          ],
+          "steelbooks": {
+            "manta_lab": [
+              { "title": "The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A", "cover": "images/steelbooks/DK_DLSA_front.jpg", "link": "images/steelbooks/bluraylife.pdf", "linkText": "bluraylife.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD", "MANTA LAB Exclusive"], "priceUah": 13765.77, "priceUsd": 299.19, "itemMeta": "Manta Lab" }
+            ],
+            "nolan": [
+              { "title": "Batman Begins", "cover": "images/steelbooks/batman_begins.jpg", "link": "https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1909.58, "priceUsd": 42.44, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "The Dark Knight", "cover": "images/steelbooks/dark_kniight.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1909.58, "priceUsd": 42.44, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "The Dark Knight Rises", "cover": "images/steelbooks/dark_knight_rises.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1909.57, "priceUsd": 42.43, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "The Prestige", "cover": "images/steelbooks/the_prestige.jpg", "link": "https://www.blu-ray.com/movies/The-Prestige-4K-Blu-ray/400574/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 2300.00, "priceUsd": 51.11, "itemMeta": "Limited Edition" },
+              { "title": "Inception", "cover": "images/steelbooks/inception.jpg", "link": "https://www.blu-ray.com/movies/Inception-4K-Blu-ray/385817/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1700.00, "priceUsd": 37.78, "itemMeta": "Limited Edition" },
+              { "title": "Dunkirk", "cover": "images/steelbooks/dunkirk.jpg", "link": "https://www.blu-ray.com/movies/Dunkirk-4K-Blu-ray/235808/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1700.00, "priceUsd": 37.78, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "Interstellar", "cover": "images/steelbooks/interstellar.jpg", "link": "https://www.blu-ray.com/movies/Interstellar-4K-Blu-ray/277619/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 2000.00, "priceUsd": 44.44, "itemMeta": "Best Buy Exclusive SteelBook" }
+            ],
+            "other": [
+              { "title": "Indiana Jones 4-Movie Collection", "cover": "images/steelbooks/Indiana_Jones_4_Movie_Collection.jpg", "link": "https://www.blu-ray.com/movies/Indiana-Jones-4-Movie-Collection-4K-Blu-ray/288048/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 5000.00, "priceUsd": 111.00, "itemMeta": "4-Movie Collection" }
+            ],
+            "other2": [
+              { "title": "The Dark Knight Trilogy: Ultimate Collector’s Edition Blu-Ray Box Set", "cover": "images/steelbooks/dk_complete.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-Trilogy-Blu-ray/65659/", "linkText": "blu-ray.com", "tags": ["BLU-RAY"], "subTags": [], "priceUah": 4052.23, "priceUsd": 90.77, "itemMeta": "3-Movie Collection" }
+            ]
+          },
+          "game_discs": {
+            "switch": [
+              { "title": "The Witcher 3: Wild Hunt Complete Edition", "cover": "images/ps_discs/witcher_3_switch.jpg", "platform": "Switch", "subTag": "Game Card", "priceUsd": 59.99 }
+            ],
+            "ps3": [
+              { "title": "Uncharted 3: Drake's Deception (Special Edition)", "cover": "images/ps_discs/uncharted_3.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 29.00 },
+              { "title": "MotorStorm: Pacific Rift", "cover": "images/ps_discs/motorstorm_pacific_rift.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Assassin's Creed", "cover": "images/ps_discs/assassins_creed.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Assassin's Creed II", "cover": "images/ps_discs/assassins_creed_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 24.00 },
+              { "title": "Uncharted: Drake's Fortune", "cover": "images/ps_discs/uncharted_1.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Uncharted 2: Among Thieves", "cover": "images/ps_discs/uncharted_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 }
+            ],
+            "ps4": [
+              { "title": "Red Dead Redemption 2", "cover": "images/ps_discs/rdr2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 33.70 },
+              { "title": "The Witcher 3 Wild Hunt Expansion Pack Blood and Wine", "cover": "images/ps_discs/witcher3_blood_and_wine_dlc.jpg", "platform": "PS4", "subTag": "Digital code", "priceUsd": 30.00 },
+              { "title": "It Takes Two", "cover": "images/ps_discs/it_takes_two.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 37.00 },
+              { "title": "Uncharted 4: A Thief's End", "cover": "images/ps_discs/uncharted_4.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Rise of the Tomb Raider", "cover": "images/ps_discs/rise_tomb_raider.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "The Last of Us Part II", "cover": "images/ps_discs/tlou2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Horizon Zero Dawn", "cover": "images/ps_discs/horizon_zero_dawn.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 30.99 },
+              { "title": "The Order: 1886", "cover": "images/ps_discs/the_order_1886.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Shadow of the Tomb Raider", "cover": "images/ps_discs/shadow_of_the_tomb_raider.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Assassin's Creed Unity", "cover": "images/ps_discs/ac_unity.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Injustice 2", "cover": "images/ps_discs/injustice_2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Assassin's Creed Syndicate", "cover": "images/ps_discs/ac_syndicate.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 }
+            ],
+            "ps5": [
+              { "title": "Resident Evil 2", "cover": "images/ps_discs/re2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.93 },
+              { "title": "Resident Evil 3", "cover": "images/ps_discs/re3.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.99 },
+              { "title": "Resident Evil 4", "cover": "images/ps_discs/re4.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 14.99 },
+              { "title": "Resident Evil 7: Biohazard", "cover": "images/ps_discs/re7.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.99 },
+              { "title": "Resident Evil Village", "cover": "images/ps_discs/re_village.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 58.20 },
+              { "title": "Alan Wake 2", "cover": "images/ps_discs/alan_wake_2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 34.96 },
+              { "title": "Silent Hill 2", "cover": "images/ps_discs/silent_hill_2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 36.29 },
+              { "title": "Grand Theft Auto V", "cover": "images/ps_discs/gta_v.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 32.60 },
+              { "title": "Assassin's Creed Black Flag Resynced", "cover": "images/ps_discs/ac_black_flag_resynced.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 77.00 },
+              { "title": "LEGO Batman: Legacy of the Dark Knight", "cover": "images/ps_discs/lego_batman_ldk.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 89.99 },
+              { "title": "007 First Light", "cover": "images/ps_discs/007_first_light.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 69.99 },
+              { "title": "The Witcher 3: Wild Hunt", "cover": "images/ps_discs/witcher_3.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 48.50 },
+              { "title": "Metal Gear Solid Δ: Snake Eater (Tactical Edition)", "cover": "images/ps_discs/mgs_delta.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 29.92 }
+            ]
+          }
+        };
 
-                const buttons = document.querySelectorAll('.tab-btn');
-                buttons.forEach(btn => {
-                    if (btn.getAttribute('data-page') === page) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
+        let currentPage = '2026';
+
+        const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+        const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        const discIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>`;
+
+        function init() {
+            renderAll();
+            switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.');
+            
+            // Check system color scheme preference on load
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme('dark');
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (theme === 'dark') {
+                icon.innerText = '☀️';
+                text.innerText = 'Light';
+            } else {
+                icon.innerText = '🌙';
+                text.innerText = 'Dark';
+            }
+        }
+
+        function renderAll() {
+            // 1. Finished Games & Books
+            const gamesGrid = document.getElementById('grid-games');
+            const booksGrid = document.getElementById('grid-books');
+
+            gamesGrid.innerHTML = mediaData.finished.filter(i => i.type === 'game').map(item => `
+                <div class="card" data-year="${item.year}">
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <div class="tag-container">
+                            <span class="tag tag-game">GAME</span>
+                            ${item.tags.map(t => `<span class="sub-tag">${t}</span>`).join('')}
+                        </div>
+                        <strong>${item.title}</strong>
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                ${clockIcon}
+                                <span class="duration-val">${item.val}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            booksGrid.innerHTML = mediaData.finished.filter(i => i.type === 'book').map(item => `
+                <div class="card" data-year="${item.year}">
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <span class="tag tag-book">BOOK</span>
+                        <strong>${item.title}</strong>
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                ${bookIcon}
+                                <span class="page-val">${item.val}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 2. Steelbooks
+            renderSteelbookGrid('grid-manta-lab', mediaData.steelbooks.manta_lab);
+            renderSteelbookGrid('grid-nolan', mediaData.steelbooks.nolan);
+            renderSteelbookGrid('grid-steelbooks-other', mediaData.steelbooks.other);
+            renderSteelbookGrid('grid-steelbooks-other2', mediaData.steelbooks.other2);
+
+            // 3. Game Discs
+            renderDiscGrid('grid-discs-switch', mediaData.game_discs.switch, 'tag-switch');
+            renderDiscGrid('grid-discs-ps3', mediaData.game_discs.ps3, 'tag-ps');
+            renderDiscGrid('grid-discs-ps4', mediaData.game_discs.ps4, 'tag-ps');
+            renderDiscGrid('grid-discs-ps5', mediaData.game_discs.ps5, 'tag-ps');
+        }
+
+        function renderSteelbookGrid(containerId, list) {
+            const container = document.getElementById(containerId);
+            if (!container || !list) return;
+
+            container.innerHTML = list.map(item => `
+                <div class="card">
+                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="${item.title}"></a>
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <div class="tag-container">
+                            ${(item.tags || []).map(t => `<span class="tag tag-steelbook">${t}</span>`).join('')}
+                            ${(item.subTags || []).map(t => `<span class="sub-tag">${t}</span>`).join('')}
+                        </div>
+                        <strong>${item.title}</strong>
+                        <div class="price-container" data-uah="${item.priceUah}" data-usd="${item.priceUsd}">
+                            ${item.priceUah.toLocaleString('uk-UA', {minimumFractionDigits: 2})} UAH 
+                            <span class="price-usd">(${item.priceUsd.toFixed(2)} US$)</span>
+                        </div>
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                ${discIcon}
+                                <span class="steelbook-item">${item.itemMeta}</span>
+                            </div>
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="bluray-link">${item.linkText}</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDiscGrid(containerId, list, tagClass) {
+            const container = document.getElementById(containerId);
+            if (!container || !list) return;
+
+            container.innerHTML = list.map(item => `
+                <div class="card">
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <div class="tag-container">
+                            <span class="tag ${tagClass}">${item.platform}</span>
+                            <span class="sub-tag">${item.subTag}</span>
+                        </div>
+                        <strong>${item.title}</strong>
+                        <div class="price-container" data-usd="${item.priceUsd}">
+                            <span class="price-usd">$${item.priceUsd.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchPage(page, headerTitle, subtitle) {
+            currentPage = page;
+            document.getElementById('page-title').innerText = headerTitle;
+            document.getElementById('page-subtitle').innerText = subtitle;
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-page') === page);
+            });
+
+            const gbStats = document.getElementById('stats-games-books');
+            const sbStats = document.getElementById('stats-steelbooks');
+            const psStats = document.getElementById('stats-ps-discs');
+
+            const gbSection = document.getElementById('section-games-books');
+            const sbSection = document.getElementById('section-steelbooks');
+            const psSection = document.getElementById('section-ps-discs');
+
+            gbStats.classList.add('hidden');
+            sbStats.classList.add('hidden');
+            psStats.classList.add('hidden');
+            gbSection.classList.add('hidden');
+            sbSection.classList.add('hidden');
+            psSection.classList.add('hidden');
+
+            if (page === 'steelbooks') {
+                sbStats.classList.remove('hidden');
+                sbSection.classList.remove('hidden');
+                calculateSteelbookTotals();
+            } else if (page === 'ps-discs') {
+                psStats.classList.remove('hidden');
+                psSection.classList.remove('hidden');
+                calculatePSDiscTotals();
+            } else {
+                gbStats.classList.remove('hidden');
+                gbSection.classList.remove('hidden');
+
+                document.querySelectorAll('#section-games-books .card').forEach(card => {
+                    card.classList.toggle('hidden', card.getAttribute('data-year') !== page);
                 });
+                calculateTotals();
+            }
+        }
 
-                const gbStats = document.getElementById('stats-games-books');
-                const sbStats = document.getElementById('stats-steelbooks');
-                const psStats = document.getElementById('stats-ps-discs');
+        function calculateTotals() {
+            const activeGames = document.querySelectorAll('#grid-games .card:not(.hidden) .duration-val');
+            let totalHours = 0;
+            activeGames.forEach(el => totalHours += parseFloat(el.innerText) || 0);
 
-                const gbSection = document.getElementById('section-games-books');
-                const sbSection = document.getElementById('section-steelbooks');
-                const psSection = document.getElementById('section-ps-discs');
+            document.getElementById('game-count').innerText = activeGames.length;
+            document.getElementById('total-game-time').innerText = Number(totalHours.toFixed(1)) + 'h';
 
-                // Hide all sections and stats
-                gbStats.classList.add('hidden');
-                sbStats.classList.add('hidden');
-                psStats.classList.add('hidden');
-                gbSection.classList.add('hidden');
-                sbSection.classList.add('hidden');
-                psSection.classList.add('hidden');
+            const activeBooks = document.querySelectorAll('#grid-books .card:not(.hidden) .page-val');
+            let totalPages = 0;
+            activeBooks.forEach(el => totalPages += parseInt(el.innerText.replace(/,/g, '')) || 0);
 
-                if (page === 'steelbooks') {
-                    sbStats.classList.remove('hidden');
-                    sbSection.classList.remove('hidden');
-                    calculateSteelbookTotals();
-                } else if (page === 'ps-discs') {
-                    psStats.classList.remove('hidden');
-                    psSection.classList.remove('hidden');
-                    calculatePSDiscTotals();
-                } else {
-                    gbStats.classList.remove('hidden');
-                    gbSection.classList.remove('hidden');
+            document.getElementById('book-count').innerText = activeBooks.length;
+            document.getElementById('total-pages').innerText = totalPages.toLocaleString();
+        }
 
-                    const cards = document.querySelectorAll('#section-games-books .card');
-                    cards.forEach(card => {
-                        if (card.getAttribute('data-year') === page) {
-                            card.classList.remove('hidden');
-                        } else {
-                            card.classList.add('hidden');
-                        }
-                    });
-                    calculateTotals();
+        function calculateSteelbookTotals() {
+            const steelbooks = document.querySelectorAll('#section-steelbooks .card');
+            document.getElementById('steelbook-count').innerText = steelbooks.length;
+
+            let totalUah = 0, totalUsd = 0;
+            steelbooks.forEach(card => {
+                const priceEl = card.querySelector('.price-container');
+                if (priceEl) {
+                    totalUah += parseFloat(priceEl.getAttribute('data-uah')) || 0;
+                    totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
                 }
-            }
+            });
 
-            function calculateTotals() {
-                const activeGames = document.querySelectorAll('#section-games-books .card:not(.hidden) .duration-val');
-                let totalHours = 0;
-                activeGames.forEach(el => {
-                    totalHours += parseFloat(el.innerText) || 0;
-                });
+            document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
+            document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+        }
 
-                document.getElementById('game-count').innerText = activeGames.length;
-                document.getElementById('total-game-time').innerText = Number(totalHours.toFixed(1)) + 'h';
+        function calculatePSDiscTotals() {
+            const psDiscs = document.querySelectorAll('#section-ps-discs .card');
+            document.getElementById('ps-disc-count').innerText = psDiscs.length;
 
-                const activeBooks = document.querySelectorAll('#section-games-books .card:not(.hidden) .page-val');
-                let totalPages = 0;
-                activeBooks.forEach(el => {
-                    totalPages += parseInt(el.innerText.replace(/,/g, '')) || 0;
-                });
+            let totalUsd = 0;
+            psDiscs.forEach(card => {
+                const priceEl = card.querySelector('.price-container');
+                if (priceEl) totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
+            });
 
-                document.getElementById('book-count').innerText = activeBooks.length;
-                document.getElementById('total-pages').innerText = totalPages.toLocaleString();
-            }
+            document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
-            function calculateSteelbookTotals() {
-                const steelbooks = document.querySelectorAll('#section-steelbooks .card');
-                document.getElementById('steelbook-count').innerText = steelbooks.length;
-
-                let totalUah = 0;
-                let totalUsd = 0;
-
-                steelbooks.forEach(card => {
-                    const priceEl = card.querySelector('.price-container');
-                    if (priceEl) {
-                        totalUah += parseFloat(priceEl.getAttribute('data-uah')) || 0;
-                        totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-                    }
-                });
-
-                document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-                document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
-            }
-
-            function calculatePSDiscTotals() {
-                const psDiscs = document.querySelectorAll('#section-ps-discs .card');
-                document.getElementById('ps-disc-count').innerText = psDiscs.length;
-
-                let totalUsd = 0;
-                psDiscs.forEach(card => {
-                    const priceEl = card.querySelector('.price-container');
-                    if (priceEl) {
-                        totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-                    }
-                });
-
-                document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            }
-
-            window.onload = function () {
-                switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.');
-            };
-        </script>
-
+        window.onload = init;
+    </script>
 </body>
 
 </html>
