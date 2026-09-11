@@ -21,6 +21,7 @@
             --tab-active-bg: #0f172a;
             --tab-active-text: #ffffff;
             --subtag-bg: #e2e8f0;
+            --table-header-bg: #f1f5f9;
 
             /* Category Accents */
             --accent-game: #6366f1;
@@ -28,6 +29,7 @@
             --accent-steelbook: #f97316;
             --accent-ps: #0284c7;
             --accent-switch: #ef4444;
+            --accent-digital: #8b5cf6;
         }
 
         [data-theme="dark"] {
@@ -45,6 +47,7 @@
             --tab-active-bg: #38bdf8;
             --tab-active-text: #0f172a;
             --subtag-bg: #334155;
+            --table-header-bg: #0f172a;
         }
 
         * {
@@ -214,6 +217,7 @@
         .stat-card.books { border-bottom-color: var(--accent-book); }
         .stat-card.steelbooks { border-bottom-color: var(--accent-steelbook); }
         .stat-card.ps-discs { border-bottom-color: var(--accent-ps); }
+        .stat-card.digital { border-bottom-color: var(--accent-digital); }
 
         .stat-value {
             display: block;
@@ -413,6 +417,87 @@
             font-weight: 700;
             color: var(--accent-ps);
         }
+
+        /* TABLE STYLES FOR DIGITAL PURCHASES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--text);
+            padding: 14px 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .date-col {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .title-col {
+            font-weight: 600;
+        }
+
+        .desc-col {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .price-col {
+            text-align: right;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* SORTABLE TABLE HEADERS */
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sortable:hover {
+            background-color: var(--tab-hover);
+        }
+
+        .sort-icon {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 
@@ -437,6 +522,7 @@
             <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
             <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Movie discs</button>
             <button class="tab-btn" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
+            <button class="tab-btn" data-page="ps-digital" onclick="switchPage('ps-digital', 'PlayStation Digital Purchases', 'Complete history of my digital purchases on PlayStation Store.')">PlayStation digital purchases</button>
         </div>
 
         <!-- STATS SECTIONS -->
@@ -493,6 +579,21 @@
             </div>
         </div>
 
+        <div class="stats-bar hidden" id="stats-ps-digital">
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Transactions</span>
+            </div>
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-spent-uah" style="font-size: 1.3rem;">0 UAH</span>
+                <span class="stat-label">Total Spent (UAH)</span>
+            </div>
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
+                <span class="stat-label">Total Spent (USD)</span>
+            </div>
+        </div>
+
         <!-- CONTENT CONTAINERS -->
         <div id="section-games-books">
             <div class="section-header">
@@ -526,7 +627,7 @@
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-steelbooks-other"></div>
-            
+
             <div class="section-header">
                 <h2 style="color: var(--accent-steelbook)">Collector's editions</h2>
                 <div class="line"></div>
@@ -558,6 +659,38 @@
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps5"></div>
+        </div>
+
+        <div id="section-ps-digital" class="hidden">
+            <div class="section-header">
+                <h2 style="color: var(--accent-digital)">Digital Purchases History</h2>
+                <div class="line"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortDigitalTable('transaction_date')">
+                                Date <span id="sort-transaction_date" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortDigitalTable('game_title')">
+                                Game Title <span id="sort-game_title" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortDigitalTable('item_description')">
+                                Item Description <span id="sort-item_description" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortDigitalTable('price_uah')">
+                                Price (UAH) <span id="sort-price_uah" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortDigitalTable('price_usd')">
+                                Price (USD) <span id="sort-price_usd" class="sort-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-digital-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -609,13 +742,12 @@
             ],
             "other": [
               { "title": "Indiana Jones 4-Movie Collection", "cover": "images/steelbooks/Indiana_Jones_4_Movie_Collection.jpg", "link": "https://www.blu-ray.com/movies/Indiana-Jones-4-Movie-Collection-4K-Blu-ray/288048/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 5000.00, "priceUsd": 111.00, "itemMeta": "4-Movie Collection" },
-            { "title": "Harry Potter Collection", "cover": "images/steelbooks/hpblurayrus.jpg", "link": "images/steelbooks/hpblurayrus.jpg", "linkText": "blu-ray.com", "tags": ["Amaray Bluray"], "subTags": ["BLU-RAY"], "priceUah": 3273.00, "priceUsd": 83.00, "itemMeta": "8-Movie Collection" }            ],
+              { "title": "Harry Potter Collection", "cover": "images/steelbooks/hpblurayrus.jpg", "link": "images/steelbooks/hpblurayrus.jpg", "linkText": "blu-ray.com", "tags": ["Amaray Bluray"], "subTags": ["BLU-RAY"], "priceUah": 3273.00, "priceUsd": 83.00, "itemMeta": "8-Movie Collection" }
+            ],
             "other2": [
               { "title": "The Dark Knight Trilogy: Ultimate Collector’s Edition Blu-Ray Box Set", "cover": "images/steelbooks/dk_complete.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-Trilogy-Blu-ray/65659/", "linkText": "blu-ray.com", "tags": ["BLU-RAY"], "subTags": [], "priceUah": 4052.23, "priceUsd": 90.77, "itemMeta": "3-Movie Collection" },
-            { "title": "Teenage Mutant Ninja Turtles Trilogy Limited Edition", "cover": "images/steelbooks/tmnt_arrow.jpg", "link": "https://www.blu-ray.com/movies/Teenage-Mutant-Ninja-Turtles-Trilogy-4K-Blu-ray/394492/", "linkText": "blu-ray.com", "tags": ["4K UHD"], "subTags": [], "priceUah": 1954.05, "priceUsd": 43.38, "itemMeta": "3-Movie Collection" },
-            { "title": "Titanic 3D Collectors Edition", "cover": "images/steelbooks/titanic_3d.jpg", "link": "https://www.blu-ray.com/movies/Titanic-3D-Collectors-Edition-Blu-ray/50252/", "linkText": "blu-ray.com", "tags": ["BLU-RAY"], "subTags": [], "priceUah": 2000, "priceUsd": 36, "itemMeta": "3-Movie Collection" }
-
-
+              { "title": "Teenage Mutant Ninja Turtles Trilogy Limited Edition", "cover": "images/steelbooks/tmnt_arrow.jpg", "link": "https://www.blu-ray.com/movies/Teenage-Mutant-Ninja-Turtles-Trilogy-4K-Blu-ray/394492/", "linkText": "blu-ray.com", "tags": ["4K UHD"], "subTags": [], "priceUah": 1954.05, "priceUsd": 43.38, "itemMeta": "3-Movie Collection" },
+              { "title": "Titanic 3D Collectors Edition", "cover": "images/steelbooks/titanic_3d.jpg", "link": "https://www.blu-ray.com/movies/Titanic-3D-Collectors-Edition-Blu-ray/50252/", "linkText": "blu-ray.com", "tags": ["BLU-RAY"], "subTags": [], "priceUah": 2000, "priceUsd": 36, "itemMeta": "3-Movie Collection" }
             ]
           },
           "game_discs": {
@@ -658,14 +790,50 @@
               { "title": "007 First Light", "cover": "images/ps_discs/007_first_light.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 69.99 },
               { "title": "The Witcher 3: Wild Hunt", "cover": "images/ps_discs/witcher_3.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 48.50 },
               { "title": "Metal Gear Solid Δ: Snake Eater (Tactical Edition)", "cover": "images/ps_discs/mgs_delta.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 29.92 },
-                { "title": "Onimusha: Way of the Sword", "cover": "images/ps_discs/OnimushaWayoftheSword.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 69.00 },
-                { "title": "The Blood of Dawnwalker Day 1 Edition", "cover": "images/ps_discs/dawnwalker.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 30.66}
-
+              { "title": "Onimusha: Way of the Sword", "cover": "images/ps_discs/OnimushaWayoftheSword.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 69.00 },
+              { "title": "The Blood of Dawnwalker Day 1 Edition", "cover": "images/ps_discs/dawnwalker.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 30.66 }
             ]
-          }
+          },
+          "ps_digital": [
+            { "transaction_date": "2015-03-07", "game_title": "THE LAST OF US REMASTERED", "item_description": "«Одни из нас™. Обновленная версия»", "price_uah": 389.0, "price_usd": 16.99 },
+            { "transaction_date": "2015-04-09", "game_title": "Need for Speed™ Rivals", "item_description": "Need for Speed™ Rivals: Complete Edition", "price_uah": 379.0, "price_usd": 16.18 },
+            { "transaction_date": "2015-04-15", "game_title": "MORTAL KOMBAT X", "item_description": "Mortal Kombat X", "price_uah": 999.0, "price_usd": 43.74 },
+            { "transaction_date": "2015-05-19", "game_title": "«Ведьмак 3: Дикая Охота»", "item_description": "Ведьмак 3: Дикая Охота", "price_uah": 999.0, "price_usd": 48.01 },
+            { "transaction_date": "2015-06-22", "game_title": "BATMAN ARKHAM KNIGHT", "item_description": "Batman: Arkham Knight", "price_uah": 999.0, "price_usd": 46.21 },
+            { "transaction_date": "2015-08-13", "game_title": "BATMAN ARKHAM KNIGHT", "item_description": "Рыцарь Аркхема Семейное дело", "price_uah": 109.0, "price_usd": 5.1 },
+            { "transaction_date": "2015-10-03", "game_title": "Uncharted™: Натан Дрейк. Коллекция", "item_description": "Uncharted™: Натан Дрейк. Kоллекция", "price_uah": 949.0, "price_usd": 44.87 },
+            { "transaction_date": "2015-12-29", "game_title": "ROCKET LEAGUE", "item_description": "Rocket League®", "price_uah": 270.0, "price_usd": 11.35 },
+            { "transaction_date": "2015-12-29", "game_title": "PlayStation Plus", "item_description": "Подписка на 1 месяц", "price_uah": 159.0, "price_usd": 6.68 },
+            { "transaction_date": "2015-12-30", "game_title": "Rayman Legends", "item_description": "Rayman Legends", "price_uah": 270.0, "price_usd": 11.25 },
+            { "transaction_date": "2015-12-30", "game_title": "«Ведьмак 3: Дикая Охота»", "item_description": "Каменные сердца", "price_uah": 225.0, "price_usd": 9.38 },
+            { "transaction_date": "2015-12-30", "game_title": "Metal Gear Solid V", "item_description": "Ground Zeroes", "price_uah": 118.0, "price_usd": 4.92 },
+            { "transaction_date": "2019-03-27", "game_title": "RED DEAD REDEMPTION 2", "item_description": "Red Dead Online", "price_uah": 1999.0, "price_usd": 74.15 },
+            { "transaction_date": "2020-04-08", "game_title": "FINAL FANTASY VII REMAKE", "item_description": "FINAL FANTASY VII REMAKE", "price_uah": 1999.0, "price_usd": 73.33 },
+            { "transaction_date": "2020-09-24", "game_title": "Предзаказ Mafia: Definitive Edition", "item_description": "Предзаказ Mafia: Definitive Edition", "price_uah": 1199.0, "price_usd": 42.55 },
+            { "transaction_date": "2020-11-23", "game_title": "HITMAN 2", "item_description": "HITMAN™ 2", "price_uah": 439.78, "price_usd": 15.51 },
+            { "transaction_date": "2020-11-23", "game_title": "HITMAN 2", "item_description": "HITMAN™ 2 - Набор дополнений", "price_uah": 279.8, "price_usd": 9.87 },
+            { "transaction_date": "2020-12-07", "game_title": "Team Sonic Racing™", "item_description": "Team Sonic Racing™", "price_uah": 599.5, "price_usd": 21.19 },
+            { "transaction_date": "2020-12-07", "game_title": "WOLFENSTEIN 2", "item_description": "Wolfenstein® II: The New Colossus™", "price_uah": 479.6, "price_usd": 16.95 },
+            { "transaction_date": "2021-01-22", "game_title": "GRIS", "item_description": "GRIS", "price_uah": 549.0, "price_usd": 19.5 },
+            { "transaction_date": "2021-01-22", "game_title": "Unravel Two", "item_description": "Unravel Two", "price_uah": 227.15, "price_usd": 8.07 },
+            { "transaction_date": "2021-04-20", "game_title": "A WAY OUT", "item_description": "A Way Out", "price_uah": 314.7, "price_usd": 11.24 },
+            { "transaction_date": "2021-05-01", "game_title": "Metal Gear Solid V", "item_description": "The Definitive Experience", "price_uah": 129.8, "price_usd": 4.68 },
+            { "transaction_date": "2021-08-28", "game_title": "Assassin's Creed® III Remastered", "item_description": "Assassin's Creed® III Remastered", "price_uah": 288.4, "price_usd": 10.71 },
+            { "transaction_date": "2021-09-05", "game_title": "Assassin’s Creed® The Ezio Collection", "item_description": "Assassin’s Creed® The Ezio Collection", "price_uah": 233.6, "price_usd": 8.67 },
+            { "transaction_date": "2021-11-11", "game_title": "GOD OF WAR® III REMASTERED", "item_description": "God of War® III Обновленная версия", "price_uah": 324.5, "price_usd": 12.45 },
+            { "transaction_date": "2023-12-02", "game_title": "BATMAN ARKHAM KNIGHT", "item_description": "Batman: Коллекция Аркхема", "price_uah": 269.85, "price_usd": 7.42 },
+            { "transaction_date": "2026-02-22", "game_title": "Crash™ Team Racing Nitro-Fueled", "item_description": "Crash™ Team Racing Nitro-Fueled", "price_uah": 402.15, "price_usd": 9.33 },
+            { "transaction_date": "2026-03-07", "game_title": "Resident Evil Requiem", "item_description": "Resident Evil Requiem Deluxe Edition", "price_uah": 2399.0, "price_usd": 55.47 },
+            { "transaction_date": "2026-03-28", "game_title": "Control: Ultimate Edition", "item_description": "Полное издание CONTROL", "price_uah": 179.85, "price_usd": 4.14 },
+            { "transaction_date": "2026-04-23", "game_title": "Resident Evil Village", "item_description": "Resident Evil Village Gold Edition", "price_uah": 449.7, "price_usd": 10.33 },
+            { "transaction_date": "2026-06-06", "game_title": "LEGO® Бэтмен™: Наследие Темного рыцаря", "item_description": "Улучшение до Deluxe-издания", "price_uah": 719.0, "price_usd": 16.42 },
+            { "transaction_date": "2026-06-19", "game_title": "Resident Evil 4", "item_description": "Resident Evil 4 — «Два пути»", "price_uah": 329.0, "price_usd": 7.49 }
+          ]
         };
 
         let currentPage = '2026';
+        let currentSortColumn = null;
+        let isAscending = true;
 
         const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
         const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
@@ -751,6 +919,9 @@
             renderDiscGrid('grid-discs-ps3', mediaData.game_discs.ps3, 'tag-ps');
             renderDiscGrid('grid-discs-ps4', mediaData.game_discs.ps4, 'tag-ps');
             renderDiscGrid('grid-discs-ps5', mediaData.game_discs.ps5, 'tag-ps');
+
+            // 4. Digital Purchases Table
+            renderDigitalTable();
         }
 
         function renderSteelbookGrid(containerId, list) {
@@ -804,6 +975,52 @@
             `).join('');
         }
 
+        function renderDigitalTable() {
+            const tbody = document.getElementById('table-digital-body');
+            if (!tbody || !mediaData.ps_digital) return;
+
+            tbody.innerHTML = mediaData.ps_digital.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description}</td>
+                    <td class="price-col">${item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2})} UAH</td>
+                    <td class="price-col" style="color: var(--accent-ps);">$${item.price_usd.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function sortDigitalTable(columnKey) {
+            if (!mediaData.ps_digital) return;
+
+            if (currentSortColumn === columnKey) {
+                isAscending = !isAscending;
+            } else {
+                currentSortColumn = columnKey;
+                isAscending = true;
+            }
+
+            mediaData.ps_digital.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
+
+                if (typeof valA === 'string') {
+                    const comparison = valA.localeCompare(valB);
+                    return isAscending ? comparison : -comparison;
+                }
+
+                return isAscending ? valA - valB : valB - valA;
+            });
+
+            renderDigitalTable();
+
+            document.querySelectorAll('.sort-icon').forEach(el => el.innerText = '');
+            const activeHeaderIcon = document.getElementById(`sort-${columnKey}`);
+            if (activeHeaderIcon) {
+                activeHeaderIcon.innerText = isAscending ? '▲' : '▼';
+            }
+        }
+
         function switchPage(page, headerTitle, subtitle) {
             currentPage = page;
             document.getElementById('page-title').innerText = headerTitle;
@@ -816,17 +1033,22 @@
             const gbStats = document.getElementById('stats-games-books');
             const sbStats = document.getElementById('stats-steelbooks');
             const psStats = document.getElementById('stats-ps-discs');
+            const digitalStats = document.getElementById('stats-ps-digital');
 
             const gbSection = document.getElementById('section-games-books');
             const sbSection = document.getElementById('section-steelbooks');
             const psSection = document.getElementById('section-ps-discs');
+            const digitalSection = document.getElementById('section-ps-digital');
 
             gbStats.classList.add('hidden');
             sbStats.classList.add('hidden');
             psStats.classList.add('hidden');
+            digitalStats.classList.add('hidden');
+
             gbSection.classList.add('hidden');
             sbSection.classList.add('hidden');
             psSection.classList.add('hidden');
+            digitalSection.classList.add('hidden');
 
             if (page === 'steelbooks') {
                 sbStats.classList.remove('hidden');
@@ -836,6 +1058,10 @@
                 psStats.classList.remove('hidden');
                 psSection.classList.remove('hidden');
                 calculatePSDiscTotals();
+            } else if (page === 'ps-digital') {
+                digitalStats.classList.remove('hidden');
+                digitalSection.classList.remove('hidden');
+                calculateDigitalTotals();
             } else {
                 gbStats.classList.remove('hidden');
                 gbSection.classList.remove('hidden');
@@ -891,6 +1117,22 @@
             });
 
             document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calculateDigitalTotals() {
+            const items = mediaData.ps_digital || [];
+            document.getElementById('digital-count').innerText = items.length;
+
+            let totalUah = 0;
+            let totalUsd = 0;
+
+            items.forEach(item => {
+                totalUah += item.price_uah || 0;
+                totalUsd += item.price_usd || 0;
+            });
+
+            document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
+            document.getElementById('digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
         }
 
         window.onload = init;
