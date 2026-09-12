@@ -5,10 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Log</title>
-    <!-- Imported Google Fonts for Inter & Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Light Theme Variables */
@@ -118,39 +114,17 @@
         }
 
         h1 {
+            font-weight: 800;
+            font-size: 2.25rem;
             margin: 0 0 8px 0;
+            color: var(--header-title);
+            letter-spacing: -0.025em;
         }
 
         header p {
             color: var(--text-muted);
             margin: 0;
             font-size: 1rem;
-        }
-
-        /* CUSTOM APPLIED STYLES */
-        /* Custom Header Styling (Matches "Steelbook Collection" & Main Page Titles) */
-        .steelbook-header-title {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 800;
-            font-size: 2.25rem; /* Responsive breakpoint increases to 3rem on larger screens (min-width: 768px) */
-            line-height: 1.2;
-            letter-spacing: -0.03em;
-            color: #0f172a; /* Light mode default fallback */
-            
-            /* Modern Gradient Text Overlay */
-            background: linear-gradient(135deg, var(--text) 30%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Category Subheaders & Accent Colors */
-        .steelbook-category-header {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 0.9rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent-steelbook, #f97316);
         }
 
         @media (min-width: 768px) {
@@ -166,8 +140,8 @@
                 width: auto;
             }
 
-            .steelbook-header-title {
-                font-size: 3rem;
+            h1 {
+                font-size: 2.75rem;
             }
         }
 
@@ -280,7 +254,11 @@
         }
 
         .section-header h2 {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
             margin: 0;
+            font-weight: 700;
         }
 
         .line {
@@ -539,7 +517,7 @@
                 </button>
             </div>
             <div class="header-content">
-                <h1 id="page-title" class="steelbook-header-title">Finished in 2026</h1>
+                <h1 id="page-title">Finished in 2026</h1>
                 <p id="page-subtitle">A gallery of my completed adventures and stories.</p>
             </div>
         </header>
@@ -656,13 +634,13 @@
         <!-- CONTENT CONTAINERS -->
         <div id="section-games-books">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-game)">Games</h2>
+                <h2 style="color: var(--accent-game)">Games</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-games"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-book)">Books</h2>
+                <h2 style="color: var(--accent-book)">Books</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-books"></div>
@@ -670,25 +648,25 @@
 
         <div id="section-steelbooks" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
+                <h2 style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-manta-lab"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
+                <h2 style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-nolan"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Other</h2>
+                <h2 style="color: var(--accent-steelbook)">Other</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-steelbooks-other"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Collector's editions</h2>
+                <h2 style="color: var(--accent-steelbook)">Collector's editions</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-steelbooks-other2"></div>
@@ -696,25 +674,25 @@
 
         <div id="section-ps-discs" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-switch)">Nintendo Switch</h2>
+                <h2 style="color: var(--accent-switch)">Nintendo Switch</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-switch"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 3</h2>
+                <h2 style="color: var(--accent-ps)">PlayStation 3</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps3"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 4</h2>
+                <h2 style="color: var(--accent-ps)">PlayStation 4</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps4"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 5</h2>
+                <h2 style="color: var(--accent-ps)">PlayStation 5</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps5"></div>
@@ -722,7 +700,7 @@
 
         <div id="section-ps-digital" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-digital)">Digital Purchases History</h2>
+                <h2 style="color: var(--accent-digital)">Digital Purchases History</h2>
                 <div class="line"></div>
             </div>
             <div class="table-responsive">
@@ -754,7 +732,7 @@
 
         <div id="section-nintendo-digital" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-nintendo-digital)">Nintendo Digital Purchases History</h2>
+                <h2 style="color: var(--accent-nintendo-digital)">Nintendo Digital Purchases History</h2>
                 <div class="line"></div>
             </div>
             <div class="table-responsive">
@@ -783,7 +761,7 @@
 
         <div id="section-steam-digital" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steam-text)">Steam Digital Purchases & Library History</h2>
+                <h2 style="color: var(--accent-steam-text)">Steam Digital Purchases & Library History</h2>
                 <div class="line"></div>
             </div>
             <div class="table-responsive">
@@ -986,74 +964,74 @@
             { "transaction_date": "2024-06-19", "game_title": "Subnautica", "item_description": "Full Game", "price_usd": 9.89 },
             { "transaction_date": "2024-06-28", "game_title": "Alan Wake Remastered", "item_description": "Full Game", "price_usd": 29.99 }
           ],
-  "steam_digital": [
-    { "transaction_date": "2026-05-19", "game_title": "SOMA", "item_description": "Purchase", "playtime_hours": 12.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
-    { "transaction_date": "2026-05-07", "game_title": "REANIMAL", "item_description": "Purchase", "playtime_hours": 8.0, "platform_type": "Steam", "price_uah": 555.0, "price_usd": 13.51 },
-    { "transaction_date": "2026-02-27", "game_title": "Splinter Cell | Tom Clancy's Splinter Cell : Pandora Tomorrow | SplinterCell: Double Agent | Tom Clancy's Splinter Cell Conviction | Tom Clancy's Splinter Cell Blacklist Standard Edition RU+CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 295.0, "price_usd": 7.18 },
-    { "transaction_date": "2025-12-20", "game_title": "MK1: Definitive Edition Upgrade | Mortal Kombat X | Kombat Pack | Kombat Pack 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 408.0, "price_usd": 9.93 },
-    { "transaction_date": "2025-11-25", "game_title": "Mortal Kombat 1", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 259.0, "price_usd": 6.30 },
-    { "transaction_date": "2025-11-06", "game_title": "Sonic and All-Stars Racing Transformed Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
-    { "transaction_date": "2025-08-14", "game_title": "Warhammer 40,000: Dawn of War - Definitive Edition - Veterans Upgrade", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 350.0, "price_usd": 8.52 },
-    { "transaction_date": "2025-08-09", "game_title": "Mafia: The Old Country", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 1999.0, "price_usd": 48.64 },
-    { "transaction_date": "2025-06-29", "game_title": "Deep Rock Galactic", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 125.0, "price_usd": 3.04 },
-    { "transaction_date": "2025-04-17", "game_title": "Space Hulk: Deathwing Enhanced Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 89.0, "price_usd": 2.17 },
-    { "transaction_date": "2025-03-05", "game_title": "Split Fiction", "item_description": "Purchase", "playtime_hours": 23.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
-    { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 249.0, "price_usd": 6.06 },
-    { "transaction_date": "2024-12-02", "game_title": "Trailmakers | Batman: Arkham Collection | RESIDENT EVIL 2 Deluxe | Far Cry 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 646.0, "price_usd": 15.72 },
-    { "transaction_date": "2024-11-14", "game_title": "Warhammer: End Times - Vermintide | Vermintide 2 | Darktide", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 711.0, "price_usd": 17.30 },
-    { "transaction_date": "2024-11-04", "game_title": "Middle-earth™: The Shadow Bundle", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 184.0, "price_usd": 4.48 },
-    { "transaction_date": "2024-10-14", "game_title": "Max Payne 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 389.0, "price_usd": 9.46 },
-    { "transaction_date": "2024-09-20", "game_title": "Risk of Rain 2: Seekers of the Storm", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 209.0, "price_usd": 5.09 },
-    { "transaction_date": "2024-09-07", "game_title": "Warhammer 40,000: Space Marine 2 - Standard Edition", "item_description": "Purchase", "playtime_hours": 10.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
-    { "transaction_date": "2024-09-02", "game_title": "Hogwarts Legacy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 479.0, "price_usd": 11.65 },
-    { "transaction_date": "2024-08-10", "game_title": "Half-Life: Alyx", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 382.0, "price_usd": 9.29 },
-    { "transaction_date": "2024-07-03", "game_title": "Assassin's Creed Brotherhood", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 90.0, "price_usd": 2.19 },
-    { "transaction_date": "2024-07-28", "game_title": "Fallout New Vegas Ultimate PCR", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.0, "price_usd": 12.65 },
-    { "transaction_date": "2024-07-28", "game_title": "RESIDENT EVIL 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 252.0, "price_usd": 6.13 },
-    { "transaction_date": "2024-07-11", "game_title": "Call of Duty: Modern Warfare Remastered", "item_description": "Purchase", "playtime_hours": 8.8, "platform_type": "Steam", "price_uah": 678.0, "price_usd": 16.50 },
-    { "transaction_date": "2024-07-10", "game_title": "Resident Evil 4 Gold Edition", "item_description": "Purchase", "playtime_hours": 13.2, "platform_type": "Steam", "price_uah": 1359.0, "price_usd": 33.07 },
-    { "transaction_date": "2024-06-28", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 224.0, "price_usd": 5.45 },
-    { "transaction_date": "2024-05-31", "game_title": "PAYDAY 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
-    { "transaction_date": "2024-05-27", "game_title": "Warhammer 40,000: Dawn of War - Master Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 109.0, "price_usd": 2.65 },
-    { "transaction_date": "2024-04-04", "game_title": "Worms W.M.D", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 119.0, "price_usd": 2.89 },
-    { "transaction_date": "2024-03-22", "game_title": "Dragon's Dogma: Dark Arisen", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2024-03-21", "game_title": "Age of Empires: Definitive Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2024-03-20", "game_title": "Age of Empires: Definitive Edition | Dragon's Dogma: Dark Arisen", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 277.0, "price_usd": 6.74 },
-    { "transaction_date": "2023-12-17", "game_title": "Risk of Rain 2", "item_description": "Purchase", "playtime_hours": 36.3, "platform_type": "Steam", "price_uah": 329.0, "price_usd": 8.00 },
-    { "transaction_date": "2023-12-09", "game_title": "Quake III Arena", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2023-12-08", "game_title": "Quake III Arena", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 380.0, "price_usd": 9.25 },
-    { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Purchase", "playtime_hours": 35.9, "platform_type": "Steam", "price_uah": 300.0, "price_usd": 7.30 },
-    { "transaction_date": "2023-11-17", "game_title": "TEKKEN 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 135.0, "price_usd": 3.28 },
-    { "transaction_date": "2023-11-09", "game_title": "Condition Zero", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
-    { "transaction_date": "2023-11-09", "game_title": "Portal 2", "item_description": "Purchase", "playtime_hours": 14.1, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
-    { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 99.0, "price_usd": 2.41 },
-    { "transaction_date": "2022-11-08", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2022-11-05", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 579.0, "price_usd": 14.09 },
-    { "transaction_date": "2021-10-14", "game_title": "Splintercell: Chaos Theory", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
-    { "transaction_date": "2020-12-23", "game_title": "Assassin’s Creed® Chronicles: Trilogy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 113.0, "price_usd": 2.75 },
-    { "transaction_date": "2020-04-05", "game_title": "Trine 2: Complete Story", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 69.0, "price_usd": 1.68 },
-    { "transaction_date": "2020-03-29", "game_title": "Rocket League®", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 139.0, "price_usd": 3.38 },
-    { "transaction_date": "2020-03-27", "game_title": "Left 4 Dead 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
-    { "transaction_date": "2020-02-09", "game_title": "Need for Speed: Undercover", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
-    { "transaction_date": "2020-02-08", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
-    { "transaction_date": "2017-11-14", "game_title": "Currency Conversion to UAH (Ukraine)", "item_description": "Conversion", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2017-10-31", "game_title": "Bastion", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 66.23, "price_usd": 2.49 },
-    { "transaction_date": "2016-12-09", "game_title": "Grand Theft Auto IV (US/AU)", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.34, "price_usd": 19.99 },
-    { "transaction_date": "2016-12-09", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($23.25)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 605.20, "price_usd": 23.25 },
-    { "transaction_date": "2016-11-24", "game_title": "Grand Theft Auto: Vice City New Audio ROW", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 88.82, "price_usd": 3.49 },
-    { "transaction_date": "2016-08-25", "game_title": "The Witcher: Enhanced Edition | The Witcher 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 76.27, "price_usd": 3.00 },
-    { "transaction_date": "2016-08-25", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($7.29)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 185.34, "price_usd": 7.29 },
-    { "transaction_date": "2016-08-11", "game_title": "Tomb Raider RU + CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 294.95, "price_usd": 11.99 },
-    { "transaction_date": "2016-08-11", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.81)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 265.93, "price_usd": 10.81 },
-    { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($2.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 49.20, "price_usd": 2.00 },
-    { "transaction_date": "2016-08-10", "game_title": "Assassin's Creed II", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 245.75, "price_usd": 9.99 },
-    { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 246.00, "price_usd": 10.00 },
-    { "transaction_date": "2018-11-23", "game_title": "Warhammer 40k: Dawn of War - Soulstorm", "item_description": "Expansion Pack", "playtime_hours": 310.3, "platform_type": "Steam / Key", "price_uah": 133.0, "price_usd": 3.24 },
-    { "transaction_date": "2020-05-18", "game_title": "Styx: Master of Shadows", "item_description": "Full Game", "playtime_hours": 28.2, "platform_type": "Steam", "price_uah": 123.0, "price_usd": 2.99 }
-  ]
+          "steam_digital": [
+            { "transaction_date": "2026-05-19", "game_title": "SOMA", "item_description": "Purchase", "playtime_hours": 12.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
+            { "transaction_date": "2026-05-07", "game_title": "REANIMAL", "item_description": "Purchase", "playtime_hours": 8.0, "platform_type": "Steam", "price_uah": 555.0, "price_usd": 13.51 },
+            { "transaction_date": "2026-02-27", "game_title": "Splinter Cell | Tom Clancy's Splinter Cell : Pandora Tomorrow | SplinterCell: Double Agent | Tom Clancy's Splinter Cell Conviction | Tom Clancy's Splinter Cell Blacklist Standard Edition RU+CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 295.0, "price_usd": 7.18 },
+            { "transaction_date": "2025-12-20", "game_title": "MK1: Definitive Edition Upgrade | Mortal Kombat X | Kombat Pack | Kombat Pack 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 408.0, "price_usd": 9.93 },
+            { "transaction_date": "2025-11-25", "game_title": "Mortal Kombat 1", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 259.0, "price_usd": 6.30 },
+            { "transaction_date": "2025-11-06", "game_title": "Sonic and All-Stars Racing Transformed Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
+            { "transaction_date": "2025-08-14", "game_title": "Warhammer 40,000: Dawn of War - Definitive Edition - Veterans Upgrade", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 350.0, "price_usd": 8.52 },
+            { "transaction_date": "2025-08-09", "game_title": "Mafia: The Old Country", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 1999.0, "price_usd": 48.64 },
+            { "transaction_date": "2025-06-29", "game_title": "Deep Rock Galactic", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 125.0, "price_usd": 3.04 },
+            { "transaction_date": "2025-04-17", "game_title": "Space Hulk: Deathwing Enhanced Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 89.0, "price_usd": 2.17 },
+            { "transaction_date": "2025-03-05", "game_title": "Split Fiction", "item_description": "Purchase", "playtime_hours": 23.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
+            { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 249.0, "price_usd": 6.06 },
+            { "transaction_date": "2024-12-02", "game_title": "Trailmakers | Batman: Arkham Collection | RESIDENT EVIL 2 Deluxe | Far Cry 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 646.0, "price_usd": 15.72 },
+            { "transaction_date": "2024-11-14", "game_title": "Warhammer: End Times - Vermintide | Vermintide 2 | Darktide", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 711.0, "price_usd": 17.30 },
+            { "transaction_date": "2024-11-04", "game_title": "Middle-earth™: The Shadow Bundle", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 184.0, "price_usd": 4.48 },
+            { "transaction_date": "2024-10-14", "game_title": "Max Payne 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 389.0, "price_usd": 9.46 },
+            { "transaction_date": "2024-09-20", "game_title": "Risk of Rain 2: Seekers of the Storm", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 209.0, "price_usd": 5.09 },
+            { "transaction_date": "2024-09-07", "game_title": "Warhammer 40,000: Space Marine 2 - Standard Edition", "item_description": "Purchase", "playtime_hours": 10.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
+            { "transaction_date": "2024-09-02", "game_title": "Hogwarts Legacy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 479.0, "price_usd": 11.65 },
+            { "transaction_date": "2024-08-10", "game_title": "Half-Life: Alyx", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 382.0, "price_usd": 9.29 },
+            { "transaction_date": "2024-07-03", "game_title": "Assassin's Creed Brotherhood", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 90.0, "price_usd": 2.19 },
+            { "transaction_date": "2024-07-28", "game_title": "Fallout New Vegas Ultimate PCR", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.0, "price_usd": 12.65 },
+            { "transaction_date": "2024-07-28", "game_title": "RESIDENT EVIL 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 252.0, "price_usd": 6.13 },
+            { "transaction_date": "2024-07-11", "game_title": "Call of Duty: Modern Warfare Remastered", "item_description": "Purchase", "playtime_hours": 8.8, "platform_type": "Steam", "price_uah": 678.0, "price_usd": 16.50 },
+            { "transaction_date": "2024-07-10", "game_title": "Resident Evil 4 Gold Edition", "item_description": "Purchase", "playtime_hours": 13.2, "platform_type": "Steam", "price_uah": 1359.0, "price_usd": 33.07 },
+            { "transaction_date": "2024-06-28", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 224.0, "price_usd": 5.45 },
+            { "transaction_date": "2024-05-31", "game_title": "PAYDAY 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
+            { "transaction_date": "2024-05-27", "game_title": "Warhammer 40,000: Dawn of War - Master Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 109.0, "price_usd": 2.65 },
+            { "transaction_date": "2024-04-04", "game_title": "Worms W.M.D", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 119.0, "price_usd": 2.89 },
+            { "transaction_date": "2024-03-22", "game_title": "Dragon's Dogma: Dark Arisen", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2024-03-21", "game_title": "Age of Empires: Definitive Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2024-03-20", "game_title": "Age of Empires: Definitive Edition | Dragon's Dogma: Dark Arisen", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 277.0, "price_usd": 6.74 },
+            { "transaction_date": "2023-12-17", "game_title": "Risk of Rain 2", "item_description": "Purchase", "playtime_hours": 36.3, "platform_type": "Steam", "price_uah": 329.0, "price_usd": 8.00 },
+            { "transaction_date": "2023-12-09", "game_title": "Quake III Arena", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2023-12-08", "game_title": "Quake III Arena", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 380.0, "price_usd": 9.25 },
+            { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Purchase", "playtime_hours": 35.9, "platform_type": "Steam", "price_uah": 300.0, "price_usd": 7.30 },
+            { "transaction_date": "2023-11-17", "game_title": "TEKKEN 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 135.0, "price_usd": 3.28 },
+            { "transaction_date": "2023-11-09", "game_title": "Condition Zero", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+            { "transaction_date": "2023-11-09", "game_title": "Portal 2", "item_description": "Purchase", "playtime_hours": 14.1, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
+            { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 99.0, "price_usd": 2.41 },
+            { "transaction_date": "2022-11-08", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2022-11-05", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 579.0, "price_usd": 14.09 },
+            { "transaction_date": "2021-10-14", "game_title": "Splintercell: Chaos Theory", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
+            { "transaction_date": "2020-12-23", "game_title": "Assassin’s Creed® Chronicles: Trilogy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 113.0, "price_usd": 2.75 },
+            { "transaction_date": "2020-04-05", "game_title": "Trine 2: Complete Story", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 69.0, "price_usd": 1.68 },
+            { "transaction_date": "2020-03-29", "game_title": "Rocket League®", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 139.0, "price_usd": 3.38 },
+            { "transaction_date": "2020-03-27", "game_title": "Left 4 Dead 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+            { "transaction_date": "2020-02-09", "game_title": "Need for Speed: Undercover", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+            { "transaction_date": "2020-02-08", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
+            { "transaction_date": "2017-11-14", "game_title": "Currency Conversion to UAH (Ukraine)", "item_description": "Conversion", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2017-10-31", "game_title": "Bastion", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 66.23, "price_usd": 2.49 },
+            { "transaction_date": "2016-12-09", "game_title": "Grand Theft Auto IV (US/AU)", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.34, "price_usd": 19.99 },
+            { "transaction_date": "2016-12-09", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($23.25)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 605.20, "price_usd": 23.25 },
+            { "transaction_date": "2016-11-24", "game_title": "Grand Theft Auto: Vice City New Audio ROW", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 88.82, "price_usd": 3.49 },
+            { "transaction_date": "2016-08-25", "game_title": "The Witcher: Enhanced Edition | The Witcher 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 76.27, "price_usd": 3.00 },
+            { "transaction_date": "2016-08-25", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($7.29)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 185.34, "price_usd": 7.29 },
+            { "transaction_date": "2016-08-11", "game_title": "Tomb Raider RU + CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 294.95, "price_usd": 11.99 },
+            { "transaction_date": "2016-08-11", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.81)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 265.93, "price_usd": 10.81 },
+            { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($2.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 49.20, "price_usd": 2.00 },
+            { "transaction_date": "2016-08-10", "game_title": "Assassin's Creed II", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 245.75, "price_usd": 9.99 },
+            { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 246.00, "price_usd": 10.00 },
+            { "transaction_date": "2018-11-23", "game_title": "Warhammer 40k: Dawn of War - Soulstorm", "item_description": "Expansion Pack", "playtime_hours": 310.3, "platform_type": "Steam / Key", "price_uah": 133.0, "price_usd": 3.24 },
+            { "transaction_date": "2020-05-18", "game_title": "Styx: Master of Shadows", "item_description": "Full Game", "playtime_hours": 123.0, "price_usd": 2.99 }
+          ]
         };
 
         let currentPage = '2026';
@@ -1345,169 +1323,190 @@
             }
         }
 
-        function switchPage(page, headerTitle, subtitle) {
-            currentPage = page;
-            document.getElementById('page-title').innerText = headerTitle;
+        function switchPage(pageKey, title, subtitle) {
+            currentPage = pageKey;
+
+            // Update Header Titles
+            document.getElementById('page-title').innerText = title;
             document.getElementById('page-subtitle').innerText = subtitle;
 
+            // Active Tab Styles
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-page') === page);
+                btn.classList.toggle('active', btn.getAttribute('data-page') === pageKey);
             });
 
-            const gbStats = document.getElementById('stats-games-books');
-            const sbStats = document.getElementById('stats-steelbooks');
-            const psStats = document.getElementById('stats-ps-discs');
-            const digitalStats = document.getElementById('stats-ps-digital');
-            const nintendoDigitalStats = document.getElementById('stats-nintendo-digital');
-            const steamDigitalStats = document.getElementById('stats-steam-digital');
+            // Toggle Sections
+            const secGamesBooks = document.getElementById('section-games-books');
+            const secSteelbooks = document.getElementById('section-steelbooks');
+            const secPsDiscs = document.getElementById('section-ps-discs');
+            const secPsDigital = document.getElementById('section-ps-digital');
+            const secNintendoDigital = document.getElementById('section-nintendo-digital');
+            const secSteamDigital = document.getElementById('section-steam-digital');
 
-            const gbSection = document.getElementById('section-games-books');
-            const sbSection = document.getElementById('section-steelbooks');
-            const psSection = document.getElementById('section-ps-discs');
-            const digitalSection = document.getElementById('section-ps-digital');
-            const nintendoDigitalSection = document.getElementById('section-nintendo-digital');
-            const steamDigitalSection = document.getElementById('section-steam-digital');
+            const statsGamesBooks = document.getElementById('stats-games-books');
+            const statsSteelbooks = document.getElementById('stats-steelbooks');
+            const statsPsDiscs = document.getElementById('stats-ps-discs');
+            const statsPsDigital = document.getElementById('stats-ps-digital');
+            const statsNintendoDigital = document.getElementById('stats-nintendo-digital');
+            const statsSteamDigital = document.getElementById('stats-steam-digital');
 
-            gbStats.classList.add('hidden');
-            sbStats.classList.add('hidden');
-            psStats.classList.add('hidden');
-            digitalStats.classList.add('hidden');
-            nintendoDigitalStats.classList.add('hidden');
-            steamDigitalStats.classList.add('hidden');
+            secGamesBooks.classList.add('hidden');
+            secSteelbooks.classList.add('hidden');
+            secPsDiscs.classList.add('hidden');
+            secPsDigital.classList.add('hidden');
+            secNintendoDigital.classList.add('hidden');
+            secSteamDigital.classList.add('hidden');
 
-            gbSection.classList.add('hidden');
-            sbSection.classList.add('hidden');
-            psSection.classList.add('hidden');
-            digitalSection.classList.add('hidden');
-            nintendoDigitalSection.classList.add('hidden');
-            steamDigitalSection.classList.add('hidden');
+            statsGamesBooks.classList.add('hidden');
+            statsSteelbooks.classList.add('hidden');
+            statsPsDiscs.classList.add('hidden');
+            statsPsDigital.classList.add('hidden');
+            statsNintendoDigital.classList.add('hidden');
+            statsSteamDigital.classList.add('hidden');
 
-            if (page === 'steelbooks') {
-                sbStats.classList.remove('hidden');
-                sbSection.classList.remove('hidden');
-                calculateSteelbookTotals();
-            } else if (page === 'ps-discs') {
-                psStats.classList.remove('hidden');
-                psSection.classList.remove('hidden');
-                calculatePSDiscTotals();
-            } else if (page === 'ps-digital') {
-                digitalStats.classList.remove('hidden');
-                digitalSection.classList.remove('hidden');
-                calculateDigitalTotals();
-            } else if (page === 'nintendo-digital') {
-                nintendoDigitalStats.classList.remove('hidden');
-                nintendoDigitalSection.classList.remove('hidden');
-                calculateNintendoDigitalTotals();
-            } else if (page === 'steam-digital') {
-                steamDigitalStats.classList.remove('hidden');
-                steamDigitalSection.classList.remove('hidden');
-                calculateSteamDigitalTotals();
-            } else {
-                gbStats.classList.remove('hidden');
-                gbSection.classList.remove('hidden');
+            if (pageKey === '2026' || pageKey === '2022-2025') {
+                secGamesBooks.classList.remove('hidden');
+                statsGamesBooks.classList.remove('hidden');
 
+                // Filter cards by data-year
                 document.querySelectorAll('#section-games-books .card').forEach(card => {
-                    card.classList.toggle('hidden', card.getAttribute('data-year') !== page);
+                    card.classList.toggle('hidden', card.getAttribute('data-year') !== pageKey);
                 });
-                calculateTotals();
+
+                calculateFinishedStats(pageKey);
+            } else if (pageKey === 'steelbooks') {
+                secSteelbooks.classList.remove('hidden');
+                statsSteelbooks.classList.remove('hidden');
+                calculateSteelbookStats();
+            } else if (pageKey === 'ps-discs') {
+                secPsDiscs.classList.remove('hidden');
+                statsPsDiscs.classList.remove('hidden');
+                calculatePsDiscStats();
+            } else if (pageKey === 'ps-digital') {
+                secPsDigital.classList.remove('hidden');
+                statsPsDigital.classList.remove('hidden');
+                calculateDigitalStats();
+            } else if (pageKey === 'nintendo-digital') {
+                secNintendoDigital.classList.remove('hidden');
+                statsNintendoDigital.classList.remove('hidden');
+                calculateNintendoDigitalStats();
+            } else if (pageKey === 'steam-digital') {
+                secSteamDigital.classList.remove('hidden');
+                statsSteamDigital.classList.remove('hidden');
+                calculateSteamDigitalStats();
             }
         }
 
-        function calculateTotals() {
-            const activeGames = document.querySelectorAll('#grid-games .card:not(.hidden) .duration-val');
+        function calculateFinishedStats(yearKey) {
+            const items = mediaData.finished.filter(i => i.year === yearKey);
+            
+            const games = items.filter(i => i.type === 'game');
+            const books = items.filter(i => i.type === 'book');
+
+            document.getElementById('game-count').innerText = games.length;
+            document.getElementById('book-count').innerText = books.length;
+
             let totalHours = 0;
-            activeGames.forEach(el => totalHours += parseFloat(el.innerText) || 0);
+            games.forEach(g => {
+                const h = parseFloat(g.val.replace('h', ''));
+                if (!isNaN(h)) totalHours += h;
+            });
+            document.getElementById('total-game-time').innerText = Math.round(totalHours) + 'h';
 
-            document.getElementById('game-count').innerText = activeGames.length;
-            document.getElementById('total-game-time').innerText = Number(totalHours.toFixed(1)) + 'h';
-
-            const activeBooks = document.querySelectorAll('#grid-books .card:not(.hidden) .page-val');
             let totalPages = 0;
-            activeBooks.forEach(el => totalPages += parseInt(el.innerText.replace(/,/g, '')) || 0);
-
-            document.getElementById('book-count').innerText = activeBooks.length;
+            books.forEach(b => {
+                const p = parseInt(b.val.replace(/[^0-9]/g, ''));
+                if (!isNaN(p)) totalPages += p;
+            });
             document.getElementById('total-pages').innerText = totalPages.toLocaleString();
         }
 
-        function calculateSteelbookTotals() {
-            const steelbooks = document.querySelectorAll('#section-steelbooks .card');
-            document.getElementById('steelbook-count').innerText = steelbooks.length;
-
-            let totalUah = 0, totalUsd = 0;
-            steelbooks.forEach(card => {
-                const priceEl = card.querySelector('.price-container');
-                if (priceEl) {
-                    totalUah += parseFloat(priceEl.getAttribute('data-uah')) || 0;
-                    totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-                }
-            });
-
-            document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-            document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
-        }
-
-        function calculatePSDiscTotals() {
-            const psDiscs = document.querySelectorAll('#section-ps-discs .card');
-            document.getElementById('ps-disc-count').innerText = psDiscs.length;
-
-            let totalUsd = 0;
-            psDiscs.forEach(card => {
-                const priceEl = card.querySelector('.price-container');
-                if (priceEl) totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-            });
-
-            document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function calculateDigitalTotals() {
-            const items = mediaData.ps_digital || [];
-            document.getElementById('digital-count').innerText = items.length;
+        function calculateSteelbookStats() {
+            const allSteelbooks = [
+                ...mediaData.steelbooks.manta_lab,
+                ...mediaData.steelbooks.nolan,
+                ...mediaData.steelbooks.other,
+                ...mediaData.steelbooks.other2
+            ];
 
             let totalUah = 0;
             let totalUsd = 0;
 
-            items.forEach(item => {
-                totalUah += item.price_uah || 0;
-                totalUsd += item.price_usd || 0;
+            allSteelbooks.forEach(s => {
+                totalUah += s.priceUah || 0;
+                totalUsd += s.priceUsd || 0;
             });
 
-            document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-            document.getElementById('digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+            document.getElementById('steelbook-count').innerText = allSteelbooks.length;
+            document.getElementById('total-spent-uah').innerText = Math.round(totalUah).toLocaleString('uk-UA') + ' UAH';
+            document.getElementById('total-spent-usd').innerText = Math.round(totalUsd).toLocaleString() + ' US$';
         }
 
-        function calculateNintendoDigitalTotals() {
-            const items = mediaData.nintendo_digital || [];
-            document.getElementById('nintendo-digital-count').innerText = items.length;
+        function calculatePsDiscStats() {
+            const allDiscs = [
+                ...mediaData.game_discs.switch,
+                ...mediaData.game_discs.ps3,
+                ...mediaData.game_discs.ps4,
+                ...mediaData.game_discs.ps5
+            ];
 
-            let totalUsd = 0;
-            items.forEach(item => {
-                totalUsd += item.price_usd || 0;
+            let totalSpent = 0;
+            allDiscs.forEach(d => {
+                totalSpent += d.priceUsd || 0;
             });
 
-            document.getElementById('nintendo-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+            document.getElementById('ps-disc-count').innerText = allDiscs.length;
+            document.getElementById('total-ps-spent').innerText = '$' + totalSpent.toFixed(2);
         }
 
-        function calculateSteamDigitalTotals() {
-            const items = mediaData.steam_digital || [];
-            document.getElementById('steam-digital-count').innerText = items.length;
-
+        function calculateDigitalStats() {
+            const transactions = mediaData.ps_digital || [];
             let totalUah = 0;
             let totalUsd = 0;
+
+            transactions.forEach(t => {
+                totalUah += t.price_uah || 0;
+                totalUsd += t.price_usd || 0;
+            });
+
+            document.getElementById('digital-count').innerText = transactions.length;
+            document.getElementById('digital-spent-uah').innerText = Math.round(totalUah).toLocaleString('uk-UA') + ' UAH';
+            document.getElementById('digital-spent-usd').innerText = Math.round(totalUsd).toLocaleString() + ' US$';
+        }
+
+        function calculateNintendoDigitalStats() {
+            const transactions = mediaData.nintendo_digital || [];
+            let totalUsd = 0;
+
+            transactions.forEach(t => {
+                totalUsd += t.price_usd || 0;
+            });
+
+            document.getElementById('nintendo-digital-count').innerText = transactions.length;
+            document.getElementById('nintendo-digital-spent-usd').innerText = Math.round(totalUsd).toLocaleString() + ' US$';
+        }
+
+        function calculateSteamDigitalStats() {
+            const transactions = mediaData.steam_digital || [];
             let totalPlaytime = 0;
+            let totalUah = 0;
+            let totalUsd = 0;
 
-            items.forEach(item => {
-                totalUah += item.price_uah || 0;
-                totalUsd += item.price_usd || 0;
-                totalPlaytime += item.playtime_hours || 0;
+            transactions.forEach(t => {
+                totalPlaytime += t.playtime_hours || 0;
+                totalUah += t.price_uah || 0;
+                totalUsd += t.price_usd || 0;
             });
 
-            document.getElementById('steam-playtime').innerText = totalPlaytime.toFixed(1) + 'h';
-            document.getElementById('steam-digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-            document.getElementById('steam-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+            document.getElementById('steam-digital-count').innerText = transactions.length;
+            document.getElementById('steam-playtime').innerText = Math.round(totalPlaytime) + 'h';
+            document.getElementById('steam-digital-spent-uah').innerText = Math.round(totalUah).toLocaleString('uk-UA') + ' UAH';
+            document.getElementById('steam-digital-spent-usd').innerText = Math.round(totalUsd).toLocaleString() + ' US$';
         }
 
         window.onload = init;
     </script>
+
 </body>
 
 </html>

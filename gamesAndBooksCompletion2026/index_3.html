@@ -5,27 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Log</title>
-    <!-- Imported Google Fonts for Inter & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Light Theme Variables */
-            --bg: #f4f6f9;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text: #2d3436;
-            --text-muted: #636e72;
+            --text: #0f172a;
+            --text-muted: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+            --shadow-hover: 0 20px 30px -10px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
             --header-title: #0f172a;
-            --tab-bg: #e2e8f0;
-            --tab-hover: #cbd5e1;
+            --tab-bg: #ffffff;
+            --tab-hover: #f1f5f9;
             --tab-active-bg: #0f172a;
             --tab-active-text: #ffffff;
-            --subtag-bg: #e2e8f0;
-            --table-header-bg: #f1f5f9;
+            --subtag-bg: #f1f5f9;
+            --table-header-bg: #f8fafc;
+            --card-glow: rgba(99, 102, 241, 0.15);
 
             /* Category Accents */
             --accent-game: #6366f1;
@@ -41,38 +41,43 @@
 
         [data-theme="dark"] {
             /* Dark Theme Variables */
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            --header-title: #f8fafc;
-            --tab-bg: #1e293b;
-            --tab-hover: #334155;
+            --bg: #090d16;
+            --card-bg: #111827;
+            --text: #f9fafb;
+            --text-muted: #9ca3af;
+            --border: #1f2937;
+            --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 25px 35px -10px rgba(0, 0, 0, 0.7);
+            --header-title: #f9fafb;
+            --tab-bg: #111827;
+            --tab-hover: #1f2937;
             --tab-active-bg: #38bdf8;
-            --tab-active-text: #0f172a;
-            --subtag-bg: #334155;
-            --table-header-bg: #0f172a;
+            --tab-active-text: #090d16;
+            --subtag-bg: #1f2937;
+            --table-header-bg: #0d131f;
+            --card-glow: rgba(56, 189, 248, 0.15);
         }
 
         * {
             box-sizing: border-box;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
             padding: 24px 16px;
             min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.05) 0%, transparent 25%);
+            background-attachment: fixed;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1140px;
             margin: 0 auto;
         }
 
@@ -81,7 +86,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             position: relative;
         }
 
@@ -97,20 +102,24 @@
             border: 1px solid var(--border);
             color: var(--text);
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 99px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease, background-color 0.3s;
             touch-action: manipulation;
         }
 
+        .theme-toggle-btn:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-1px);
+        }
+
         .theme-toggle-btn:active {
-            transform: scale(0.96);
+            transform: translateY(0) scale(0.96);
         }
 
         .header-content {
@@ -118,39 +127,21 @@
         }
 
         h1 {
+            font-weight: 800;
+            font-size: 2.25rem;
             margin: 0 0 8px 0;
+            color: var(--header-title);
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--text) 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         header p {
             color: var(--text-muted);
             margin: 0;
             font-size: 1rem;
-        }
-
-        /* CUSTOM APPLIED STYLES */
-        /* Custom Header Styling (Matches "Steelbook Collection" & Main Page Titles) */
-        .steelbook-header-title {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 800;
-            font-size: 2.25rem; /* Responsive breakpoint increases to 3rem on larger screens (min-width: 768px) */
-            line-height: 1.2;
-            letter-spacing: -0.03em;
-            color: #0f172a; /* Light mode default fallback */
-            
-            /* Modern Gradient Text Overlay */
-            background: linear-gradient(135deg, var(--text) 30%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Category Subheaders & Accent Colors */
-        .steelbook-category-header {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 0.9rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent-steelbook, #f97316);
+            font-weight: 500;
         }
 
         @media (min-width: 768px) {
@@ -166,7 +157,7 @@
                 width: auto;
             }
 
-            .steelbook-header-title {
+            h1 {
                 font-size: 3rem;
             }
         }
@@ -178,49 +169,55 @@
             gap: 8px;
             margin: 25px 0 35px;
             flex-wrap: wrap;
+            padding: 6px;
+            background: rgba(125, 125, 125, 0.05);
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(8px);
         }
 
         .tab-btn {
-            background: var(--tab-bg);
+            background: transparent;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-muted);
-            border-radius: 30px;
+            border-radius: 99px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             touch-action: manipulation;
         }
 
         @media (min-width: 768px) {
             .nav-tabs {
-                gap: 12px;
-                margin: 35px 0 45px;
+                gap: 6px;
+                margin: 35px auto 45px;
+                width: fit-content;
             }
 
             .tab-btn {
                 padding: 10px 24px;
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
         }
 
         .tab-btn:hover {
-            background: var(--tab-hover);
             color: var(--text);
+            background: var(--tab-hover);
         }
 
         .tab-btn.active {
             background: var(--tab-active-bg);
             color: var(--tab-active-text);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
         }
 
         /* STATS BAR */
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
+            gap: 14px;
             margin-bottom: 35px;
         }
 
@@ -234,41 +231,49 @@
 
         .stat-card {
             background: var(--card-bg);
-            padding: 16px;
-            border-radius: 14px;
+            padding: 20px 16px;
+            border-radius: 16px;
             box-shadow: var(--shadow);
             text-align: center;
             border: 1px solid var(--border);
-            border-bottom: 4px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-card.games { border-bottom-color: var(--accent-game); }
-        .stat-card.books { border-bottom-color: var(--accent-book); }
-        .stat-card.steelbooks { border-bottom-color: var(--accent-steelbook); }
-        .stat-card.ps-discs { border-bottom-color: var(--accent-ps); }
-        .stat-card.digital { border-bottom-color: var(--accent-digital); }
-        .stat-card.nintendo-digital { border-bottom-color: var(--accent-nintendo-digital); }
-        .stat-card.steam-digital { border-bottom-color: var(--accent-steam-text); }
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--border);
+        }
+
+        .stat-card.games::before { background: var(--accent-game); }
+        .stat-card.books::before { background: var(--accent-book); }
+        .stat-card.steelbooks::before { background: var(--accent-steelbook); }
+        .stat-card.ps-discs::before { background: var(--accent-ps); }
+        .stat-card.digital::before { background: var(--accent-digital); }
 
         .stat-value {
             display: block;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: var(--text);
+            letter-spacing: -0.02em;
         }
 
         @media (min-width: 768px) {
             .stat-value {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
         }
 
         .stat-label {
-            font-size: 0.68rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
+            letter-spacing: 1.2px;
+            margin-top: 6px;
             font-weight: 700;
         }
 
@@ -276,40 +281,58 @@
         .section-header {
             display: flex;
             align-items: center;
-            margin: 35px 0 20px;
+            justify-content: space-between;
+            margin: 40px 0 20px;
         }
 
         .section-header h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             margin: 0;
+            font-weight: 800;
         }
 
         .line {
             flex-grow: 1;
             height: 1px;
-            background: var(--border);
-            margin-left: 15px;
+            background: linear-gradient(90deg, var(--border), transparent);
+            margin: 0 15px;
+        }
+
+        .platform-filter {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            box-shadow: var(--shadow);
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px;
+            gap: 18px;
         }
 
         @media (min-width: 600px) {
             .grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 25px;
+                grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+                gap: 24px;
             }
         }
 
         .card {
             position: relative;
             background: var(--card-bg);
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
             display: flex;
             flex-direction: column;
             color: var(--text);
@@ -317,8 +340,9 @@
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover), 0 0 20px var(--card-glow);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .stretched-link::after {
@@ -339,43 +363,38 @@
         }
 
         .info {
-            padding: 12px;
+            padding: 14px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
         @media (min-width: 768px) {
-            .info { padding: 18px; }
+            .info { padding: 16px; }
         }
 
         .info strong {
             display: block;
-            font-size: 0.9rem;
-            margin: 8px 0;
-            line-height: 1.3;
-        }
-
-        @media (min-width: 768px) {
-            .info strong {
-                font-size: 1rem;
-                margin: 10px 0;
-            }
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 10px 0;
+            line-height: 1.35;
         }
 
         .tag-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 6px;
             align-items: center;
         }
 
         .tag {
             font-size: 0.6rem;
             font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
             color: white;
+            letter-spacing: 0.5px;
             align-self: flex-start;
         }
 
@@ -388,23 +407,28 @@
         .sub-tag {
             font-size: 0.6rem;
             font-weight: 700;
-            padding: 2px 5px;
-            border-radius: 4px;
+            padding: 3px 7px;
+            border-radius: 6px;
             background: var(--subtag-bg);
             color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+        .tag-ps-store { background: var(--accent-ps); color: white; }
+        .tag-nintendo-store { background: var(--accent-nintendo-digital); color: white; }
+        .tag-steam-store { background: #171a21; color: var(--accent-steam-text); }
 
         .card-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: auto;
-            padding-top: 10px;
+            padding-top: 12px;
             border-top: 1px dashed var(--border);
             font-size: 0.75rem;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .meta-left {
@@ -415,7 +439,7 @@
         .meta-left svg {
             width: 14px;
             height: 14px;
-            margin-right: 4px;
+            margin-right: 5px;
             stroke: currentColor;
             stroke-width: 2.2;
             fill: none;
@@ -426,16 +450,16 @@
             z-index: 2;
             color: var(--accent-steelbook);
             text-decoration: none;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 700;
         }
 
         .bluray-link:hover { text-decoration: underline; }
 
         .price-container {
-            margin-top: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            margin-top: 4px;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text);
         }
 
@@ -450,7 +474,7 @@
             width: 100%;
             overflow-x: auto;
             background: var(--card-bg);
-            border-radius: 14px;
+            border-radius: 16px;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
         }
@@ -459,22 +483,22 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
 
         .custom-table th {
             background-color: var(--table-header-bg);
             color: var(--text);
-            padding: 14px 16px;
-            font-weight: 700;
+            padding: 16px;
+            font-weight: 800;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
             border-bottom: 2px solid var(--border);
         }
 
         .custom-table td {
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-bottom: 1px solid var(--border);
             color: var(--text);
         }
@@ -484,18 +508,18 @@
         }
 
         .custom-table tr:hover td {
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
         .date-col {
-            font-family: monospace;
-            font-size: 0.85rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.82rem;
             color: var(--text-muted);
             white-space: nowrap;
         }
 
         .title-col {
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .desc-col {
@@ -506,13 +530,14 @@
         .price-col {
             text-align: right;
             white-space: nowrap;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         /* SORTABLE TABLE HEADERS */
         .sortable {
             cursor: pointer;
             user-select: none;
+            transition: background-color 0.2s;
         }
 
         .sortable:hover {
@@ -539,7 +564,7 @@
                 </button>
             </div>
             <div class="header-content">
-                <h1 id="page-title" class="steelbook-header-title">Finished in 2026</h1>
+                <h1 id="page-title">Finished in 2026</h1>
                 <p id="page-subtitle">A gallery of my completed adventures and stories.</p>
             </div>
         </header>
@@ -549,9 +574,7 @@
             <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
             <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Movie discs</button>
             <button class="tab-btn" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
-            <button class="tab-btn" data-page="ps-digital" onclick="switchPage('ps-digital', 'PlayStation Digital Purchases', 'Complete history of my digital purchases on PlayStation Store.')">PS digital</button>
-            <button class="tab-btn" data-page="nintendo-digital" onclick="switchPage('nintendo-digital', 'Nintendo Digital Purchases', 'History of my digital purchases on Nintendo eShop.')">Nintendo digital</button>
-            <button class="tab-btn" data-page="steam-digital" onclick="switchPage('steam-digital', 'Steam Digital Purchases', 'Detailed log of PC and Steam game purchases, playtime, and licenses.')">Steam</button>
+            <button class="tab-btn" data-page="digital" onclick="switchPage('digital', 'Digital Purchases History', 'Complete history of digital purchases across PlayStation, Nintendo, and Steam.')">Digital Purchases</button>
         </div>
 
         <!-- STATS SECTIONS -->
@@ -608,10 +631,14 @@
             </div>
         </div>
 
-        <div class="stats-bar hidden" id="stats-ps-digital">
+        <div class="stats-bar hidden" id="stats-digital">
             <div class="stat-card digital">
                 <span class="stat-value" id="digital-count" style="font-size: 1.5rem;">0</span>
                 <span class="stat-label">Transactions</span>
+            </div>
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-playtime" style="font-size: 1.5rem;">0h</span>
+                <span class="stat-label">Total Playtime</span>
             </div>
             <div class="stat-card digital">
                 <span class="stat-value" id="digital-spent-uah" style="font-size: 1.3rem;">0 UAH</span>
@@ -623,46 +650,16 @@
             </div>
         </div>
 
-        <div class="stats-bar hidden" id="stats-nintendo-digital">
-            <div class="stat-card nintendo-digital">
-                <span class="stat-value" id="nintendo-digital-count" style="font-size: 1.5rem;">0</span>
-                <span class="stat-label">Transactions</span>
-            </div>
-            <div class="stat-card nintendo-digital">
-                <span class="stat-value" id="nintendo-digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
-                <span class="stat-label">Total Spent (USD)</span>
-            </div>
-        </div>
-
-        <div class="stats-bar hidden" id="stats-steam-digital">
-            <div class="stat-card steam-digital">
-                <span class="stat-value" id="steam-digital-count" style="font-size: 1.5rem;">0</span>
-                <span class="stat-label">Transactions</span>
-            </div>
-            <div class="stat-card steam-digital">
-                <span class="stat-value" id="steam-playtime" style="font-size: 1.5rem;">0h</span>
-                <span class="stat-label">Total Playtime</span>
-            </div>
-            <div class="stat-card steam-digital">
-                <span class="stat-value" id="steam-digital-spent-uah" style="font-size: 1.3rem;">0 UAH</span>
-                <span class="stat-label">Total Spent (UAH)</span>
-            </div>
-            <div class="stat-card steam-digital">
-                <span class="stat-value" id="steam-digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
-                <span class="stat-label">Total Spent (USD)</span>
-            </div>
-        </div>
-
         <!-- CONTENT CONTAINERS -->
         <div id="section-games-books">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-game)">Games</h2>
+                <h2 style="color: var(--accent-game)">Games</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-games"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-book)">Books</h2>
+                <h2 style="color: var(--accent-book)">Books</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-books"></div>
@@ -670,25 +667,25 @@
 
         <div id="section-steelbooks" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
+                <h2 style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-manta-lab"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
+                <h2 style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-nolan"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Other</h2>
+                <h2 style="color: var(--accent-steelbook)">Other</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-steelbooks-other"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Collector's editions</h2>
+                <h2 style="color: var(--accent-steelbook)">Collector's editions</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-steelbooks-other2"></div>
@@ -696,34 +693,40 @@
 
         <div id="section-ps-discs" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-switch)">Nintendo Switch</h2>
+                <h2 style="color: var(--accent-switch)">Nintendo Switch</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-switch"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 3</h2>
+                <h2 style="color: var(--accent-ps)">PlayStation 3</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps3"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 4</h2>
+                <h2 style="color: var(--accent-ps)">PlayStation 4</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps4"></div>
 
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 5</h2>
+                <h2 style="color: var(--accent-ps)">PlayStation 5</h2>
                 <div class="line"></div>
             </div>
             <div class="grid" id="grid-discs-ps5"></div>
         </div>
 
-        <div id="section-ps-digital" class="hidden">
+        <div id="section-digital" class="hidden">
             <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-digital)">Digital Purchases History</h2>
+                <h2 style="color: var(--accent-digital)">Digital Purchases History</h2>
                 <div class="line"></div>
+                <select id="platform-filter" class="platform-filter" onchange="filterDigitalTable()">
+                    <option value="ALL">All Platforms</option>
+                    <option value="PlayStation">PlayStation</option>
+                    <option value="Nintendo">Nintendo</option>
+                    <option value="Steam">Steam</option>
+                </select>
             </div>
             <div class="table-responsive">
                 <table class="custom-table">
@@ -732,11 +735,17 @@
                             <th class="sortable" onclick="sortDigitalTable('transaction_date')">
                                 Date <span id="sort-transaction_date" class="sort-icon"></span>
                             </th>
+                            <th class="sortable" onclick="sortDigitalTable('platform')">
+                                Platform <span id="sort-platform" class="sort-icon"></span>
+                            </th>
                             <th class="sortable" onclick="sortDigitalTable('game_title')">
-                                Game Title <span id="sort-game_title" class="sort-icon"></span>
+                                Title <span id="sort-game_title" class="sort-icon"></span>
                             </th>
                             <th class="sortable" onclick="sortDigitalTable('item_description')">
-                                Item Description <span id="sort-item_description" class="sort-icon"></span>
+                                Item Description / Type <span id="sort-item_description" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortDigitalTable('playtime_hours')">
+                                Playtime <span id="sort-playtime_hours" class="sort-icon"></span>
                             </th>
                             <th class="sortable" style="text-align: right;" onclick="sortDigitalTable('price_uah')">
                                 Price (UAH) <span id="sort-price_uah" class="sort-icon"></span>
@@ -747,73 +756,6 @@
                         </tr>
                     </thead>
                     <tbody id="table-digital-body">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="section-nintendo-digital" class="hidden">
-            <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-nintendo-digital)">Nintendo Digital Purchases History</h2>
-                <div class="line"></div>
-            </div>
-            <div class="table-responsive">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th class="sortable" onclick="sortNintendoDigitalTable('transaction_date')">
-                                Date <span id="sort-nin-transaction_date" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" onclick="sortNintendoDigitalTable('game_title')">
-                                Title <span id="sort-nin-game_title" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" onclick="sortNintendoDigitalTable('item_description')">
-                                Item Description <span id="sort-nin-item_description" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" style="text-align: right;" onclick="sortNintendoDigitalTable('price_usd')">
-                                Price (USD) <span id="sort-nin-price_usd" class="sort-icon"></span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-nintendo-digital-body">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="section-steam-digital" class="hidden">
-            <div class="section-header">
-                <h2 class="steelbook-category-header" style="color: var(--accent-steam-text)">Steam Digital Purchases & Library History</h2>
-                <div class="line"></div>
-            </div>
-            <div class="table-responsive">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th class="sortable" onclick="sortSteamDigitalTable('transaction_date')">
-                                Date <span id="sort-steam-transaction_date" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" onclick="sortSteamDigitalTable('game_title')">
-                                Title <span id="sort-steam-game_title" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" onclick="sortSteamDigitalTable('item_description')">
-                                Item Description / Type <span id="sort-steam-item_description" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" style="text-align: right;" onclick="sortSteamDigitalTable('playtime_hours')">
-                                Playtime <span id="sort-steam-playtime_hours" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" onclick="sortSteamDigitalTable('platform_type')">
-                                Store / Platform <span id="sort-steam-platform_type" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" style="text-align: right;" onclick="sortSteamDigitalTable('price_uah')">
-                                Price (UAH) <span id="sort-steam-price_uah" class="sort-icon"></span>
-                            </th>
-                            <th class="sortable" style="text-align: right;" onclick="sortSteamDigitalTable('price_usd')">
-                                Price (USD) <span id="sort-steam-price_usd" class="sort-icon"></span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-steam-digital-body">
                     </tbody>
                 </table>
             </div>
@@ -986,95 +928,101 @@
             { "transaction_date": "2024-06-19", "game_title": "Subnautica", "item_description": "Full Game", "price_usd": 9.89 },
             { "transaction_date": "2024-06-28", "game_title": "Alan Wake Remastered", "item_description": "Full Game", "price_usd": 29.99 }
           ],
-  "steam_digital": [
-    { "transaction_date": "2026-05-19", "game_title": "SOMA", "item_description": "Purchase", "playtime_hours": 12.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
-    { "transaction_date": "2026-05-07", "game_title": "REANIMAL", "item_description": "Purchase", "playtime_hours": 8.0, "platform_type": "Steam", "price_uah": 555.0, "price_usd": 13.51 },
-    { "transaction_date": "2026-02-27", "game_title": "Splinter Cell | Tom Clancy's Splinter Cell : Pandora Tomorrow | SplinterCell: Double Agent | Tom Clancy's Splinter Cell Conviction | Tom Clancy's Splinter Cell Blacklist Standard Edition RU+CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 295.0, "price_usd": 7.18 },
-    { "transaction_date": "2025-12-20", "game_title": "MK1: Definitive Edition Upgrade | Mortal Kombat X | Kombat Pack | Kombat Pack 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 408.0, "price_usd": 9.93 },
-    { "transaction_date": "2025-11-25", "game_title": "Mortal Kombat 1", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 259.0, "price_usd": 6.30 },
-    { "transaction_date": "2025-11-06", "game_title": "Sonic and All-Stars Racing Transformed Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
-    { "transaction_date": "2025-08-14", "game_title": "Warhammer 40,000: Dawn of War - Definitive Edition - Veterans Upgrade", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 350.0, "price_usd": 8.52 },
-    { "transaction_date": "2025-08-09", "game_title": "Mafia: The Old Country", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 1999.0, "price_usd": 48.64 },
-    { "transaction_date": "2025-06-29", "game_title": "Deep Rock Galactic", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 125.0, "price_usd": 3.04 },
-    { "transaction_date": "2025-04-17", "game_title": "Space Hulk: Deathwing Enhanced Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 89.0, "price_usd": 2.17 },
-    { "transaction_date": "2025-03-05", "game_title": "Split Fiction", "item_description": "Purchase", "playtime_hours": 23.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
-    { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 249.0, "price_usd": 6.06 },
-    { "transaction_date": "2024-12-02", "game_title": "Trailmakers | Batman: Arkham Collection | RESIDENT EVIL 2 Deluxe | Far Cry 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 646.0, "price_usd": 15.72 },
-    { "transaction_date": "2024-11-14", "game_title": "Warhammer: End Times - Vermintide | Vermintide 2 | Darktide", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 711.0, "price_usd": 17.30 },
-    { "transaction_date": "2024-11-04", "game_title": "Middle-earth™: The Shadow Bundle", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 184.0, "price_usd": 4.48 },
-    { "transaction_date": "2024-10-14", "game_title": "Max Payne 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 389.0, "price_usd": 9.46 },
-    { "transaction_date": "2024-09-20", "game_title": "Risk of Rain 2: Seekers of the Storm", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 209.0, "price_usd": 5.09 },
-    { "transaction_date": "2024-09-07", "game_title": "Warhammer 40,000: Space Marine 2 - Standard Edition", "item_description": "Purchase", "playtime_hours": 10.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
-    { "transaction_date": "2024-09-02", "game_title": "Hogwarts Legacy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 479.0, "price_usd": 11.65 },
-    { "transaction_date": "2024-08-10", "game_title": "Half-Life: Alyx", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 382.0, "price_usd": 9.29 },
-    { "transaction_date": "2024-07-03", "game_title": "Assassin's Creed Brotherhood", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 90.0, "price_usd": 2.19 },
-    { "transaction_date": "2024-07-28", "game_title": "Fallout New Vegas Ultimate PCR", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.0, "price_usd": 12.65 },
-    { "transaction_date": "2024-07-28", "game_title": "RESIDENT EVIL 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 252.0, "price_usd": 6.13 },
-    { "transaction_date": "2024-07-11", "game_title": "Call of Duty: Modern Warfare Remastered", "item_description": "Purchase", "playtime_hours": 8.8, "platform_type": "Steam", "price_uah": 678.0, "price_usd": 16.50 },
-    { "transaction_date": "2024-07-10", "game_title": "Resident Evil 4 Gold Edition", "item_description": "Purchase", "playtime_hours": 13.2, "platform_type": "Steam", "price_uah": 1359.0, "price_usd": 33.07 },
-    { "transaction_date": "2024-06-28", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 224.0, "price_usd": 5.45 },
-    { "transaction_date": "2024-05-31", "game_title": "PAYDAY 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
-    { "transaction_date": "2024-05-27", "game_title": "Warhammer 40,000: Dawn of War - Master Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 109.0, "price_usd": 2.65 },
-    { "transaction_date": "2024-04-04", "game_title": "Worms W.M.D", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 119.0, "price_usd": 2.89 },
-    { "transaction_date": "2024-03-22", "game_title": "Dragon's Dogma: Dark Arisen", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2024-03-21", "game_title": "Age of Empires: Definitive Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2024-03-20", "game_title": "Age of Empires: Definitive Edition | Dragon's Dogma: Dark Arisen", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 277.0, "price_usd": 6.74 },
-    { "transaction_date": "2023-12-17", "game_title": "Risk of Rain 2", "item_description": "Purchase", "playtime_hours": 36.3, "platform_type": "Steam", "price_uah": 329.0, "price_usd": 8.00 },
-    { "transaction_date": "2023-12-09", "game_title": "Quake III Arena", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2023-12-08", "game_title": "Quake III Arena", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 380.0, "price_usd": 9.25 },
-    { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Purchase", "playtime_hours": 35.9, "platform_type": "Steam", "price_uah": 300.0, "price_usd": 7.30 },
-    { "transaction_date": "2023-11-17", "game_title": "TEKKEN 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 135.0, "price_usd": 3.28 },
-    { "transaction_date": "2023-11-09", "game_title": "Condition Zero", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
-    { "transaction_date": "2023-11-09", "game_title": "Portal 2", "item_description": "Purchase", "playtime_hours": 14.1, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
-    { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 99.0, "price_usd": 2.41 },
-    { "transaction_date": "2022-11-08", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2022-11-05", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 579.0, "price_usd": 14.09 },
-    { "transaction_date": "2021-10-14", "game_title": "Splintercell: Chaos Theory", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
-    { "transaction_date": "2020-12-23", "game_title": "Assassin’s Creed® Chronicles: Trilogy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 113.0, "price_usd": 2.75 },
-    { "transaction_date": "2020-04-05", "game_title": "Trine 2: Complete Story", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 69.0, "price_usd": 1.68 },
-    { "transaction_date": "2020-03-29", "game_title": "Rocket League®", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 139.0, "price_usd": 3.38 },
-    { "transaction_date": "2020-03-27", "game_title": "Left 4 Dead 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
-    { "transaction_date": "2020-02-09", "game_title": "Need for Speed: Undercover", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
-    { "transaction_date": "2020-02-08", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
-    { "transaction_date": "2017-11-14", "game_title": "Currency Conversion to UAH (Ukraine)", "item_description": "Conversion", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 0.0, "price_usd": 0.0 },
-    { "transaction_date": "2017-10-31", "game_title": "Bastion", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 66.23, "price_usd": 2.49 },
-    { "transaction_date": "2016-12-09", "game_title": "Grand Theft Auto IV (US/AU)", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.34, "price_usd": 19.99 },
-    { "transaction_date": "2016-12-09", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($23.25)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 605.20, "price_usd": 23.25 },
-    { "transaction_date": "2016-11-24", "game_title": "Grand Theft Auto: Vice City New Audio ROW", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 88.82, "price_usd": 3.49 },
-    { "transaction_date": "2016-08-25", "game_title": "The Witcher: Enhanced Edition | The Witcher 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 76.27, "price_usd": 3.00 },
-    { "transaction_date": "2016-08-25", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($7.29)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 185.34, "price_usd": 7.29 },
-    { "transaction_date": "2016-08-11", "game_title": "Tomb Raider RU + CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 294.95, "price_usd": 11.99 },
-    { "transaction_date": "2016-08-11", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.81)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 265.93, "price_usd": 10.81 },
-    { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($2.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 49.20, "price_usd": 2.00 },
-    { "transaction_date": "2016-08-10", "game_title": "Assassin's Creed II", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 245.75, "price_usd": 9.99 },
-    { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 246.00, "price_usd": 10.00 },
-    { "transaction_date": "2018-11-23", "game_title": "Warhammer 40k: Dawn of War - Soulstorm", "item_description": "Expansion Pack", "playtime_hours": 310.3, "platform_type": "Steam / Key", "price_uah": 133.0, "price_usd": 3.24 },
-    { "transaction_date": "2020-05-18", "game_title": "Styx: Master of Shadows", "item_description": "Full Game", "playtime_hours": 28.2, "platform_type": "Steam", "price_uah": 123.0, "price_usd": 2.99 }
-  ]
+          "steam_digital": [
+            { "transaction_date": "2026-05-19", "game_title": "SOMA", "item_description": "Purchase", "playtime_hours": 12.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
+            { "transaction_date": "2026-05-07", "game_title": "REANIMAL", "item_description": "Purchase", "playtime_hours": 8.0, "platform_type": "Steam", "price_uah": 555.0, "price_usd": 13.51 },
+            { "transaction_date": "2026-02-27", "game_title": "Splinter Cell | Tom Clancy's Splinter Cell : Pandora Tomorrow | SplinterCell: Double Agent | Tom Clancy's Splinter Cell Conviction | Tom Clancy's Splinter Cell Blacklist Standard Edition RU+CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 295.0, "price_usd": 7.18 },
+            { "transaction_date": "2025-12-20", "game_title": "MK1: Definitive Edition Upgrade | Mortal Kombat X | Kombat Pack | Kombat Pack 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 408.0, "price_usd": 9.93 },
+            { "transaction_date": "2025-11-25", "game_title": "Mortal Kombat 1", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 259.0, "price_usd": 6.30 },
+            { "transaction_date": "2025-11-06", "game_title": "Sonic and All-Stars Racing Transformed Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
+            { "transaction_date": "2025-08-14", "game_title": "Warhammer 40,000: Dawn of War - Definitive Edition - Veterans Upgrade", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 350.0, "price_usd": 8.52 },
+            { "transaction_date": "2025-08-09", "game_title": "Mafia: The Old Country", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 1999.0, "price_usd": 48.64 },
+            { "transaction_date": "2025-06-29", "game_title": "Deep Rock Galactic", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 125.0, "price_usd": 3.04 },
+            { "transaction_date": "2025-04-17", "game_title": "Space Hulk: Deathwing Enhanced Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 89.0, "price_usd": 2.17 },
+            { "transaction_date": "2025-03-05", "game_title": "Split Fiction", "item_description": "Purchase", "playtime_hours": 23.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
+            { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 249.0, "price_usd": 6.06 },
+            { "transaction_date": "2024-12-02", "game_title": "Trailmakers | Batman: Arkham Collection | RESIDENT EVIL 2 Deluxe | Far Cry 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 646.0, "price_usd": 15.72 },
+            { "transaction_date": "2024-11-14", "game_title": "Warhammer: End Times - Vermintide | Vermintide 2 | Darktide", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 711.0, "price_usd": 17.30 },
+            { "transaction_date": "2024-11-04", "game_title": "Middle-earth™: The Shadow Bundle", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 184.0, "price_usd": 4.48 },
+            { "transaction_date": "2024-10-14", "game_title": "Max Payne 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 389.0, "price_usd": 9.46 },
+            { "transaction_date": "2024-09-20", "game_title": "Risk of Rain 2: Seekers of the Storm", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 209.0, "price_usd": 5.09 },
+            { "transaction_date": "2024-09-07", "game_title": "Warhammer 40,000: Space Marine 2 - Standard Edition", "item_description": "Purchase", "playtime_hours": 10.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
+            { "transaction_date": "2024-09-02", "game_title": "Hogwarts Legacy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 479.0, "price_usd": 11.65 },
+            { "transaction_date": "2024-08-10", "game_title": "Half-Life: Alyx", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 382.0, "price_usd": 9.29 },
+            { "transaction_date": "2024-07-03", "game_title": "Assassin's Creed Brotherhood", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 90.0, "price_usd": 2.19 },
+            { "transaction_date": "2024-07-28", "game_title": "Fallout New Vegas Ultimate PCR", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.0, "price_usd": 12.65 },
+            { "transaction_date": "2024-07-28", "game_title": "RESIDENT EVIL 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 252.0, "price_usd": 6.13 },
+            { "transaction_date": "2024-07-11", "game_title": "Call of Duty: Modern Warfare Remastered", "item_description": "Purchase", "playtime_hours": 8.8, "platform_type": "Steam", "price_uah": 678.0, "price_usd": 16.50 },
+            { "transaction_date": "2024-07-10", "game_title": "Resident Evil 4 Gold Edition", "item_description": "Purchase", "playtime_hours": 13.2, "platform_type": "Steam", "price_uah": 1359.0, "price_usd": 33.07 },
+            { "transaction_date": "2024-06-28", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 224.0, "price_usd": 5.45 },
+            { "transaction_date": "2024-05-31", "game_title": "PAYDAY 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
+            { "transaction_date": "2024-05-27", "game_title": "Warhammer 40,000: Dawn of War - Master Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 109.0, "price_usd": 2.65 },
+            { "transaction_date": "2024-04-04", "game_title": "Worms W.M.D", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 119.0, "price_usd": 2.89 },
+            { "transaction_date": "2024-03-22", "game_title": "Dragon's Dogma: Dark Arisen", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2024-03-21", "game_title": "Age of Empires: Definitive Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2024-03-20", "game_title": "Age of Empires: Definitive Edition | Dragon's Dogma: Dark Arisen", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 277.0, "price_usd": 6.74 },
+            { "transaction_date": "2023-12-17", "game_title": "Risk of Rain 2", "item_description": "Purchase", "playtime_hours": 36.3, "platform_type": "Steam", "price_uah": 329.0, "price_usd": 8.00 },
+            { "transaction_date": "2023-12-09", "game_title": "Quake III Arena", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2023-12-08", "game_title": "Quake III Arena", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 380.0, "price_usd": 9.25 },
+            { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Purchase", "playtime_hours": 35.9, "platform_type": "Steam", "price_uah": 300.0, "price_usd": 7.30 },
+            { "transaction_date": "2023-11-17", "game_title": "TEKKEN 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 135.0, "price_usd": 3.28 },
+            { "transaction_date": "2023-11-09", "game_title": "Condition Zero", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+            { "transaction_date": "2023-11-09", "game_title": "Portal 2", "item_description": "Purchase", "playtime_hours": 14.1, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
+            { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 99.0, "price_usd": 2.41 },
+            { "transaction_date": "2022-11-08", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2022-11-05", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 579.0, "price_usd": 14.09 },
+            { "transaction_date": "2021-10-14", "game_title": "Splintercell: Chaos Theory", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
+            { "transaction_date": "2020-12-23", "game_title": "Assassin’s Creed® Chronicles: Trilogy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 113.0, "price_usd": 2.75 },
+            { "transaction_date": "2020-04-05", "game_title": "Trine 2: Complete Story", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 69.0, "price_usd": 1.68 },
+            { "transaction_date": "2020-03-29", "game_title": "Rocket League®", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 139.0, "price_usd": 3.38 },
+            { "transaction_date": "2020-03-27", "game_title": "Left 4 Dead 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+            { "transaction_date": "2020-02-09", "game_title": "Need for Speed: Undercover", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+            { "transaction_date": "2020-02-08", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
+            { "transaction_date": "2017-11-14", "game_title": "Currency Conversion to UAH (Ukraine)", "item_description": "Conversion", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 0.0, "price_usd": 0.0 },
+            { "transaction_date": "2017-10-31", "game_title": "Bastion", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 66.23, "price_usd": 2.49 },
+            { "transaction_date": "2016-12-09", "game_title": "Grand Theft Auto IV (US/AU)", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.34, "price_usd": 19.99 },
+            { "transaction_date": "2016-12-09", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($23.25)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 605.20, "price_usd": 23.25 },
+            { "transaction_date": "2016-11-24", "game_title": "Grand Theft Auto: Vice City New Audio ROW", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 88.82, "price_usd": 3.49 },
+            { "transaction_date": "2016-08-25", "game_title": "The Witcher: Enhanced Edition | The Witcher 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 76.27, "price_usd": 3.00 },
+            { "transaction_date": "2016-08-25", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($7.29)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 185.34, "price_usd": 7.29 },
+            { "transaction_date": "2016-08-11", "game_title": "Tomb Raider RU + CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 294.95, "price_usd": 11.99 },
+            { "transaction_date": "2016-08-11", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.81)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 265.93, "price_usd": 10.81 },
+            { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($2.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 49.20, "price_usd": 2.00 },
+            { "transaction_date": "2016-08-10", "game_title": "Assassin's Creed II", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 245.75, "price_usd": 9.99 },
+            { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 246.00, "price_usd": 10.00 },
+            { "transaction_date": "2018-11-23", "game_title": "Warhammer 40k: Dawn of War - Soulstorm", "item_description": "Expansion Pack", "playtime_hours": 310.3, "platform_type": "Steam / Key", "price_uah": 133.0, "price_usd": 3.24 },
+            { "transaction_date": "2020-05-18", "game_title": "Styx: Master of Shadows", "item_description": "Full Game", "playtime_hours": 28.2, "platform_type": "Steam", "price_uah": 123.0, "price_usd": 2.99 }
+          ]
         };
 
         let currentPage = '2026';
-        let currentSortColumn = null;
-        let isAscending = true;
-        let currentNintendoSortColumn = null;
-        let isNintendoAscending = true;
-        let currentSteamSortColumn = null;
-        let isSteamAscending = true;
+        let currentSortColumn = 'transaction_date';
+        let isAscending = false;
+        let unifiedDigitalData = [];
 
         const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
         const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const discIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>`;
 
         function init() {
+            buildUnifiedDigitalData();
             renderAll();
             switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.');
             
-            // Load saved theme or default to dark
             const savedTheme = localStorage.getItem('theme') || 'dark';
             setTheme(savedTheme);
+        }
+
+        function buildUnifiedDigitalData() {
+            unifiedDigitalData = [
+                ...mediaData.ps_digital.map(i => ({ ...i, platform: 'PlayStation', playtime_hours: 0, tagClass: 'tag-ps-store' })),
+                ...mediaData.nintendo_digital.map(i => ({ ...i, platform: 'Nintendo', price_uah: 0, playtime_hours: 0, tagClass: 'tag-nintendo-store' })),
+                ...mediaData.steam_digital.map(i => ({ ...i, platform: 'Steam', tagClass: 'tag-steam-store' }))
+            ];
+            sortData(currentSortColumn, isAscending);
         }
 
         function toggleTheme() {
@@ -1149,10 +1097,12 @@
             renderDiscGrid('grid-discs-ps4', mediaData.game_discs.ps4, 'tag-ps');
             renderDiscGrid('grid-discs-ps5', mediaData.game_discs.ps5, 'tag-ps');
 
-            // 4. Digital Purchases Tables
+            // 4. Digital Purchases Table
             renderDigitalTable();
-            renderNintendoDigitalTable();
-            renderSteamDigitalTable();
+            calculateDigitalStats();
+            calculateGameAndBookStats();
+            calculateSteelbookStats();
+            calculatePsDiscStats();
         }
 
         function renderSteelbookGrid(containerId, list) {
@@ -1208,53 +1158,34 @@
 
         function renderDigitalTable() {
             const tbody = document.getElementById('table-digital-body');
-            if (!tbody || !mediaData.ps_digital) return;
+            if (!tbody) return;
 
-            tbody.innerHTML = mediaData.ps_digital.map(item => `
+            const selectedFilter = document.getElementById('platform-filter') ? document.getElementById('platform-filter').value : 'ALL';
+            
+            const filteredData = unifiedDigitalData.filter(item => {
+                if (selectedFilter === 'ALL') return true;
+                return item.platform === selectedFilter;
+            });
+
+            tbody.innerHTML = filteredData.map(item => `
                 <tr>
                     <td class="date-col">${item.transaction_date}</td>
+                    <td><span class="sub-tag ${item.tagClass}">${item.platform}</span></td>
                     <td class="title-col">${item.game_title}</td>
                     <td class="desc-col">${item.item_description}</td>
-                    <td class="price-col">${item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2})} UAH</td>
-                    <td class="price-col" style="color: var(--accent-ps);">$${item.price_usd.toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-
-        function renderNintendoDigitalTable() {
-            const tbody = document.getElementById('table-nintendo-digital-body');
-            if (!tbody || !mediaData.nintendo_digital) return;
-
-            tbody.innerHTML = mediaData.nintendo_digital.map(item => `
-                <tr>
-                    <td class="date-col">${item.transaction_date}</td>
-                    <td class="title-col">${item.game_title}</td>
-                    <td class="desc-col">${item.item_description}</td>
-                    <td class="price-col" style="color: var(--accent-nintendo-digital);">$${item.price_usd.toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-
-        function renderSteamDigitalTable() {
-            const tbody = document.getElementById('table-steam-digital-body');
-            if (!tbody || !mediaData.steam_digital) return;
-
-            tbody.innerHTML = mediaData.steam_digital.map(item => `
-                <tr>
-                    <td class="date-col">${item.transaction_date}</td>
-                    <td class="title-col">${item.game_title}</td>
-                    <td class="desc-col">${item.item_description}</td>
-                    <td class="price-col" style="color: var(--text-muted);">${item.playtime_hours}h</td>
-                    <td class="desc-col"><span class="sub-tag">${item.platform_type}</span></td>
+                    <td class="price-col" style="color: var(--text-muted);">${item.playtime_hours > 0 ? item.playtime_hours + 'h' : '-'}</td>
                     <td class="price-col">${item.price_uah > 0 ? item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2}) + ' UAH' : '-'}</td>
-                    <td class="price-col" style="color: var(--accent-steam-text);">${item.price_usd > 0 ? '$' + item.price_usd.toFixed(2) : '-'}</td>
+                    <td class="price-col" style="color: var(--accent-ps);">${item.price_usd > 0 ? '$' + item.price_usd.toFixed(2) : '-'}</td>
                 </tr>
             `).join('');
+        }
+
+        function filterDigitalTable() {
+            renderDigitalTable();
+            calculateDigitalStats();
         }
 
         function sortDigitalTable(columnKey) {
-            if (!mediaData.ps_digital) return;
-
             if (currentSortColumn === columnKey) {
                 isAscending = !isAscending;
             } else {
@@ -1262,248 +1193,166 @@
                 isAscending = true;
             }
 
-            mediaData.ps_digital.sort((a, b) => {
-                let valA = a[columnKey];
-                let valB = b[columnKey];
-
-                if (typeof valA === 'string') {
-                    const comparison = valA.localeCompare(valB);
-                    return isAscending ? comparison : -comparison;
-                }
-
-                return isAscending ? valA - valB : valB - valA;
-            });
-
+            sortData(currentSortColumn, isAscending);
             renderDigitalTable();
 
-            document.querySelectorAll('#section-ps-digital .sort-icon').forEach(el => el.innerText = '');
+            document.querySelectorAll('#section-digital .sort-icon').forEach(el => el.innerText = '');
             const activeHeaderIcon = document.getElementById(`sort-${columnKey}`);
             if (activeHeaderIcon) {
                 activeHeaderIcon.innerText = isAscending ? '▲' : '▼';
             }
         }
 
-        function sortNintendoDigitalTable(columnKey) {
-            if (!mediaData.nintendo_digital) return;
-
-            if (currentNintendoSortColumn === columnKey) {
-                isNintendoAscending = !isNintendoAscending;
-            } else {
-                currentNintendoSortColumn = columnKey;
-                isNintendoAscending = true;
-            }
-
-            mediaData.nintendo_digital.sort((a, b) => {
-                let valA = a[columnKey];
-                let valB = b[columnKey];
+        function sortData(columnKey, asc) {
+            unifiedDigitalData.sort((a, b) => {
+                let valA = a[columnKey] !== undefined ? a[columnKey] : '';
+                let valB = b[columnKey] !== undefined ? b[columnKey] : '';
 
                 if (typeof valA === 'string') {
                     const comparison = valA.localeCompare(valB);
-                    return isNintendoAscending ? comparison : -comparison;
+                    return asc ? comparison : -comparison;
                 }
 
-                return isNintendoAscending ? valA - valB : valB - valA;
+                return asc ? valA - valB : valB - valA;
             });
-
-            renderNintendoDigitalTable();
-
-            document.querySelectorAll('#section-nintendo-digital .sort-icon').forEach(el => el.innerText = '');
-            const activeHeaderIcon = document.getElementById(`sort-nin-${columnKey}`);
-            if (activeHeaderIcon) {
-                activeHeaderIcon.innerText = isNintendoAscending ? '▲' : '▼';
-            }
         }
 
-        function sortSteamDigitalTable(columnKey) {
-            if (!mediaData.steam_digital) return;
-
-            if (currentSteamSortColumn === columnKey) {
-                isSteamAscending = !isSteamAscending;
-            } else {
-                currentSteamSortColumn = columnKey;
-                isSteamAscending = true;
-            }
-
-            mediaData.steam_digital.sort((a, b) => {
-                let valA = a[columnKey];
-                let valB = b[columnKey];
-
-                if (typeof valA === 'string') {
-                    const comparison = valA.localeCompare(valB);
-                    return isSteamAscending ? comparison : -comparison;
-                }
-
-                return isSteamAscending ? valA - valB : valB - valA;
+        function calculateDigitalStats() {
+            const selectedFilter = document.getElementById('platform-filter') ? document.getElementById('platform-filter').value : 'ALL';
+            const filteredData = unifiedDigitalData.filter(item => {
+                if (selectedFilter === 'ALL') return true;
+                return item.platform === selectedFilter;
             });
-
-            renderSteamDigitalTable();
-
-            document.querySelectorAll('#section-steam-digital .sort-icon').forEach(el => el.innerText = '');
-            const activeHeaderIcon = document.getElementById(`sort-steam-${columnKey}`);
-            if (activeHeaderIcon) {
-                activeHeaderIcon.innerText = isSteamAscending ? '▲' : '▼';
-            }
-        }
-
-        function switchPage(page, headerTitle, subtitle) {
-            currentPage = page;
-            document.getElementById('page-title').innerText = headerTitle;
-            document.getElementById('page-subtitle').innerText = subtitle;
-
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-page') === page);
-            });
-
-            const gbStats = document.getElementById('stats-games-books');
-            const sbStats = document.getElementById('stats-steelbooks');
-            const psStats = document.getElementById('stats-ps-discs');
-            const digitalStats = document.getElementById('stats-ps-digital');
-            const nintendoDigitalStats = document.getElementById('stats-nintendo-digital');
-            const steamDigitalStats = document.getElementById('stats-steam-digital');
-
-            const gbSection = document.getElementById('section-games-books');
-            const sbSection = document.getElementById('section-steelbooks');
-            const psSection = document.getElementById('section-ps-discs');
-            const digitalSection = document.getElementById('section-ps-digital');
-            const nintendoDigitalSection = document.getElementById('section-nintendo-digital');
-            const steamDigitalSection = document.getElementById('section-steam-digital');
-
-            gbStats.classList.add('hidden');
-            sbStats.classList.add('hidden');
-            psStats.classList.add('hidden');
-            digitalStats.classList.add('hidden');
-            nintendoDigitalStats.classList.add('hidden');
-            steamDigitalStats.classList.add('hidden');
-
-            gbSection.classList.add('hidden');
-            sbSection.classList.add('hidden');
-            psSection.classList.add('hidden');
-            digitalSection.classList.add('hidden');
-            nintendoDigitalSection.classList.add('hidden');
-            steamDigitalSection.classList.add('hidden');
-
-            if (page === 'steelbooks') {
-                sbStats.classList.remove('hidden');
-                sbSection.classList.remove('hidden');
-                calculateSteelbookTotals();
-            } else if (page === 'ps-discs') {
-                psStats.classList.remove('hidden');
-                psSection.classList.remove('hidden');
-                calculatePSDiscTotals();
-            } else if (page === 'ps-digital') {
-                digitalStats.classList.remove('hidden');
-                digitalSection.classList.remove('hidden');
-                calculateDigitalTotals();
-            } else if (page === 'nintendo-digital') {
-                nintendoDigitalStats.classList.remove('hidden');
-                nintendoDigitalSection.classList.remove('hidden');
-                calculateNintendoDigitalTotals();
-            } else if (page === 'steam-digital') {
-                steamDigitalStats.classList.remove('hidden');
-                steamDigitalSection.classList.remove('hidden');
-                calculateSteamDigitalTotals();
-            } else {
-                gbStats.classList.remove('hidden');
-                gbSection.classList.remove('hidden');
-
-                document.querySelectorAll('#section-games-books .card').forEach(card => {
-                    card.classList.toggle('hidden', card.getAttribute('data-year') !== page);
-                });
-                calculateTotals();
-            }
-        }
-
-        function calculateTotals() {
-            const activeGames = document.querySelectorAll('#grid-games .card:not(.hidden) .duration-val');
-            let totalHours = 0;
-            activeGames.forEach(el => totalHours += parseFloat(el.innerText) || 0);
-
-            document.getElementById('game-count').innerText = activeGames.length;
-            document.getElementById('total-game-time').innerText = Number(totalHours.toFixed(1)) + 'h';
-
-            const activeBooks = document.querySelectorAll('#grid-books .card:not(.hidden) .page-val');
-            let totalPages = 0;
-            activeBooks.forEach(el => totalPages += parseInt(el.innerText.replace(/,/g, '')) || 0);
-
-            document.getElementById('book-count').innerText = activeBooks.length;
-            document.getElementById('total-pages').innerText = totalPages.toLocaleString();
-        }
-
-        function calculateSteelbookTotals() {
-            const steelbooks = document.querySelectorAll('#section-steelbooks .card');
-            document.getElementById('steelbook-count').innerText = steelbooks.length;
-
-            let totalUah = 0, totalUsd = 0;
-            steelbooks.forEach(card => {
-                const priceEl = card.querySelector('.price-container');
-                if (priceEl) {
-                    totalUah += parseFloat(priceEl.getAttribute('data-uah')) || 0;
-                    totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-                }
-            });
-
-            document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-            document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
-        }
-
-        function calculatePSDiscTotals() {
-            const psDiscs = document.querySelectorAll('#section-ps-discs .card');
-            document.getElementById('ps-disc-count').innerText = psDiscs.length;
-
-            let totalUsd = 0;
-            psDiscs.forEach(card => {
-                const priceEl = card.querySelector('.price-container');
-                if (priceEl) totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
-            });
-
-            document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function calculateDigitalTotals() {
-            const items = mediaData.ps_digital || [];
-            document.getElementById('digital-count').innerText = items.length;
-
-            let totalUah = 0;
-            let totalUsd = 0;
-
-            items.forEach(item => {
-                totalUah += item.price_uah || 0;
-                totalUsd += item.price_usd || 0;
-            });
-
-            document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-            document.getElementById('digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
-        }
-
-        function calculateNintendoDigitalTotals() {
-            const items = mediaData.nintendo_digital || [];
-            document.getElementById('nintendo-digital-count').innerText = items.length;
-
-            let totalUsd = 0;
-            items.forEach(item => {
-                totalUsd += item.price_usd || 0;
-            });
-
-            document.getElementById('nintendo-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
-        }
-
-        function calculateSteamDigitalTotals() {
-            const items = mediaData.steam_digital || [];
-            document.getElementById('steam-digital-count').innerText = items.length;
 
             let totalUah = 0;
             let totalUsd = 0;
             let totalPlaytime = 0;
 
-            items.forEach(item => {
+            filteredData.forEach(item => {
                 totalUah += item.price_uah || 0;
                 totalUsd += item.price_usd || 0;
                 totalPlaytime += item.playtime_hours || 0;
             });
 
-            document.getElementById('steam-playtime').innerText = totalPlaytime.toFixed(1) + 'h';
-            document.getElementById('steam-digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
-            document.getElementById('steam-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+            document.getElementById('digital-count').innerText = filteredData.length;
+            document.getElementById('digital-playtime').innerText = totalPlaytime.toFixed(1) + 'h';
+            document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', {maximumFractionDigits: 0}) + ' UAH';
+            document.getElementById('digital-spent-usd').innerText = Math.round(totalUsd) + ' US$';
+        }
+
+        function calculateGameAndBookStats() {
+            const visibleCards = document.querySelectorAll(`.card[data-year="${currentPage}"]`);
+            let gameCount = 0;
+            let bookCount = 0;
+            let totalGameTime = 0;
+            let totalPages = 0;
+
+            visibleCards.forEach(card => {
+                const isGame = card.querySelector('.tag-game');
+                const isBook = card.querySelector('.tag-book');
+
+                if (isGame) {
+                    gameCount++;
+                    const durationText = card.querySelector('.duration-val').innerText;
+                    totalGameTime += parseFloat(durationText) || 0;
+                } else if (isBook) {
+                    bookCount++;
+                    const pageText = card.querySelector('.page-val').innerText;
+                    totalPages += parseInt(pageText) || 0;
+                }
+            });
+
+            document.getElementById('game-count').innerText = gameCount;
+            document.getElementById('total-game-time').innerText = totalGameTime + 'h';
+            document.getElementById('book-count').innerText = bookCount;
+            document.getElementById('total-pages').innerText = totalPages;
+        }
+
+        function calculateSteelbookStats() {
+            let count = 0;
+            let totalUah = 0;
+            let totalUsd = 0;
+
+            const allSteelbooks = [
+                ...mediaData.steelbooks.manta_lab,
+                ...mediaData.steelbooks.nolan,
+                ...mediaData.steelbooks.other,
+                ...mediaData.steelbooks.other2
+            ];
+
+            allSteelbooks.forEach(item => {
+                count++;
+                totalUah += item.priceUah || 0;
+                totalUsd += item.priceUsd || 0;
+            });
+
+            document.getElementById('steelbook-count').innerText = count;
+            document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', {maximumFractionDigits: 0}) + ' UAH';
+            document.getElementById('total-spent-usd').innerText = Math.round(totalUsd) + ' US$';
+        }
+
+        function calculatePsDiscStats() {
+            let count = 0;
+            let totalUsd = 0;
+
+            const allDiscs = [
+                ...mediaData.game_discs.switch,
+                ...mediaData.game_discs.ps3,
+                ...mediaData.game_discs.ps4,
+                ...mediaData.game_discs.ps5
+            ];
+
+            allDiscs.forEach(item => {
+                count++;
+                totalUsd += item.priceUsd || 0;
+            });
+
+            document.getElementById('ps-disc-count').innerText = count;
+            document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toFixed(2);
+        }
+
+        function switchPage(pageKey, title, subtitle) {
+            currentPage = pageKey;
+
+            document.getElementById('page-title').innerText = title;
+            document.getElementById('page-subtitle').innerText = subtitle;
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-page') === pageKey);
+            });
+
+            // Hide all sections
+            document.getElementById('section-games-books').classList.add('hidden');
+            document.getElementById('section-steelbooks').classList.add('hidden');
+            document.getElementById('section-ps-discs').classList.add('hidden');
+            document.getElementById('section-digital').classList.add('hidden');
+
+            // Hide all stats
+            document.getElementById('stats-games-books').classList.add('hidden');
+            document.getElementById('stats-steelbooks').classList.add('hidden');
+            document.getElementById('stats-ps-discs').classList.add('hidden');
+            document.getElementById('stats-digital').classList.add('hidden');
+
+            if (pageKey === '2026' || pageKey === '2022-2025') {
+                document.getElementById('section-games-books').classList.remove('hidden');
+                document.getElementById('stats-games-books').classList.remove('hidden');
+
+                document.querySelectorAll('#section-games-books .card').forEach(card => {
+                    const year = card.getAttribute('data-year');
+                    card.classList.toggle('hidden', year !== pageKey);
+                });
+
+                calculateGameAndBookStats();
+            } else if (pageKey === 'steelbooks') {
+                document.getElementById('section-steelbooks').classList.remove('hidden');
+                document.getElementById('stats-steelbooks').classList.remove('hidden');
+            } else if (pageKey === 'ps-discs') {
+                document.getElementById('section-ps-discs').classList.remove('hidden');
+                document.getElementById('stats-ps-discs').classList.remove('hidden');
+            } else if (pageKey === 'digital') {
+                document.getElementById('section-digital').classList.remove('hidden');
+                document.getElementById('stats-digital').classList.remove('hidden');
+            }
         }
 
         window.onload = init;
