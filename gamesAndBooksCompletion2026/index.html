@@ -30,6 +30,7 @@
             --accent-ps: #0284c7;
             --accent-switch: #ef4444;
             --accent-digital: #8b5cf6;
+            --accent-nintendo-digital: #e60012;
         }
 
         [data-theme="dark"] {
@@ -218,6 +219,7 @@
         .stat-card.steelbooks { border-bottom-color: var(--accent-steelbook); }
         .stat-card.ps-discs { border-bottom-color: var(--accent-ps); }
         .stat-card.digital { border-bottom-color: var(--accent-digital); }
+        .stat-card.nintendo-digital { border-bottom-color: var(--accent-nintendo-digital); }
 
         .stat-value {
             display: block;
@@ -523,6 +525,7 @@
             <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Movie discs</button>
             <button class="tab-btn" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
             <button class="tab-btn" data-page="ps-digital" onclick="switchPage('ps-digital', 'PlayStation Digital Purchases', 'Complete history of my digital purchases on PlayStation Store.')">PlayStation digital purchases</button>
+            <button class="tab-btn" data-page="nintendo-digital" onclick="switchPage('nintendo-digital', 'Nintendo Digital Purchases', 'History of my digital purchases on Nintendo eShop.')">Nintendo digital purchases</button>
         </div>
 
         <!-- STATS SECTIONS -->
@@ -590,6 +593,17 @@
             </div>
             <div class="stat-card digital">
                 <span class="stat-value" id="digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
+                <span class="stat-label">Total Spent (USD)</span>
+            </div>
+        </div>
+
+        <div class="stats-bar hidden" id="stats-nintendo-digital">
+            <div class="stat-card nintendo-digital">
+                <span class="stat-value" id="nintendo-digital-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Transactions</span>
+            </div>
+            <div class="stat-card nintendo-digital">
+                <span class="stat-value" id="nintendo-digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
                 <span class="stat-label">Total Spent (USD)</span>
             </div>
         </div>
@@ -688,6 +702,35 @@
                         </tr>
                     </thead>
                     <tbody id="table-digital-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-nintendo-digital" class="hidden">
+            <div class="section-header">
+                <h2 style="color: var(--accent-nintendo-digital)">Nintendo Digital Purchases History</h2>
+                <div class="line"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortNintendoDigitalTable('transaction_date')">
+                                Date <span id="sort-nin-transaction_date" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortNintendoDigitalTable('game_title')">
+                                Title <span id="sort-nin-game_title" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortNintendoDigitalTable('item_description')">
+                                Item Description <span id="sort-nin-item_description" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortNintendoDigitalTable('price_usd')">
+                                Price (USD) <span id="sort-nin-price_usd" class="sort-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-nintendo-digital-body">
                     </tbody>
                 </table>
             </div>
@@ -828,12 +871,45 @@
             { "transaction_date": "2026-04-23", "game_title": "Resident Evil Village", "item_description": "Resident Evil Village Gold Edition", "price_uah": 449.7, "price_usd": 10.33 },
             { "transaction_date": "2026-06-06", "game_title": "LEGO® Бэтмен™: Наследие Темного рыцаря", "item_description": "Улучшение до Deluxe-издания", "price_uah": 719.0, "price_usd": 16.42 },
             { "transaction_date": "2026-06-19", "game_title": "Resident Evil 4", "item_description": "Resident Evil 4 — «Два пути»", "price_uah": 329.0, "price_usd": 7.49 }
+          ],
+          "nintendo_digital": [
+            { "transaction_date": "N/A", "game_title": "New Super Mario Bros U Deluxe", "item_description": "Full Game", "price_usd": 40.52 },
+            { "transaction_date": "N/A", "game_title": "Super Mario 3D World + Bowser’s Fury", "item_description": "Full Game", "price_usd": 63.85 },
+            { "transaction_date": "N/A", "game_title": "Captain Toad: Treasure Tracker", "item_description": "Special Episode DLC", "price_usd": 6.39 },
+            { "transaction_date": "N/A", "game_title": "Captain Toad: Treasure Tracker", "item_description": "Full Game", "price_usd": 42.64 },
+            { "transaction_date": "N/A", "game_title": "Super Mario Odyssey", "item_description": "Full Game", "price_usd": 44.77 },
+            { "transaction_date": "N/A", "game_title": "Super Mario Party Jamboree", "item_description": "Full Game", "price_usd": 59.99 },
+            { "transaction_date": "N/A", "game_title": "Resident Evil 4", "item_description": "Full Game", "price_usd": 9.99 },
+            { "transaction_date": "N/A", "game_title": "Mortal Kombat 11", "item_description": "Full Game", "price_usd": 4.19 },
+            { "transaction_date": "N/A", "game_title": "Crash Bandicoot™ 4: It’s About Time", "item_description": "Full Game", "price_usd": 19.99 },
+            { "transaction_date": "N/A", "game_title": "Teenage Mutant Ninja Turtles: Shredder's Revenge", "item_description": "Full Game", "price_usd": 12.78 },
+            { "transaction_date": "N/A", "game_title": "INSIDE", "item_description": "Full Game", "price_usd": 1.35 },
+            { "transaction_date": "N/A", "game_title": "LIMBO", "item_description": "Full Game", "price_usd": 1.99 },
+            { "transaction_date": "N/A", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Full Game", "price_usd": 19.99 },
+            { "transaction_date": "N/A", "game_title": "Portal: Companion Collection", "item_description": "Full Game", "price_usd": 20.32 },
+            { "transaction_date": "N/A", "game_title": "Red Dead Redemption", "item_description": "Full Game", "price_usd": 53.99 },
+            { "transaction_date": "N/A", "game_title": "Fortnite", "item_description": "1,000 V-Bucks", "price_usd": 9.71 },
+            { "transaction_date": "N/A", "game_title": "It Takes Two", "item_description": "Full Game", "price_usd": 21.59 },
+            { "transaction_date": "N/A", "game_title": "Fortnite", "item_description": "1,000 V-Bucks", "price_usd": 9.71 },
+            { "transaction_date": "N/A", "game_title": "Fortnite", "item_description": "5,000 V-Bucks", "price_usd": 36.99 },
+            { "transaction_date": "N/A", "game_title": "Minecraft", "item_description": "Realms Plus 1 Month Subscription Pass: You + 10 Friends (3)", "price_usd": 3.16 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Minecraft", "item_description": "Realms Plus 1 Month Subscription: You + 10 Friends (3)", "price_usd": 7.99 },
+            { "transaction_date": "N/A", "game_title": "Subnautica", "item_description": "Full Game", "price_usd": 9.89 },
+            { "transaction_date": "N/A", "game_title": "Alan Wake Remastered", "item_description": "Full Game", "price_usd": 29.99 }
           ]
         };
 
         let currentPage = '2026';
         let currentSortColumn = null;
         let isAscending = true;
+        let currentNintendoSortColumn = null;
+        let isNintendoAscending = true;
 
         const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
         const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
@@ -920,8 +996,9 @@
             renderDiscGrid('grid-discs-ps4', mediaData.game_discs.ps4, 'tag-ps');
             renderDiscGrid('grid-discs-ps5', mediaData.game_discs.ps5, 'tag-ps');
 
-            // 4. Digital Purchases Table
+            // 4. Digital Purchases Tables
             renderDigitalTable();
+            renderNintendoDigitalTable();
         }
 
         function renderSteelbookGrid(containerId, list) {
@@ -990,6 +1067,20 @@
             `).join('');
         }
 
+        function renderNintendoDigitalTable() {
+            const tbody = document.getElementById('table-nintendo-digital-body');
+            if (!tbody || !mediaData.nintendo_digital) return;
+
+            tbody.innerHTML = mediaData.nintendo_digital.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description}</td>
+                    <td class="price-col" style="color: var(--accent-nintendo-digital);">$${item.price_usd.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
         function sortDigitalTable(columnKey) {
             if (!mediaData.ps_digital) return;
 
@@ -1014,10 +1105,41 @@
 
             renderDigitalTable();
 
-            document.querySelectorAll('.sort-icon').forEach(el => el.innerText = '');
+            document.querySelectorAll('#section-ps-digital .sort-icon').forEach(el => el.innerText = '');
             const activeHeaderIcon = document.getElementById(`sort-${columnKey}`);
             if (activeHeaderIcon) {
                 activeHeaderIcon.innerText = isAscending ? '▲' : '▼';
+            }
+        }
+
+        function sortNintendoDigitalTable(columnKey) {
+            if (!mediaData.nintendo_digital) return;
+
+            if (currentNintendoSortColumn === columnKey) {
+                isNintendoAscending = !isNintendoAscending;
+            } else {
+                currentNintendoSortColumn = columnKey;
+                isNintendoAscending = true;
+            }
+
+            mediaData.nintendo_digital.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
+
+                if (typeof valA === 'string') {
+                    const comparison = valA.localeCompare(valB);
+                    return isNintendoAscending ? comparison : -comparison;
+                }
+
+                return isNintendoAscending ? valA - valB : valB - valA;
+            });
+
+            renderNintendoDigitalTable();
+
+            document.querySelectorAll('#section-nintendo-digital .sort-icon').forEach(el => el.innerText = '');
+            const activeHeaderIcon = document.getElementById(`sort-nin-${columnKey}`);
+            if (activeHeaderIcon) {
+                activeHeaderIcon.innerText = isNintendoAscending ? '▲' : '▼';
             }
         }
 
@@ -1034,21 +1156,25 @@
             const sbStats = document.getElementById('stats-steelbooks');
             const psStats = document.getElementById('stats-ps-discs');
             const digitalStats = document.getElementById('stats-ps-digital');
+            const nintendoDigitalStats = document.getElementById('stats-nintendo-digital');
 
             const gbSection = document.getElementById('section-games-books');
             const sbSection = document.getElementById('section-steelbooks');
             const psSection = document.getElementById('section-ps-discs');
             const digitalSection = document.getElementById('section-ps-digital');
+            const nintendoDigitalSection = document.getElementById('section-nintendo-digital');
 
             gbStats.classList.add('hidden');
             sbStats.classList.add('hidden');
             psStats.classList.add('hidden');
             digitalStats.classList.add('hidden');
+            nintendoDigitalStats.classList.add('hidden');
 
             gbSection.classList.add('hidden');
             sbSection.classList.add('hidden');
             psSection.classList.add('hidden');
             digitalSection.classList.add('hidden');
+            nintendoDigitalSection.classList.add('hidden');
 
             if (page === 'steelbooks') {
                 sbStats.classList.remove('hidden');
@@ -1062,6 +1188,10 @@
                 digitalStats.classList.remove('hidden');
                 digitalSection.classList.remove('hidden');
                 calculateDigitalTotals();
+            } else if (page === 'nintendo-digital') {
+                nintendoDigitalStats.classList.remove('hidden');
+                nintendoDigitalSection.classList.remove('hidden');
+                calculateNintendoDigitalTotals();
             } else {
                 gbStats.classList.remove('hidden');
                 gbSection.classList.remove('hidden');
@@ -1133,6 +1263,18 @@
 
             document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
             document.getElementById('digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+        }
+
+        function calculateNintendoDigitalTotals() {
+            const items = mediaData.nintendo_digital || [];
+            document.getElementById('nintendo-digital-count').innerText = items.length;
+
+            let totalUsd = 0;
+            items.forEach(item => {
+                totalUsd += item.price_usd || 0;
+            });
+
+            document.getElementById('nintendo-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
         }
 
         window.onload = init;
