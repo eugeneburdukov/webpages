@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Log</title>
+    <meta name="description" content="A personal log of finished games and books, and a catalogue of a physical and digital media collection.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           MEDIA LOG — cinematic poster wall
+           Palette roles: gold = UI chrome only (never encodes a value)
+                          blue = the single data hue (charts)
+           ============================================================ */
+
+        :root {
+            color-scheme: dark;
+
+            /* Surfaces */
+            --bg: #07080b;
+            --surface: #101218;
+            --surface-2: #171a22;
+            --line: rgba(255, 255, 255, 0.09);
+            --line-strong: rgba(255, 255, 255, 0.16);
+
+            /* Ink */
+            --text: #f2f0ea;
+            --text-2: #b9bac4;
+            --muted: #8b8d99;
+
+            /* UI chrome */
+            --gold: #e0a33c;
+            --gold-soft: rgba(224, 163, 60, 0.14);
+
+            /* Data hue (validated against the dark surface) */
+            --data: #3987e5;
+            --data-track: rgba(57, 135, 229, 0.16);
+
+            /* Category identity — chips and hairlines only */
+            --c-game: #8fa2ff;
+            --c-book: #3ec98a;
+            --c-steel: #f0954a;
+            --c-ps: #4aa3e8;
+            --c-switch: #ff6b6b;
+            --c-digital: #9085e9;
+            --c-nintendo: #ff5a5f;
+            --c-steam: #66c0f4;
+
+            --shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+            --shadow-lift: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
+            --radius: 14px;
+            --scrim: linear-gradient(to top, rgba(4, 5, 8, 0.94) 0%, rgba(4, 5, 8, 0.72) 28%, rgba(4, 5, 8, 0.12) 62%, rgba(4, 5, 8, 0) 100%);
+
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        [data-theme="light"] {
+            color-scheme: light;
+
+            --bg: #f2efe8;
+            --surface: #fbf9f4;
+            --surface-2: #f4f1ea;
+            --line: rgba(20, 21, 26, 0.12);
+            --line-strong: rgba(20, 21, 26, 0.22);
+
+            --text: #15161b;
+            --text-2: #43454f;
+            --muted: #5c5e6b;
+
+            --gold: #8a5a0c;
+            --gold-soft: rgba(138, 90, 12, 0.10);
+
+            --data: #2a78d6;
+            --data-track: rgba(42, 120, 214, 0.14);
+
+            --c-game: #4a41c4;
+            --c-book: #0f7a54;
+            --c-steel: #a8540c;
+            --c-ps: #10639f;
+            --c-switch: #c0392b;
+            --c-digital: #5b46c9;
+            --c-nintendo: #b3281f;
+            --c-steam: #14638f;
+
+            --shadow: 0 14px 30px -20px rgba(20, 21, 26, 0.5);
+            --shadow-lift: 0 26px 50px -18px rgba(20, 21, 26, 0.38);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 0 0 96px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ---------- Ambient projector light + grain ---------- */
+        .ambient {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ambient::before {
+            content: "";
+            position: absolute;
+            inset: -20% -10% auto -10%;
+            height: 78vh;
+            background:
+                radial-gradient(60% 55% at 22% 0%, rgba(224, 163, 60, 0.13), transparent 70%),
+                radial-gradient(55% 55% at 82% 8%, rgba(57, 135, 229, 0.13), transparent 70%);
+            filter: blur(8px);
+        }
+
+        .ambient::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.045;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        [data-theme="light"] .ambient::before {
+            background:
+                radial-gradient(60% 55% at 22% 0%, rgba(224, 163, 60, 0.20), transparent 70%),
+                radial-gradient(55% 55% at 82% 8%, rgba(57, 135, 229, 0.12), transparent 70%);
+        }
+
+        [data-theme="light"] .ambient::after { opacity: 0.025; }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding-inline: 20px;
+        }
+
+        /* ---------- Masthead ---------- */
+        .brandbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-block: 22px 0;
+        }
+
+        .wordmark {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .wordmark::before {
+            content: "";
+            width: 22px;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.7;
+        }
+
+        .ghost-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: transparent;
+            color: var(--text-2);
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s, background-color 0.2s, transform 0.2s var(--ease);
+            touch-action: manipulation;
+        }
+
+        .ghost-btn:hover { color: var(--text); border-color: var(--gold); background: var(--gold-soft); }
+        .ghost-btn:active { transform: scale(0.96); }
+
+        .hero {
+            padding-block: 34px 26px;
+            max-width: 52ch;
+        }
+
+        .eyebrow {
+            display: block;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.6rem, 8vw, 5rem);
+            line-height: 0.94;
+            letter-spacing: -0.045em;
+            max-width: 15ch;
+        }
+
+        .hero p {
+            margin: 16px 0 0;
+            max-width: 46ch;
+            color: var(--text-2);
+            font-size: 1rem;
+        }
+
+        /* ---------- Tabs ---------- */
+        .tabstrip {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            margin-top: 10px;
+            padding-block: 12px;
+            background: color-mix(in srgb, var(--bg) 86%, transparent);
+            backdrop-filter: blur(14px) saturate(140%);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            flex: 0 0 auto;
+            position: relative;
+            padding: 9px 15px;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted);
+            font: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+            touch-action: manipulation;
+        }
+
+        .tab:hover { color: var(--text); background: var(--surface-2); }
+
+        .tab[aria-selected="true"] {
+            color: var(--gold);
+            background: var(--gold-soft);
+            border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+        }
+
+        .tab .tab-n {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.68rem;
+            opacity: 0.55;
+            margin-left: 7px;
+        }
+
+        /* ---------- Toolbar ---------- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding-block: 22px 4px;
+        }
+
+        .search {
+            position: relative;
+            flex: 1 1 260px;
+            min-width: 0;
+        }
+
+        .search svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            translate: 0 -50%;
+            width: 15px;
+            height: 15px;
+            stroke: var(--muted);
+            stroke-width: 2;
+            fill: none;
+            pointer-events: none;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 11px 74px 11px 38px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text);
+            font: inherit;
+            font-size: 0.88rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search input::placeholder { color: var(--muted); }
+
+        .search input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-soft);
+        }
+
+        .search kbd {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            translate: 0 -50%;
+            padding: 2px 7px;
+            border: 1px solid var(--line-strong);
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.68rem;
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .search input:not(:placeholder-shown) ~ kbd { opacity: 0; }
+
+        .sorter {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+        }
+
+        .sorter select {
+            padding: 9px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text);
+            font: inherit;
+            font-size: 0.82rem;
+            letter-spacing: 0;
+            text-transform: none;
+            cursor: pointer;
+        }
+
+        .sorter select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+        .result-count {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.74rem;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        /* ---------- KPI row ---------- */
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1px;
+            margin: 22px 0 8px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .kpi {
+            background: var(--surface);
+            padding: 18px 16px;
+            position: relative;
+        }
+
+        .kpi::before {
+            content: "";
+            position: absolute;
+            left: 16px;
+            top: 0;
+            width: 26px;
+            height: 2px;
+            background: var(--kpi-accent, var(--gold));
+        }
+
+        .kpi-value {
+            display: block;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .kpi-label {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ---------- Section headers ---------- */
+        .sec { margin-top: 44px; }
+
+        .sec-head {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .sec-head h2 {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--sec-accent, var(--text));
+        }
+
+        .sec-head .rule {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--line-strong), transparent);
+        }
+
+        .sec-head .count {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        /* ---------- Poster wall ---------- */
+        .wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 14px;
+        }
+
+        @media (min-width: 720px) {
+            .wall { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; }
+        }
+
+        .tile {
+            position: relative;
+            display: block;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--surface-2);
+            box-shadow: var(--shadow);
+            isolation: isolate;
+            transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+        }
+
+        .tile::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid var(--line);
+            pointer-events: none;
+            transition: border-color 0.35s;
+            z-index: 3;
+        }
+
+        .tile-art {
+            display: block;
+            width: 100%;
+            aspect-ratio: 392 / 500;
+            object-fit: cover;
+            background: var(--surface-2);
+            transition: transform 0.6s var(--ease), filter 0.45s;
+        }
+
+        .tile-scrim {
+            position: absolute;
+            inset: 0;
+            background: var(--scrim);
+            opacity: 0.92;
+            transition: opacity 0.35s;
+            z-index: 1;
+        }
+
+        .tile-body {
+            position: absolute;
+            inset: auto 0 0 0;
+            z-index: 2;
+            padding: 12px 13px 13px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tile-title {
+            margin: 0;
+            font-size: 0.86rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Collapses to nothing when not revealed, so the title always sits on the
+           bottom edge of the poster instead of floating above reserved space. */
+        .tile-reveal { display: grid; grid-template-rows: 1fr; }
+
+        .tile-reveal-in {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            padding-top: 8px;
+        }
+
+        .tile-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            padding: 3px 7px;
+            border-radius: 6px;
+            background: rgba(4, 5, 8, 0.6);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.64rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            white-space: nowrap;
+        }
+
+        .chip-lead {
+            background: color-mix(in srgb, var(--chip, var(--gold)) 82%, transparent);
+            border-color: transparent;
+            color: #08090c;
+        }
+
+        .tile-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.86);
+        }
+
+        .tile-meta .m-left { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+
+        .tile-meta svg {
+            width: 13px;
+            height: 13px;
+            flex: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .tile-meta .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .price-main { color: #fff; font-weight: 500; }
+        .price-alt { color: var(--gold); }
+
+        .tile-link {
+            position: relative;
+            z-index: 4;
+            color: var(--gold);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.66rem;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .tile-link:hover { text-decoration: underline; }
+
+        .stretch::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+        }
+
+        /* Hover reveal — only where hovering is real */
+        @media (hover: hover) and (min-width: 720px) {
+            .tile-reveal {
+                grid-template-rows: 0fr;
+                opacity: 0;
+                transition: grid-template-rows 0.4s var(--ease), opacity 0.3s var(--ease);
+            }
+
+            .tile-scrim { opacity: 0.6; }
+
+            .tile:hover,
+            .tile:focus-within {
+                transform: translateY(-6px);
+                box-shadow: var(--shadow-lift);
+            }
+
+            .tile:hover .tile-art,
+            .tile:focus-within .tile-art { transform: scale(1.05); }
+
+            .tile:hover .tile-scrim,
+            .tile:focus-within .tile-scrim { opacity: 1; }
+
+            .tile:hover .tile-reveal,
+            .tile:focus-within .tile-reveal { grid-template-rows: 1fr; opacity: 1; }
+
+            .tile:hover::after,
+            .tile:focus-within::after { border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+        }
+
+        .tile a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+        /* ---------- Tables ---------- */
+        .table-shell {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            overflow: hidden;
+        }
+
+        .table-scroll { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.86rem;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: var(--surface-2);
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--line-strong);
+            white-space: nowrap;
+        }
+
+        th.sortable { cursor: pointer; user-select: none; }
+        th.sortable:hover { color: var(--text); }
+        th[aria-sort] { color: var(--gold); }
+
+        .sort-icon {
+            display: inline-block;
+            width: 10px;
+            margin-left: 4px;
+            font-size: 0.7rem;
+            opacity: 0.85;
+        }
+
+        tbody td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: var(--surface-2); }
+
+        .c-date {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .c-title { font-weight: 600; min-width: 200px; }
+        .c-desc { color: var(--text-2); font-size: 0.82rem; }
+
+        .c-num {
+            text-align: right;
+            white-space: nowrap;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .c-num.accent { color: var(--gold); }
+
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            font-size: 0.68rem;
+            color: var(--text-2);
+            white-space: nowrap;
+        }
+
+        /* ---------- Charts ---------- */
+        .chart-grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 900px) {
+            .chart-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        figure.chart {
+            margin: 0;
+            padding: 20px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            min-width: 0;
+        }
+
+        figure.chart figcaption { margin-bottom: 20px; }
+
+        figure.chart h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        figure.chart .sub {
+            margin: 4px 0 0;
+            font-size: 0.76rem;
+            color: var(--muted);
+        }
+
+        /* horizontal bars */
+        .barlist { display: flex; flex-direction: column; gap: 14px; }
+
+        .bar-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-2);
+        }
+
+        .bar-label b {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-variant-numeric: tabular-nums;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .bar-track {
+            position: relative;
+            height: 14px;
+            border-radius: 3px;
+            background: var(--data-track);
+        }
+
+        .bar-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: var(--pct);
+            background: var(--data);
+            border-radius: 0 4px 4px 0;
+            transition: width 0.9s var(--ease);
+        }
+
+        /* columns */
+        .cols-wrap { position: relative; padding-left: 42px; }
+
+        .cols-grid {
+            position: absolute;
+            inset: 0 0 26px 42px;
+            pointer-events: none;
+        }
+
+        .gridline {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .gridline span {
+            position: absolute;
+            right: calc(100% + 8px);
+            top: 50%;
+            translate: 0 -50%;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.66rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .cols {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 170px;
+            padding-bottom: 26px;
+            border-bottom: 1px solid var(--line-strong);
+        }
+
+        .col {
+            position: relative;
+            flex: 1 1 0;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            cursor: default;
+        }
+
+        .col-fill {
+            width: 100%;
+            max-width: 24px;
+            height: var(--h);
+            min-height: 2px;
+            background: var(--data);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.9s var(--ease), background-color 0.2s;
+        }
+
+        .col:hover .col-fill { background: color-mix(in srgb, var(--data) 75%, #fff); }
+
+        .col-x {
+            position: absolute;
+            top: calc(100% + 7px);
+            left: 50%;
+            translate: -50% 0;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+        }
+
+        .col-v {
+            position: absolute;
+            bottom: calc(var(--h) + 6px);
+            left: 50%;
+            translate: -50% 0;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.64rem;
+            font-weight: 500;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .chart-foot {
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+        }
+
+        .linkish {
+            border: 0;
+            background: none;
+            padding: 0;
+            font: inherit;
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .linkish:hover { color: var(--gold); }
+
+        .chart-table table { font-size: 0.78rem; margin-top: 12px; }
+        .chart-table td, .chart-table th { padding: 7px 10px; }
+        .chart-table thead th { position: static; background: transparent; }
+
+        /* tooltip */
+        #tip {
+            position: fixed;
+            z-index: 60;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -100%);
+            padding: 7px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--line-strong);
+            background: var(--surface-2);
+            box-shadow: var(--shadow);
+            font-size: 0.76rem;
+            white-space: nowrap;
+            transition: opacity 0.15s;
+        }
+
+        #tip b { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 500; }
+
+        /* ---------- Recent strip ---------- */
+        .recent { display: flex; flex-direction: column; }
+
+        .recent-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 14px;
+            align-items: baseline;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .recent-row:last-child { border-bottom: none; }
+
+        .recent-row .r-date {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.74rem;
+            color: var(--muted);
+        }
+
+        .recent-row .r-title {
+            font-size: 0.86rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .recent-row .r-price {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.8rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hero-figure {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: clamp(3rem, 9vw, 4.6rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin: 0;
+        }
+
+        .hero-figure-label {
+            margin: 10px 0 0;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .spotlight {
+            display: grid;
+            gap: 26px;
+            align-items: center;
+            padding: 28px 24px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background:
+                radial-gradient(90% 140% at 0% 0%, var(--gold-soft), transparent 60%),
+                var(--surface);
+        }
+
+        @media (min-width: 760px) {
+            .spotlight { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); padding: 34px 32px; }
+        }
+
+        .spotlight p.note {
+            margin: 0;
+            color: var(--text-2);
+            font-size: 0.88rem;
+        }
+
+        /* ---------- Utility ---------- */
+        [hidden] { display: none !important; }
+        .is-hidden { display: none !important; }
+
+        .empty {
+            padding: 46px 20px;
+            text-align: center;
+            color: var(--muted);
+            border: 1px dashed var(--line-strong);
+            border-radius: var(--radius);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip {
+            position: absolute;
+            left: -9999px;
+            top: 8px;
+            z-index: 100;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: var(--gold);
+            color: #08090c;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .skip:focus { left: 20px; }
+
+        footer.pagefoot {
+            margin-top: 64px;
+            padding-top: 22px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            justify-content: space-between;
+            font-size: 0.74rem;
+            color: var(--muted);
+        }
+
+        footer.pagefoot kbd {
+            padding: 1px 6px;
+            border: 1px solid var(--line-strong);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.7rem;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="ambient" aria-hidden="true"></div>
+
+    <div class="wrap">
+        <div class="brandbar">
+            <span class="wordmark">Media Log</span>
+            <button class="ghost-btn" id="theme-toggle" type="button" aria-label="Switch colour theme">
+                <span id="theme-icon" aria-hidden="true">☀</span>
+                <span id="theme-text">Light</span>
+            </button>
+        </div>
+
+        <header class="hero">
+            <span class="eyebrow" id="page-eyebrow">Collection</span>
+            <h1 id="page-title">Media Log</h1>
+            <p id="page-subtitle">A gallery of finished adventures and stories.</p>
+        </header>
+    </div>
+
+    <div class="tabstrip">
+        <div class="wrap">
+            <div class="tabs" id="tabs" role="tablist" aria-label="Collection views"></div>
+        </div>
+    </div>
+
+    <main class="wrap" id="main">
+        <div class="toolbar" id="toolbar">
+            <div class="search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                <input type="search" id="search" placeholder="Filter this view…" autocomplete="off" aria-label="Filter items in this view">
+                <kbd>/</kbd>
+            </div>
+            <label class="sorter" for="sort">Sort
+                <select id="sort"></select>
+            </label>
+            <span class="result-count" id="result-count"></span>
+        </div>
+
+        <div id="kpis-top"><div class="kpis" id="kpis"></div></div>
+
+        <!-- ============ OVERVIEW ============ -->
+        <section id="view-overview" class="view" hidden>
+            <div class="sec">
+                <div class="spotlight">
+                    <div>
+                        <p class="hero-figure" id="grand-total">$0</p>
+                        <p class="hero-figure-label">Lifetime spend on media</p>
+                    </div>
+                    <p class="note" id="overview-note"></p>
+                </div>
+            </div>
+
+            <!-- the hero figure leads; the KPI row moves in beneath it -->
+            <div id="kpis-slot"></div>
+
+            <div class="sec">
+                <div class="sec-head">
+                    <h2>The numbers</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="chart-grid">
+                    <figure class="chart">
+                        <figcaption>
+                            <h3>Spend by category</h3>
+                            <p class="sub">All-time, converted to US$</p>
+                        </figcaption>
+                        <div class="barlist" id="chart-category"></div>
+                        <div class="chart-foot">
+                            <button class="linkish" type="button" data-table-toggle="table-category">Show data table</button>
+                            <div class="chart-table" id="table-category" hidden></div>
+                        </div>
+                    </figure>
+
+                    <figure class="chart">
+                        <figcaption>
+                            <h3>Digital spend by year</h3>
+                            <p class="sub">PlayStation Store · Nintendo eShop · Steam, in US$<span id="years-excluded"></span></p>
+                        </figcaption>
+                        <div class="cols-wrap">
+                            <div class="cols-grid" id="chart-years-grid"></div>
+                            <div class="cols" id="chart-years"></div>
+                        </div>
+                        <div class="chart-foot">
+                            <button class="linkish" type="button" data-table-toggle="table-years">Show data table</button>
+                            <div class="chart-table" id="table-years" hidden></div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="sec-head">
+                    <h2>Latest purchases</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="recent" id="recent"></div>
+            </div>
+        </section>
+
+        <!-- ============ FINISHED (2026 / archive) ============ -->
+        <section id="view-finished" class="view" hidden>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-game)">
+                    <h2>Games</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-games"></span>
+                </div>
+                <div class="wall" id="wall-games"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-book)">
+                    <h2>Books</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-books"></span>
+                </div>
+                <div class="wall" id="wall-books"></div>
+            </div>
+        </section>
+
+        <!-- ============ MOVIE DISCS ============ -->
+        <section id="view-steelbooks" class="view" hidden>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-steel)">
+                    <h2>Manta Lab exclusives</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-manta"></span>
+                </div>
+                <div class="wall" id="wall-manta"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-steel)">
+                    <h2>Christopher Nolan 4K collection</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-nolan"></span>
+                </div>
+                <div class="wall" id="wall-nolan"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-steel)">
+                    <h2>Other steelbooks</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-steel-other"></span>
+                </div>
+                <div class="wall" id="wall-steel-other"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-steel)">
+                    <h2>Collector's editions</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-steel-ce"></span>
+                </div>
+                <div class="wall" id="wall-steel-ce"></div>
+            </div>
+        </section>
+
+        <!-- ============ GAME DISCS ============ -->
+        <section id="view-discs" class="view" hidden>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-switch)">
+                    <h2>Nintendo Switch</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-switch"></span>
+                </div>
+                <div class="wall" id="wall-switch"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-ps)">
+                    <h2>PlayStation 3</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-ps3"></span>
+                </div>
+                <div class="wall" id="wall-ps3"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-ps)">
+                    <h2>PlayStation 4</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-ps4"></span>
+                </div>
+                <div class="wall" id="wall-ps4"></div>
+            </div>
+            <div class="sec" data-group>
+                <div class="sec-head" style="--sec-accent: var(--c-ps)">
+                    <h2>PlayStation 5</h2>
+                    <div class="rule"></div>
+                    <span class="count" data-count-for="wall-ps5"></span>
+                </div>
+                <div class="wall" id="wall-ps5"></div>
+            </div>
+        </section>
+
+        <!-- ============ PS DIGITAL ============ -->
+        <section id="view-ps-digital" class="view" hidden>
+            <div class="sec">
+                <div class="sec-head" style="--sec-accent: var(--c-digital)">
+                    <h2>PlayStation Store history</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="table-shell">
+                    <div class="table-scroll">
+                        <table id="tbl-ps">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-key="transaction_date">Date <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="game_title">Title <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="item_description">Item <span class="sort-icon"></span></th>
+                                    <th class="sortable c-num" data-key="price_uah">UAH <span class="sort-icon"></span></th>
+                                    <th class="sortable c-num" data-key="price_usd">USD <span class="sort-icon"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ NINTENDO DIGITAL ============ -->
+        <section id="view-nintendo-digital" class="view" hidden>
+            <div class="sec">
+                <div class="sec-head" style="--sec-accent: var(--c-nintendo)">
+                    <h2>Nintendo eShop history</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="table-shell">
+                    <div class="table-scroll">
+                        <table id="tbl-nintendo">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-key="transaction_date">Date <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="game_title">Title <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="item_description">Item <span class="sort-icon"></span></th>
+                                    <th class="sortable c-num" data-key="price_usd">USD <span class="sort-icon"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ STEAM ============ -->
+        <section id="view-steam-digital" class="view" hidden>
+            <div class="sec">
+                <div class="sec-head" style="--sec-accent: var(--c-steam)">
+                    <h2>Steam purchases &amp; library</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="table-shell">
+                    <div class="table-scroll">
+                        <table id="tbl-steam">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-key="transaction_date">Date <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="game_title">Title <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="item_description">Item <span class="sort-icon"></span></th>
+                                    <th class="sortable c-num" data-key="playtime_hours">Played <span class="sort-icon"></span></th>
+                                    <th class="sortable" data-key="platform_type">Store <span class="sort-icon"></span></th>
+                                    <th class="sortable c-num" data-key="price_uah">UAH <span class="sort-icon"></span></th>
+                                    <th class="sortable c-num" data-key="price_usd">USD <span class="sort-icon"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="empty is-hidden" id="empty-state">
+            No items match <b id="empty-term"></b> in this view.
+        </div>
+
+        <footer class="pagefoot">
+            <span>Prices shown as recorded at purchase.</span>
+            <span><kbd>/</kbd> filter · <kbd>←</kbd><kbd>→</kbd> switch view · <kbd>Esc</kbd> clear</span>
+        </footer>
+    </main>
+
+    <div id="tip" role="status" aria-live="polite"></div>
+
+    <script>
+        const mediaData = {
+          "finished": [
+            { "year": "2026", "type": "game", "title": "Resident Evil Requiem", "cover": "images/re_requiem.jpg", "tags": ["PS5", "Digital"], "val": "13h" },
+            { "year": "2026", "type": "game", "title": "Alan Wake 2", "cover": "images/alan_wake_2.jpg", "tags": ["PS5", "Physical"], "val": "30h" },
+            { "year": "2026", "type": "game", "title": "Astrobot", "cover": "images/astrobot.jpg", "tags": ["PS5", "Physical"], "val": "26h" },
+            { "year": "2026", "type": "game", "title": "Resident Evil Village", "cover": "images/revillage.jpg", "tags": ["PS5", "Digital"], "val": "11h" },
+            { "year": "2026", "type": "game", "title": "Reanimal", "cover": "images/reanimal.jpg", "tags": ["PC-Steam", "Digital"], "val": "8h" },
+            { "year": "2026", "type": "game", "title": "Silent Hill 2", "cover": "images/sh2.jpg", "tags": ["PS5", "Physical"], "val": "18h" },
+            { "year": "2026", "type": "game", "title": "Soma", "cover": "images/soma.jpg", "tags": ["PC-Steam", "Digital"], "val": "12h" },
+            { "year": "2026", "type": "game", "title": "007 First Light", "cover": "images/first_light.jpg", "tags": ["PS5", "PHYSICAL"], "val": "23h" },
+            { "year": "2026", "type": "game", "title": "Lego Batman: Legacy of the Dark Knight", "cover": "images/lego_batman_ldk.png", "tags": ["PS5", "PHYSICAL"], "val": "15h" },
+            { "year": "2026", "type": "game", "title": "Assassin's Creed Black Flag Resynced", "cover": "images/acresynced.jpg", "tags": ["PS5", "PHYSICAL"], "val": "31h" },
+            { "year": "2022-2025", "type": "game", "title": "Resident Evil 4 Remake", "cover": "images/archive-2022-2025/residentevil4.jpg", "tags": ["PC-Steam", "Digital"], "val": "13.2h" },
+            { "year": "2022-2025", "type": "game", "title": "God of War: Ragnarok", "cover": "images/archive-2022-2025/godofwarragnarok.jpg", "tags": ["PC", "Free"], "val": "30h" },
+            { "year": "2022-2025", "type": "game", "title": "It Takes Two", "cover": "images/archive-2022-2025/ittakestwo.jpg", "tags": ["PC-Steam", "Digital"], "val": "35.9h" },
+            { "year": "2022-2025", "type": "game", "title": "Portal 2", "cover": "images/archive-2022-2025/portal2.jpg", "tags": ["PC-Steam", "Digital"], "val": "14.1h" },
+            { "year": "2022-2025", "type": "game", "title": "Indiana Jones and the Great Circle", "cover": "images/archive-2022-2025/IndianaJonesandtheGreatCircle.jpg", "tags": ["PC", "Free"], "val": "30h" },
+            { "year": "2022-2025", "type": "game", "title": "Warhammer 40k: Dawn of War - Soulstorm", "cover": "images/archive-2022-2025/Warhammer40000DawnofWarSoulstorm.jpg", "tags": ["PC-Steam", "Digital"], "val": "310.3h" },
+            { "year": "2022-2025", "type": "game", "title": "Warhammer 40k: Space Marine 2", "cover": "images/archive-2022-2025/Warhammer40000SpaceMarine2.jpg", "tags": ["PC-Steam", "Digital"], "val": "10.1h" },
+            { "year": "2022-2025", "type": "game", "title": "A Way Out", "cover": "images/archive-2022-2025/awayout.jpg", "tags": ["PC-Steam", "Digital"], "val": "6.6h" },
+            { "year": "2022-2025", "type": "game", "title": "Call of Duty: Modern Warfare Remastered", "cover": "images/archive-2022-2025/modernwarfare.jpg", "tags": ["PC-Steam", "Digital"], "val": "8.8h" },
+            { "year": "2022-2025", "type": "game", "title": "Call of Duty: Modern Warfare 2", "cover": "images/archive-2022-2025/modernwarfare2.jpg", "tags": ["PC-Epic", "Digital"], "val": "0h" },
+            { "year": "2022-2025", "type": "game", "title": "Call of Duty: Modern Warfare 3", "cover": "images/archive-2022-2025/modernwarfare3.jpg", "tags": ["PC-Epic", "Digital"], "val": "0h" },
+            { "year": "2022-2025", "type": "game", "title": "Risk of Rain 2", "cover": "images/archive-2022-2025/riskofrain2.jpg", "tags": ["PC-Steam", "Digital"], "val": "36.3h" },
+            { "year": "2022-2025", "type": "game", "title": "Styx: Master of Shadows", "cover": "images/archive-2022-2025/styx.jpg", "tags": ["PC-Steam", "Digital"], "val": "28.2h" },
+            { "year": "2022-2025", "type": "game", "title": "Fortnite", "cover": "images/archive-2022-2025/fortnite.jpg", "tags": ["PC-Epic", "Digital Free"], "val": "0h" },
+            { "year": "2022-2025", "type": "game", "title": "Split Fiction", "cover": "images/archive-2022-2025/splitfiction.jpg", "tags": ["PC-Steam", "Digital"], "val": "23.1h" },
+            { "year": "2026", "type": "book", "title": "Граф Монте-Кристо", "cover": "images/monte_cristo.jpg", "tags": [], "val": "1200 pages" },
+            { "year": "2026", "type": "book", "title": "Грозовой перевал", "cover": "images/wuthering_heights.jpg", "tags": [], "val": "400 pages" },
+            { "year": "2026", "type": "book", "title": "Похождения бравого солдата Швейка", "cover": "images/shvejk.jpg", "tags": [], "val": "750 pages" },
+            { "year": "2026", "type": "book", "title": "Фамильная честь Вустеров", "cover": "images/The_Code_of_the_Woosters.jpg", "tags": [], "val": "320 pages" }
+          ],
+          "steelbooks": {
+            "manta_lab": [
+              { "title": "The Dark Knight 4K Blu-ray Steelbook Manta Lab Exclusive ME#54 Double Lenticular Full Slip A", "cover": "images/steelbooks/DK_DLSA_front.jpg", "link": "images/steelbooks/bluraylife.pdf", "linkText": "bluraylife.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD", "MANTA LAB Exclusive"], "priceUah": 13765.77, "priceUsd": 299.19, "itemMeta": "Manta Lab" }
+            ],
+            "nolan": [
+              { "title": "Batman Begins", "cover": "images/steelbooks/batman_begins.jpg", "link": "https://www.blu-ray.com/movies/Batman-Begins-4K-Blu-ray/350183/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1909.58, "priceUsd": 42.44, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "The Dark Knight", "cover": "images/steelbooks/dark_kniight.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-4K-Blu-ray/350181/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1909.58, "priceUsd": 42.44, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "The Dark Knight Rises", "cover": "images/steelbooks/dark_knight_rises.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-Rises-4K-Blu-ray/350189/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1909.57, "priceUsd": 42.43, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "The Prestige", "cover": "images/steelbooks/the_prestige.jpg", "link": "https://www.blu-ray.com/movies/The-Prestige-4K-Blu-ray/400574/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 2300.00, "priceUsd": 51.11, "itemMeta": "Limited Edition" },
+              { "title": "Inception", "cover": "images/steelbooks/inception.jpg", "link": "https://www.blu-ray.com/movies/Inception-4K-Blu-ray/385817/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1700.00, "priceUsd": 37.78, "itemMeta": "Limited Edition" },
+              { "title": "Dunkirk", "cover": "images/steelbooks/dunkirk.jpg", "link": "https://www.blu-ray.com/movies/Dunkirk-4K-Blu-ray/235808/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 1700.00, "priceUsd": 37.78, "itemMeta": "Zavvi Exclusive SteelBook" },
+              { "title": "Interstellar", "cover": "images/steelbooks/interstellar.jpg", "link": "https://www.blu-ray.com/movies/Interstellar-4K-Blu-ray/277619/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 2000.00, "priceUsd": 44.44, "itemMeta": "Best Buy Exclusive SteelBook" }
+            ],
+            "other": [
+              { "title": "Indiana Jones 4-Movie Collection", "cover": "images/steelbooks/Indiana_Jones_4_Movie_Collection.jpg", "link": "https://www.blu-ray.com/movies/Indiana-Jones-4-Movie-Collection-4K-Blu-ray/288048/", "linkText": "blu-ray.com", "tags": ["STEELBOOK"], "subTags": ["4K UHD"], "priceUah": 5000.00, "priceUsd": 111.00, "itemMeta": "4-Movie Collection" },
+              { "title": "Harry Potter Collection", "cover": "images/steelbooks/hpblurayrus.jpg", "link": "images/steelbooks/hpblurayrus.jpg", "linkText": "blu-ray.com", "tags": ["Amaray Bluray"], "subTags": ["BLU-RAY"], "priceUah": 3273.00, "priceUsd": 83.00, "itemMeta": "8-Movie Collection" }
+            ],
+            "other2": [
+              { "title": "The Dark Knight Trilogy: Ultimate Collector’s Edition Blu-Ray Box Set", "cover": "images/steelbooks/dk_complete.jpg", "link": "https://www.blu-ray.com/movies/The-Dark-Knight-Trilogy-Blu-ray/65659/", "linkText": "blu-ray.com", "tags": ["BLU-RAY"], "subTags": [], "priceUah": 4052.23, "priceUsd": 90.77, "itemMeta": "3-Movie Collection" },
+              { "title": "Teenage Mutant Ninja Turtles Trilogy Limited Edition", "cover": "images/steelbooks/tmnt_arrow.jpg", "link": "https://www.blu-ray.com/movies/Teenage-Mutant-Ninja-Turtles-Trilogy-4K-Blu-ray/394492/", "linkText": "blu-ray.com", "tags": ["4K UHD"], "subTags": [], "priceUah": 1954.05, "priceUsd": 43.38, "itemMeta": "3-Movie Collection" },
+              { "title": "Titanic 3D Collectors Edition", "cover": "images/steelbooks/titanic_3d.jpg", "link": "https://www.blu-ray.com/movies/Titanic-3D-Collectors-Edition-Blu-ray/50252/", "linkText": "blu-ray.com", "tags": ["BLU-RAY"], "subTags": [], "priceUah": 2000, "priceUsd": 36, "itemMeta": "3-Movie Collection" }
+            ]
+          },
+          "game_discs": {
+            "switch": [
+              { "title": "The Witcher 3: Wild Hunt Complete Edition", "cover": "images/ps_discs/witcher_3_switch.jpg", "platform": "Switch", "subTag": "Game Card", "priceUsd": 59.99 }
+            ],
+            "ps3": [
+              { "title": "Uncharted 3: Drake's Deception (Special Edition)", "cover": "images/ps_discs/uncharted_3.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 29.00 },
+              { "title": "MotorStorm: Pacific Rift", "cover": "images/ps_discs/motorstorm_pacific_rift.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Assassin's Creed", "cover": "images/ps_discs/assassins_creed.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Assassin's Creed II", "cover": "images/ps_discs/assassins_creed_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 24.00 },
+              { "title": "Uncharted: Drake's Fortune", "cover": "images/ps_discs/uncharted_1.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Uncharted 2: Among Thieves", "cover": "images/ps_discs/uncharted_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 }
+            ],
+            "ps4": [
+              { "title": "Red Dead Redemption 2", "cover": "images/ps_discs/rdr2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 33.70 },
+              { "title": "The Witcher 3 Wild Hunt Expansion Pack Blood and Wine", "cover": "images/ps_discs/witcher3_blood_and_wine_dlc.jpg", "platform": "PS4", "subTag": "Digital code", "priceUsd": 30.00 },
+              { "title": "It Takes Two", "cover": "images/ps_discs/it_takes_two.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 37.00 },
+              { "title": "Uncharted 4: A Thief's End", "cover": "images/ps_discs/uncharted_4.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Rise of the Tomb Raider", "cover": "images/ps_discs/rise_tomb_raider.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "The Last of Us Part II", "cover": "images/ps_discs/tlou2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Horizon Zero Dawn", "cover": "images/ps_discs/horizon_zero_dawn.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 30.99 },
+              { "title": "The Order: 1886", "cover": "images/ps_discs/the_order_1886.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Shadow of the Tomb Raider", "cover": "images/ps_discs/shadow_of_the_tomb_raider.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Assassin's Creed Unity", "cover": "images/ps_discs/ac_unity.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Injustice 2", "cover": "images/ps_discs/injustice_2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Assassin's Creed Syndicate", "cover": "images/ps_discs/ac_syndicate.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 }
+            ],
+            "ps5": [
+              { "title": "Resident Evil 2", "cover": "images/ps_discs/re2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.93 },
+              { "title": "Resident Evil 3", "cover": "images/ps_discs/re3.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.99 },
+              { "title": "Resident Evil 4", "cover": "images/ps_discs/re4.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 14.99 },
+              { "title": "Resident Evil 7: Biohazard", "cover": "images/ps_discs/re7.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.99 },
+              { "title": "Resident Evil Village", "cover": "images/ps_discs/re_village.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 58.20 },
+              { "title": "Alan Wake 2", "cover": "images/ps_discs/alan_wake_2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 34.96 },
+              { "title": "Silent Hill 2", "cover": "images/ps_discs/silent_hill_2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 36.29 },
+              { "title": "Grand Theft Auto V", "cover": "images/ps_discs/gta_v.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 32.60 },
+              { "title": "Assassin's Creed Black Flag Resynced", "cover": "images/ps_discs/ac_black_flag_resynced.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 77.00 },
+              { "title": "LEGO Batman: Legacy of the Dark Knight", "cover": "images/ps_discs/lego_batman_ldk.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 89.99 },
+              { "title": "007 First Light", "cover": "images/ps_discs/007_first_light.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 69.99 },
+              { "title": "The Witcher 3: Wild Hunt", "cover": "images/ps_discs/witcher_3.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 48.50 },
+              { "title": "Metal Gear Solid Δ: Snake Eater (Tactical Edition)", "cover": "images/ps_discs/mgs_delta.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 29.92 },
+              { "title": "Onimusha: Way of the Sword", "cover": "images/ps_discs/OnimushaWayoftheSword.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 69.00 },
+              { "title": "The Blood of Dawnwalker Day 1 Edition", "cover": "images/ps_discs/dawnwalker.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 30.66 }
+            ]
+          },
+          "ps_digital": [
+            { "transaction_date": "2015-03-07", "game_title": "THE LAST OF US REMASTERED", "item_description": "«Одни из нас™. Обновленная версия»", "price_uah": 389.0, "price_usd": 16.99 },
+            { "transaction_date": "2015-04-09", "game_title": "Need for Speed™ Rivals", "item_description": "Need for Speed™ Rivals: Complete Edition", "price_uah": 379.0, "price_usd": 16.18 },
+            { "transaction_date": "2015-04-15", "game_title": "MORTAL KOMBAT X", "item_description": "Mortal Kombat X", "price_uah": 999.0, "price_usd": 43.74 },
+            { "transaction_date": "2015-05-19", "game_title": "«Ведьмак 3: Дикая Охота»", "item_description": "Ведьмак 3: Дикая Охота", "price_uah": 999.0, "price_usd": 48.01 },
+            { "transaction_date": "2015-06-22", "game_title": "BATMAN ARKHAM KNIGHT", "item_description": "Batman: Arkham Knight", "price_uah": 999.0, "price_usd": 46.21 },
+            { "transaction_date": "2015-08-13", "game_title": "BATMAN ARKHAM KNIGHT", "item_description": "Рыцарь Аркхема Семейное дело", "price_uah": 109.0, "price_usd": 5.1 },
+            { "transaction_date": "2015-10-03", "game_title": "Uncharted™: Натан Дрейк. Коллекция", "item_description": "Uncharted™: Натан Дрейк. Kоллекция", "price_uah": 949.0, "price_usd": 44.87 },
+            { "transaction_date": "2015-12-29", "game_title": "ROCKET LEAGUE", "item_description": "Rocket League®", "price_uah": 270.0, "price_usd": 11.35 },
+            { "transaction_date": "2015-12-29", "game_title": "PlayStation Plus", "item_description": "Подписка на 1 месяц", "price_uah": 159.0, "price_usd": 6.68 },
+            { "transaction_date": "2015-12-30", "game_title": "Rayman Legends", "item_description": "Rayman Legends", "price_uah": 270.0, "price_usd": 11.25 },
+            { "transaction_date": "2015-12-30", "game_title": "«Ведьмак 3: Дикая Охота»", "item_description": "Каменные сердца", "price_uah": 225.0, "price_usd": 9.38 },
+            { "transaction_date": "2015-12-30", "game_title": "Metal Gear Solid V", "item_description": "Ground Zeroes", "price_uah": 118.0, "price_usd": 4.92 },
+            { "transaction_date": "2019-03-27", "game_title": "RED DEAD REDEMPTION 2", "item_description": "Red Dead Online", "price_uah": 1999.0, "price_usd": 74.15 },
+            { "transaction_date": "2020-04-08", "game_title": "FINAL FANTASY VII REMAKE", "item_description": "FINAL FANTASY VII REMAKE", "price_uah": 1999.0, "price_usd": 73.33 },
+            { "transaction_date": "2020-09-24", "game_title": "Предзаказ Mafia: Definitive Edition", "item_description": "Предзаказ Mafia: Definitive Edition", "price_uah": 1199.0, "price_usd": 42.55 },
+            { "transaction_date": "2020-11-23", "game_title": "HITMAN 2", "item_description": "HITMAN™ 2", "price_uah": 439.78, "price_usd": 15.51 },
+            { "transaction_date": "2020-11-23", "game_title": "HITMAN 2", "item_description": "HITMAN™ 2 - Набор дополнений", "price_uah": 279.8, "price_usd": 9.87 },
+            { "transaction_date": "2020-12-07", "game_title": "Team Sonic Racing™", "item_description": "Team Sonic Racing™", "price_uah": 599.5, "price_usd": 21.19 },
+            { "transaction_date": "2020-12-07", "game_title": "WOLFENSTEIN 2", "item_description": "Wolfenstein® II: The New Colossus™", "price_uah": 479.6, "price_usd": 16.95 },
+            { "transaction_date": "2021-01-22", "game_title": "GRIS", "item_description": "GRIS", "price_uah": 549.0, "price_usd": 19.5 },
+            { "transaction_date": "2021-01-22", "game_title": "Unravel Two", "item_description": "Unravel Two", "price_uah": 227.15, "price_usd": 8.07 },
+            { "transaction_date": "2021-04-20", "game_title": "A WAY OUT", "item_description": "A Way Out", "price_uah": 314.7, "price_usd": 11.24 },
+            { "transaction_date": "2021-05-01", "game_title": "Metal Gear Solid V", "item_description": "The Definitive Experience", "price_uah": 129.8, "price_usd": 4.68 },
+            { "transaction_date": "2021-08-28", "game_title": "Assassin's Creed® III Remastered", "item_description": "Assassin's Creed® III Remastered", "price_uah": 288.4, "price_usd": 10.71 },
+            { "transaction_date": "2021-09-05", "game_title": "Assassin’s Creed® The Ezio Collection", "item_description": "Assassin’s Creed® The Ezio Collection", "price_uah": 233.6, "price_usd": 8.67 },
+            { "transaction_date": "2021-11-11", "game_title": "GOD OF WAR® III REMASTERED", "item_description": "God of War® III Обновленная версия", "price_uah": 324.5, "price_usd": 12.45 },
+            { "transaction_date": "2023-12-02", "game_title": "BATMAN ARKHAM KNIGHT", "item_description": "Batman: Коллекция Аркхема", "price_uah": 269.85, "price_usd": 7.42 },
+            { "transaction_date": "2026-02-22", "game_title": "Crash™ Team Racing Nitro-Fueled", "item_description": "Crash™ Team Racing Nitro-Fueled", "price_uah": 402.15, "price_usd": 9.33 },
+            { "transaction_date": "2026-03-07", "game_title": "Resident Evil Requiem", "item_description": "Resident Evil Requiem Deluxe Edition", "price_uah": 2399.0, "price_usd": 55.47 },
+            { "transaction_date": "2026-03-28", "game_title": "Control: Ultimate Edition", "item_description": "Полное издание CONTROL", "price_uah": 179.85, "price_usd": 4.14 },
+            { "transaction_date": "2026-04-23", "game_title": "Resident Evil Village", "item_description": "Resident Evil Village Gold Edition", "price_uah": 449.7, "price_usd": 10.33 },
+            { "transaction_date": "2026-06-06", "game_title": "LEGO® Бэтмен™: Наследие Темного рыцаря", "item_description": "Улучшение до Deluxe-издания", "price_uah": 719.0, "price_usd": 16.42 },
+            { "transaction_date": "2026-06-19", "game_title": "Resident Evil 4", "item_description": "Resident Evil 4 — «Два пути»", "price_uah": 329.0, "price_usd": 7.49 }
+          ],
+          "nintendo_digital": [
+            { "transaction_date": "2023-04-14", "game_title": "New Super Mario Bros U Deluxe", "item_description": "Full Game", "price_usd": 40.52 },
+            { "transaction_date": "2022-12-25", "game_title": "Super Mario 3D World + Bowser’s Fury", "item_description": "Full Game", "price_usd": 63.85 },
+            { "transaction_date": "2022-08-19", "game_title": "Captain Toad: Treasure Tracker", "item_description": "Special Episode DLC", "price_usd": 6.39 },
+            { "transaction_date": "2022-08-04", "game_title": "Captain Toad: Treasure Tracker", "item_description": "Full Game", "price_usd": 42.64 },
+            { "transaction_date": "2022-07-15", "game_title": "Super Mario Odyssey", "item_description": "Full Game", "price_usd": 44.77 },
+            { "transaction_date": "2025-06-28", "game_title": "Super Mario Party Jamboree", "item_description": "Full Game", "price_usd": 59.99 },
+            { "transaction_date": "2022-07-19", "game_title": "Resident Evil 4", "item_description": "Full Game", "price_usd": 9.99 },
+            { "transaction_date": "2022-11-08", "game_title": "Mortal Kombat 11", "item_description": "Full Game", "price_usd": 4.19 },
+            { "transaction_date": "2022-12-25", "game_title": "Crash Bandicoot™ 4: It’s About Time", "item_description": "Full Game", "price_usd": 19.99 },
+            { "transaction_date": "2023-04-21", "game_title": "Teenage Mutant Ninja Turtles: Shredder's Revenge", "item_description": "Full Game", "price_usd": 12.78 },
+            { "transaction_date": "2023-05-16", "game_title": "INSIDE", "item_description": "Full Game", "price_usd": 1.35 },
+            { "transaction_date": "2023-05-18", "game_title": "LIMBO", "item_description": "Full Game", "price_usd": 1.99 },
+            { "transaction_date": "2023-06-10", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Full Game", "price_usd": 19.99 },
+            { "transaction_date": "2023-07-28", "game_title": "Portal: Companion Collection", "item_description": "Full Game", "price_usd": 20.32 },
+            { "transaction_date": "2023-08-22", "game_title": "Red Dead Redemption", "item_description": "Full Game", "price_usd": 53.99 },
+            { "transaction_date": "N/A", "game_title": "Fortnite", "item_description": "1,000 V-Bucks", "price_usd": 9.71 },
+            { "transaction_date": "2023-12-29", "game_title": "It Takes Two", "item_description": "Full Game", "price_usd": 21.59 },
+            { "transaction_date": "N/A", "game_title": "Fortnite", "item_description": "1,000 V-Bucks", "price_usd": 9.71 },
+            { "transaction_date": "N/A", "game_title": "Fortnite", "item_description": "5,000 V-Bucks", "price_usd": 36.99 },
+            { "transaction_date": "N/A", "game_title": "Minecraft", "item_description": "Realms Plus 1 Month Subscription Pass: You + 10 Friends (3)", "price_usd": 3.16 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Nintendo Switch Online", "item_description": "Individual 1‑month (30‑day) membership", "price_usd": 3.99 },
+            { "transaction_date": "N/A", "game_title": "Minecraft", "item_description": "Realms Plus 1 Month Subscription: You + 10 Friends (3)", "price_usd": 7.99 },
+            { "transaction_date": "2024-06-19", "game_title": "Subnautica", "item_description": "Full Game", "price_usd": 9.89 },
+            { "transaction_date": "2024-06-28", "game_title": "Alan Wake Remastered", "item_description": "Full Game", "price_usd": 29.99 }
+          ],
+  "steam_digital": [
+    { "transaction_date": "2026-05-19", "game_title": "SOMA", "item_description": "Purchase", "playtime_hours": 12.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
+    { "transaction_date": "2026-05-07", "game_title": "REANIMAL", "item_description": "Purchase", "playtime_hours": 8.0, "platform_type": "Steam", "price_uah": 555.0, "price_usd": 13.51 },
+    { "transaction_date": "2026-02-27", "game_title": "Splinter Cell | Tom Clancy's Splinter Cell : Pandora Tomorrow | SplinterCell: Double Agent | Tom Clancy's Splinter Cell Conviction | Tom Clancy's Splinter Cell Blacklist Standard Edition RU+CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 295.0, "price_usd": 7.18 },
+    { "transaction_date": "2025-12-20", "game_title": "MK1: Definitive Edition Upgrade | Mortal Kombat X | Kombat Pack | Kombat Pack 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 408.0, "price_usd": 9.93 },
+    { "transaction_date": "2025-11-25", "game_title": "Mortal Kombat 1", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 259.0, "price_usd": 6.30 },
+    { "transaction_date": "2025-11-06", "game_title": "Sonic and All-Stars Racing Transformed Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
+    { "transaction_date": "2025-08-14", "game_title": "Warhammer 40,000: Dawn of War - Definitive Edition - Veterans Upgrade", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 350.0, "price_usd": 8.52 },
+    { "transaction_date": "2025-08-09", "game_title": "Mafia: The Old Country", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 1999.0, "price_usd": 48.64 },
+    { "transaction_date": "2025-06-29", "game_title": "Deep Rock Galactic", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 125.0, "price_usd": 3.04 },
+    { "transaction_date": "2025-04-17", "game_title": "Space Hulk: Deathwing Enhanced Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 89.0, "price_usd": 2.17 },
+    { "transaction_date": "2025-03-05", "game_title": "Split Fiction", "item_description": "Purchase", "playtime_hours": 23.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
+    { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2024-12-29", "game_title": "Brothers: A Tale of Two Sons Remake", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 249.0, "price_usd": 6.06 },
+    { "transaction_date": "2024-12-02", "game_title": "Trailmakers | Batman: Arkham Collection | RESIDENT EVIL 2 Deluxe | Far Cry 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 646.0, "price_usd": 15.72 },
+    { "transaction_date": "2024-11-14", "game_title": "Warhammer: End Times - Vermintide | Vermintide 2 | Darktide", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 711.0, "price_usd": 17.30 },
+    { "transaction_date": "2024-11-04", "game_title": "Middle-earth™: The Shadow Bundle", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 184.0, "price_usd": 4.48 },
+    { "transaction_date": "2024-10-14", "game_title": "Max Payne 3", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 389.0, "price_usd": 9.46 },
+    { "transaction_date": "2024-09-20", "game_title": "Risk of Rain 2: Seekers of the Storm", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 209.0, "price_usd": 5.09 },
+    { "transaction_date": "2024-09-07", "game_title": "Warhammer 40,000: Space Marine 2 - Standard Edition", "item_description": "Purchase", "playtime_hours": 10.1, "platform_type": "Steam", "price_uah": 1299.0, "price_usd": 31.61 },
+    { "transaction_date": "2024-09-02", "game_title": "Hogwarts Legacy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 479.0, "price_usd": 11.65 },
+    { "transaction_date": "2024-08-10", "game_title": "Half-Life: Alyx", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 382.0, "price_usd": 9.29 },
+    { "transaction_date": "2024-07-03", "game_title": "Assassin's Creed Brotherhood", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 90.0, "price_usd": 2.19 },
+    { "transaction_date": "2024-07-28", "game_title": "Fallout New Vegas Ultimate PCR", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.0, "price_usd": 12.65 },
+    { "transaction_date": "2024-07-28", "game_title": "RESIDENT EVIL 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 252.0, "price_usd": 6.13 },
+    { "transaction_date": "2024-07-11", "game_title": "Call of Duty: Modern Warfare Remastered", "item_description": "Purchase", "playtime_hours": 8.8, "platform_type": "Steam", "price_uah": 678.0, "price_usd": 16.50 },
+    { "transaction_date": "2024-07-10", "game_title": "Resident Evil 4 Gold Edition", "item_description": "Purchase", "playtime_hours": 13.2, "platform_type": "Steam", "price_uah": 1359.0, "price_usd": 33.07 },
+    { "transaction_date": "2024-06-28", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 224.0, "price_usd": 5.45 },
+    { "transaction_date": "2024-05-31", "game_title": "PAYDAY 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
+    { "transaction_date": "2024-05-27", "game_title": "Warhammer 40,000: Dawn of War - Master Collection", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 109.0, "price_usd": 2.65 },
+    { "transaction_date": "2024-04-04", "game_title": "Worms W.M.D", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 119.0, "price_usd": 2.89 },
+    { "transaction_date": "2024-03-22", "game_title": "Dragon's Dogma: Dark Arisen", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2024-03-21", "game_title": "Age of Empires: Definitive Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2024-03-20", "game_title": "Age of Empires: Definitive Edition | Dragon's Dogma: Dark Arisen", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 277.0, "price_usd": 6.74 },
+    { "transaction_date": "2023-12-17", "game_title": "Risk of Rain 2", "item_description": "Purchase", "playtime_hours": 36.3, "platform_type": "Steam", "price_uah": 329.0, "price_usd": 8.00 },
+    { "transaction_date": "2023-12-09", "game_title": "Quake III Arena", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2023-12-08", "game_title": "Quake III Arena", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 380.0, "price_usd": 9.25 },
+    { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2023-11-25", "game_title": "It Takes Two", "item_description": "Purchase", "playtime_hours": 35.9, "platform_type": "Steam", "price_uah": 300.0, "price_usd": 7.30 },
+    { "transaction_date": "2023-11-17", "game_title": "TEKKEN 7", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 135.0, "price_usd": 3.28 },
+    { "transaction_date": "2023-11-09", "game_title": "Condition Zero", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+    { "transaction_date": "2023-11-09", "game_title": "Portal 2", "item_description": "Purchase", "playtime_hours": 14.1, "platform_type": "Steam", "price_uah": 225.0, "price_usd": 5.47 },
+    { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2023-09-02", "game_title": "Stick Fight: The Game", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 99.0, "price_usd": 2.41 },
+    { "transaction_date": "2022-11-08", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Refund", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2022-11-05", "game_title": "The Witcher 3: Wild Hunt - Complete Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 579.0, "price_usd": 14.09 },
+    { "transaction_date": "2021-10-14", "game_title": "Splintercell: Chaos Theory", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 150.0, "price_usd": 3.65 },
+    { "transaction_date": "2020-12-23", "game_title": "Assassin’s Creed® Chronicles: Trilogy", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 113.0, "price_usd": 2.75 },
+    { "transaction_date": "2020-04-05", "game_title": "Trine 2: Complete Story", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 69.0, "price_usd": 1.68 },
+    { "transaction_date": "2020-03-29", "game_title": "Rocket League®", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 139.0, "price_usd": 3.38 },
+    { "transaction_date": "2020-03-27", "game_title": "Left 4 Dead 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+    { "transaction_date": "2020-02-09", "game_title": "Need for Speed: Undercover", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 169.0, "price_usd": 4.11 },
+    { "transaction_date": "2020-02-08", "game_title": "Ori and the Blind Forest: Definitive Edition", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 279.0, "price_usd": 6.79 },
+    { "transaction_date": "2017-11-14", "game_title": "Currency Conversion to UAH (Ukraine)", "item_description": "Conversion", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 0.0, "price_usd": 0.0 },
+    { "transaction_date": "2017-10-31", "game_title": "Bastion", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 66.23, "price_usd": 2.49 },
+    { "transaction_date": "2016-12-09", "game_title": "Grand Theft Auto IV (US/AU)", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 520.34, "price_usd": 19.99 },
+    { "transaction_date": "2016-12-09", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($23.25)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 605.20, "price_usd": 23.25 },
+    { "transaction_date": "2016-11-24", "game_title": "Grand Theft Auto: Vice City New Audio ROW", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 88.82, "price_usd": 3.49 },
+    { "transaction_date": "2016-08-25", "game_title": "The Witcher: Enhanced Edition | The Witcher 2", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 76.27, "price_usd": 3.00 },
+    { "transaction_date": "2016-08-25", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($7.29)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 185.34, "price_usd": 7.29 },
+    { "transaction_date": "2016-08-11", "game_title": "Tomb Raider RU + CIS", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 294.95, "price_usd": 11.99 },
+    { "transaction_date": "2016-08-11", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.81)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 265.93, "price_usd": 10.81 },
+    { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($2.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 49.20, "price_usd": 2.00 },
+    { "transaction_date": "2016-08-10", "game_title": "Assassin's Creed II", "item_description": "Purchase", "playtime_hours": 0.0, "platform_type": "Steam", "price_uah": 245.75, "price_usd": 9.99 },
+    { "transaction_date": "2016-08-10", "game_title": "Purchased Wallet Credit", "item_description": "Wallet Credit ($10.00)", "playtime_hours": 0.0, "platform_type": "Steam Wallet", "price_uah": 246.00, "price_usd": 10.00 },
+    { "transaction_date": "2018-11-23", "game_title": "Warhammer 40k: Dawn of War - Soulstorm", "item_description": "Expansion Pack", "playtime_hours": 310.3, "platform_type": "Steam / Key", "price_uah": 133.0, "price_usd": 3.24 },
+    { "transaction_date": "2020-05-18", "game_title": "Styx: Master of Shadows", "item_description": "Full Game", "playtime_hours": 28.2, "platform_type": "Steam", "price_uah": 123.0, "price_usd": 2.99 }
+  ]
+        };
+
+        /* ------------------------------------------------------------------
+           Config
+        ------------------------------------------------------------------ */
+        const TABS = [
+            { id: 'overview',         label: 'Overview',  view: 'view-overview',         eyebrow: 'Dashboard',        title: 'Media Log',            sub: 'Everything finished, owned and bought — at a glance.' },
+            { id: '2026',             label: '2026',      view: 'view-finished',         eyebrow: 'Finished',         title: 'Finished in 2026',     sub: 'A gallery of completed adventures and stories.' },
+            { id: '2022-2025',        label: '2022–2025', view: 'view-finished',         eyebrow: 'Archive',          title: 'Finished 2022–2025',   sub: 'Everything completed before this year.' },
+            { id: 'steelbooks',       label: 'Movie discs', view: 'view-steelbooks',     eyebrow: 'Physical media',   title: 'Steelbook Collection', sub: 'Boutique 4K steelbooks and collector’s editions.' },
+            { id: 'ps-discs',         label: 'Game discs', view: 'view-discs',           eyebrow: 'Physical media',   title: 'Game Discs',           sub: 'PlayStation and Nintendo, on a shelf rather than a server.' },
+            { id: 'ps-digital',       label: 'PS digital', view: 'view-ps-digital',      eyebrow: 'Purchase history', title: 'PlayStation Store',    sub: 'Every digital purchase since 2015.' },
+            { id: 'nintendo-digital', label: 'Nintendo',  view: 'view-nintendo-digital', eyebrow: 'Purchase history', title: 'Nintendo eShop',       sub: 'Every digital purchase on the eShop.' },
+            { id: 'steam-digital',    label: 'Steam',     view: 'view-steam-digital',    eyebrow: 'Purchase history', title: 'Steam Library',        sub: 'Purchases, keys, wallet top-ups and playtime.' }
+        ];
+
+        const SORTS = {
+            finished:   [['default', 'Default'], ['title-asc', 'Title A–Z'], ['title-desc', 'Title Z–A'], ['num-desc', 'Longest first'], ['num-asc', 'Shortest first']],
+            collection: [['default', 'Default'], ['title-asc', 'Title A–Z'], ['title-desc', 'Title Z–A'], ['num-desc', 'Most expensive'], ['num-asc', 'Least expensive']]
+        };
+
+        const ICONS = {
+            clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+            book:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg>',
+            disc:  '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/></svg>'
+        };
+
+        const state = { tab: '2026', query: '', sort: 'default' };
+
+        /* ------------------------------------------------------------------
+           Small helpers
+        ------------------------------------------------------------------ */
+        const $ = (sel, root = document) => root.querySelector(sel);
+        const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+        const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const usd = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const usd0 = (n) => '$' + Math.round(n).toLocaleString('en-US');
+        const uah = (n) => n.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₴';
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const tabOf = (id) => TABS.find((t) => t.id === id);
+
+        const hoursOf = (item) => parseFloat(item.val) || 0;
+        const pagesOf = (item) => parseInt(String(item.val).replace(/,/g, ''), 10) || 0;
+        const finishedIn = (year) => mediaData.finished.filter((i) => i.year === year);
+        const allSteelbooks = () => Object.values(mediaData.steelbooks).flat();
+        const allDiscs = () => Object.values(mediaData.game_discs).flat();
+        const sum = (arr, fn) => arr.reduce((a, b) => a + (fn(b) || 0), 0);
+
+        /* ------------------------------------------------------------------
+           Theme
+        ------------------------------------------------------------------ */
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            try { localStorage.setItem('theme', theme); } catch (e) { /* private mode */ }
+            $('#theme-icon').textContent = theme === 'dark' ? '☀' : '☾';
+            $('#theme-text').textContent = theme === 'dark' ? 'Light' : 'Dark';
+        }
+
+        /* ------------------------------------------------------------------
+           Tile builders — every tile is a poster first
+        ------------------------------------------------------------------ */
+        function tile({ art, title, index, chips, meta, search, href, linkText }) {
+            return `
+                <article class="tile${href ? ' stretch' : ''}" data-search="${esc(search.toLowerCase())}" data-title="${esc(title.toLowerCase())}" data-num="${meta.num ?? 0}">
+                    ${href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(title)}"></a>` : ''}
+                    <img class="tile-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">
+                    <div class="tile-scrim"></div>
+                    <span class="tile-index">${String(index).padStart(2, '0')}</span>
+                    <div class="tile-body">
+                        <h3 class="tile-title">${esc(title)}</h3>
+                        <div class="tile-reveal">
+                            <div class="tile-reveal-in">
+                                <div class="chips">${chips}</div>
+                                <div class="tile-meta">
+                                    <span class="m-left">${meta.icon}<span class="truncate">${meta.text}</span></span>
+                                    ${linkText ? `<a class="tile-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(linkText)}</a>` : (meta.right || '')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>`;
+        }
+
+        function renderFinished() {
+            const build = (list, kind) => list.map((item, i) => {
+                const isGame = kind === 'game';
+                const chips = [`<span class="chip chip-lead" style="--chip: var(--c-${isGame ? 'game' : 'book'})">${isGame ? 'Game' : 'Book'}</span>`]
+                    .concat((item.tags || []).map((t) => `<span class="chip">${esc(t)}</span>`)).join('');
+                return tile({
+                    art: item.cover,
+                    title: item.title,
+                    index: i + 1,
+                    chips,
+                    search: [item.title, ...(item.tags || []), item.val].join(' '),
+                    meta: {
+                        icon: isGame ? ICONS.clock : ICONS.book,
+                        text: esc(item.val),
+                        num: isGame ? hoursOf(item) : pagesOf(item)
+                    }
+                });
+            }).join('');
+
+            $('#wall-games').innerHTML = build(mediaData.finished.filter((i) => i.type === 'game'), 'game');
+            $('#wall-books').innerHTML = build(mediaData.finished.filter((i) => i.type === 'book'), 'book');
+            // year is the switch between the 2026 tab and the archive tab
+            mediaData.finished.filter((i) => i.type === 'game').forEach((item, i) => {
+                $('#wall-games').children[i].dataset.year = item.year;
+            });
+            mediaData.finished.filter((i) => i.type === 'book').forEach((item, i) => {
+                $('#wall-books').children[i].dataset.year = item.year;
+            });
+        }
+
+        function renderSteelbooks(id, list) {
+            $('#' + id).innerHTML = (list || []).map((item, i) => tile({
+                art: item.cover,
+                title: item.title,
+                index: i + 1,
+                href: item.link,
+                linkText: item.linkText,
+                search: [item.title, item.itemMeta, ...(item.subTags || [])].join(' '),
+                chips: (item.tags || []).map((t) => `<span class="chip chip-lead" style="--chip: var(--c-steel)">${esc(t)}</span>`)
+                    .concat((item.subTags || []).map((t) => `<span class="chip">${esc(t)}</span>`)).join(''),
+                meta: {
+                    icon: ICONS.disc,
+                    text: `<span class="price-main">${uah(item.priceUah)}</span> <span class="price-alt">${usd(item.priceUsd)}</span>`,
+                    num: item.priceUsd
+                }
+            })).join('');
+        }
+
+        function renderDiscs(id, list, accent) {
+            $('#' + id).innerHTML = (list || []).map((item, i) => tile({
+                art: item.cover,
+                title: item.title,
+                index: i + 1,
+                search: [item.title, item.platform, item.subTag].join(' '),
+                chips: `<span class="chip chip-lead" style="--chip: var(--c-${accent})">${esc(item.platform)}</span><span class="chip">${esc(item.subTag)}</span>`,
+                meta: {
+                    icon: ICONS.disc,
+                    text: `<span class="price-main">${usd(item.priceUsd)}</span>`,
+                    num: item.priceUsd
+                }
+            })).join('');
+        }
+
+        /* ------------------------------------------------------------------
+           Tables
+        ------------------------------------------------------------------ */
+        const TABLES = {
+            'tbl-ps': {
+                data: () => mediaData.ps_digital,
+                sort: { key: 'transaction_date', asc: false },
+                row: (r) => `<tr data-search="${esc((r.game_title + ' ' + r.item_description + ' ' + r.transaction_date).toLowerCase())}">
+                        <td class="c-date">${esc(r.transaction_date)}</td>
+                        <td class="c-title">${esc(r.game_title)}</td>
+                        <td class="c-desc">${esc(r.item_description)}</td>
+                        <td class="c-num">${uah(r.price_uah)}</td>
+                        <td class="c-num accent">${usd(r.price_usd)}</td>
+                    </tr>`
+            },
+            'tbl-nintendo': {
+                data: () => mediaData.nintendo_digital,
+                sort: { key: 'transaction_date', asc: false },
+                row: (r) => `<tr data-search="${esc((r.game_title + ' ' + r.item_description + ' ' + r.transaction_date).toLowerCase())}">
+                        <td class="c-date">${esc(r.transaction_date)}</td>
+                        <td class="c-title">${esc(r.game_title)}</td>
+                        <td class="c-desc">${esc(r.item_description)}</td>
+                        <td class="c-num accent">${usd(r.price_usd)}</td>
+                    </tr>`
+            },
+            'tbl-steam': {
+                data: () => mediaData.steam_digital,
+                sort: { key: 'transaction_date', asc: false },
+                row: (r) => `<tr data-search="${esc((r.game_title + ' ' + r.item_description + ' ' + r.platform_type + ' ' + r.transaction_date).toLowerCase())}">
+                        <td class="c-date">${esc(r.transaction_date)}</td>
+                        <td class="c-title">${esc(r.game_title)}</td>
+                        <td class="c-desc">${esc(r.item_description)}</td>
+                        <td class="c-num">${r.playtime_hours ? r.playtime_hours.toFixed(1) + 'h' : '—'}</td>
+                        <td><span class="pill">${esc(r.platform_type)}</span></td>
+                        <td class="c-num">${uah(r.price_uah)}</td>
+                        <td class="c-num accent">${usd(r.price_usd)}</td>
+                    </tr>`
+            }
+        };
+
+        function renderTable(id) {
+            const cfg = TABLES[id];
+            const table = document.getElementById(id);
+            const { key, asc } = cfg.sort;
+
+            const rows = cfg.data().slice().sort((a, b) => {
+                const va = a[key], vb = b[key];
+                const cmp = typeof va === 'string' ? va.localeCompare(vb, undefined, { numeric: true }) : (va - vb);
+                return asc ? cmp : -cmp;
+            });
+
+            $('tbody', table).innerHTML = rows.map(cfg.row).join('');
+            $$('th.sortable', table).forEach((th) => {
+                const active = th.dataset.key === key;
+                th.toggleAttribute('aria-sort', active);
+                if (active) th.setAttribute('aria-sort', asc ? 'ascending' : 'descending');
+                $('.sort-icon', th).textContent = active ? (asc ? '▲' : '▼') : '';
+            });
+        }
+
+        function wireTables() {
+            Object.keys(TABLES).forEach((id) => {
+                const table = document.getElementById(id);
+                $$('th.sortable', table).forEach((th) => {
+                    th.tabIndex = 0;
+                    const go = () => {
+                        const cfg = TABLES[id];
+                        cfg.sort = cfg.sort.key === th.dataset.key
+                            ? { key: th.dataset.key, asc: !cfg.sort.asc }
+                            : { key: th.dataset.key, asc: true };
+                        renderTable(id);
+                        applyFilter();
+                    };
+                    th.addEventListener('click', go);
+                    th.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+                    });
+                });
+                renderTable(id);
+            });
+        }
+
+        /* ------------------------------------------------------------------
+           KPIs — the numbers react to the active tab and the filter
+        ------------------------------------------------------------------ */
+        function visibleTiles(viewId) {
+            return $$('#' + viewId + ' .tile:not(.is-hidden)');
+        }
+
+        function kpisFor(tab) {
+            const t = tab.id;
+
+            if (t === 'overview') {
+                const digitalCount = mediaData.ps_digital.length + mediaData.nintendo_digital.length + mediaData.steam_digital.length;
+                return [
+                    { label: 'Titles finished', value: mediaData.finished.length, accent: 'var(--c-game)' },
+                    { label: 'Hours played', value: sum(mediaData.finished.filter((i) => i.type === 'game'), hoursOf), digits: 0, suffix: 'h', accent: 'var(--c-game)' },
+                    { label: 'Pages read', value: sum(mediaData.finished.filter((i) => i.type === 'book'), pagesOf), accent: 'var(--c-book)' },
+                    { label: 'Discs owned', value: allDiscs().length + allSteelbooks().length, accent: 'var(--c-steel)' },
+                    { label: 'Transactions', value: digitalCount, accent: 'var(--c-digital)' }
+                ];
+            }
+
+            if (t === '2026' || t === '2022-2025') {
+                const games = visibleTiles('view-finished').filter((el) => el.closest('.wall').id === 'wall-games');
+                const books = visibleTiles('view-finished').filter((el) => el.closest('.wall').id === 'wall-books');
+                const hours = games.reduce((a, el) => a + Number(el.dataset.num), 0);
+                const pages = books.reduce((a, el) => a + Number(el.dataset.num), 0);
+                return [
+                    { label: 'Games completed', value: games.length, accent: 'var(--c-game)' },
+                    { label: 'Hours played', value: hours, digits: 1, suffix: 'h', accent: 'var(--c-game)' },
+                    { label: 'Books read', value: books.length, accent: 'var(--c-book)' },
+                    { label: 'Pages read', value: pages, accent: 'var(--c-book)' }
+                ];
+            }
+
+            if (t === 'steelbooks') {
+                const tiles = visibleTiles('view-steelbooks');
+                const titles = new Set(tiles.map((el) => el.dataset.title));
+                const items = allSteelbooks().filter((i) => titles.has(i.title.toLowerCase()));
+                return [
+                    { label: 'Discs collected', value: tiles.length, accent: 'var(--c-steel)' },
+                    { label: 'Spent (UAH)', value: sum(items, (i) => i.priceUah), format: uah, accent: 'var(--c-steel)' },
+                    { label: 'Spent (USD)', value: sum(items, (i) => i.priceUsd), format: usd, accent: 'var(--c-steel)' },
+                    { label: 'Primary format', text: '4K UHD', accent: 'var(--c-steel)' }
+                ];
+            }
+
+            if (t === 'ps-discs') {
+                const tiles = visibleTiles('view-discs');
+                const titles = new Set(tiles.map((el) => el.dataset.title));
+                const items = allDiscs().filter((i) => titles.has(i.title.toLowerCase()));
+                return [
+                    { label: 'Physical games', value: tiles.length, accent: 'var(--c-ps)' },
+                    { label: 'Total spent', value: sum(items, (i) => i.priceUsd), format: usd, accent: 'var(--c-ps)' },
+                    { label: 'Platforms', text: 'Switch · PS3 · PS4 · PS5', accent: 'var(--c-switch)' }
+                ];
+            }
+
+            const tableFor = { 'ps-digital': 'tbl-ps', 'nintendo-digital': 'tbl-nintendo', 'steam-digital': 'tbl-steam' }[t];
+            const rows = $$('#' + tableFor + ' tbody tr:not(.is-hidden)');
+            const keys = new Set(rows.map((r) => r.dataset.search));
+            const src = { 'ps-digital': mediaData.ps_digital, 'nintendo-digital': mediaData.nintendo_digital, 'steam-digital': mediaData.steam_digital }[t];
+            const items = src.filter((r) => keys.has(
+                (r.game_title + ' ' + r.item_description + (t === 'steam-digital' ? ' ' + r.platform_type : '') + ' ' + r.transaction_date).toLowerCase()
+            ));
+
+            const out = [{ label: 'Transactions', value: rows.length, accent: 'var(--c-digital)' }];
+            if (t === 'steam-digital') out.push({ label: 'Playtime', value: sum(items, (i) => i.playtime_hours), digits: 1, suffix: 'h', accent: 'var(--c-steam)' });
+            if (t !== 'nintendo-digital') out.push({ label: 'Spent (UAH)', value: sum(items, (i) => i.price_uah), format: uah, accent: 'var(--c-digital)' });
+            out.push({ label: 'Spent (USD)', value: sum(items, (i) => i.price_usd), format: usd, accent: 'var(--gold)' });
+            return out;
+        }
+
+        function paintKpis() {
+            const specs = kpisFor(tabOf(state.tab));
+            const host = $('#kpis');
+
+            if (host.childElementCount !== specs.length) {
+                host.innerHTML = specs.map(() => '<div class="kpi"><span class="kpi-value"></span><span class="kpi-label"></span></div>').join('');
+            }
+
+            specs.forEach((spec, i) => {
+                const card = host.children[i];
+                const valueEl = $('.kpi-value', card);
+                card.style.setProperty('--kpi-accent', spec.accent || 'var(--gold)');
+                $('.kpi-label', card).textContent = spec.label;
+
+                if (spec.text !== undefined) {
+                    valueEl.style.fontSize = '1.05rem';
+                    valueEl.textContent = spec.text;
+                    return;
+                }
+
+                valueEl.style.fontSize = '';
+                const fmt = spec.format || ((n) => n.toLocaleString('en-US', {
+                    minimumFractionDigits: spec.digits || 0,
+                    maximumFractionDigits: spec.digits || 0
+                }) + (spec.suffix || ''));
+                countTo(valueEl, spec.value, fmt);
+            });
+        }
+
+        function countTo(el, target, fmt) {
+            const from = Number(el.dataset.raw || 0);
+            el.dataset.raw = target;
+
+            if (reduceMotion || from === target) { el.textContent = fmt(target); return; }
+
+            const start = performance.now();
+            const dur = 650;
+            cancelAnimationFrame(Number(el.dataset.raf));
+            const step = (now) => {
+                const p = Math.min(1, (now - start) / dur);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = fmt(from + (target - from) * eased);
+                if (p < 1) el.dataset.raf = requestAnimationFrame(step);
+            };
+            el.dataset.raf = requestAnimationFrame(step);
+        }
+
+        /* ------------------------------------------------------------------
+           Overview — hero figure, two single-series charts, recent list
+        ------------------------------------------------------------------ */
+        function categorySpend() {
+            return [
+                { label: 'PlayStation Store', value: sum(mediaData.ps_digital, (i) => i.price_usd) },
+                { label: 'Steam / PC', value: sum(mediaData.steam_digital, (i) => i.price_usd) },
+                { label: 'Nintendo eShop', value: sum(mediaData.nintendo_digital, (i) => i.price_usd) },
+                { label: 'Movie discs', value: sum(allSteelbooks(), (i) => i.priceUsd) },
+                { label: 'Game discs', value: sum(allDiscs(), (i) => i.priceUsd) }
+            ].sort((a, b) => b.value - a.value);
+        }
+
+        // Some eShop rows carry no purchase date ("N/A"); they can't sit on a
+        // timeline, so they're excluded here and disclosed under the chart.
+        const DATED = /^\d{4}-\d{2}-\d{2}$/;
+        const isDated = (r) => DATED.test(String(r.transaction_date));
+        const allTransactions = () => [
+            ...mediaData.ps_digital,
+            ...mediaData.nintendo_digital,
+            ...mediaData.steam_digital
+        ];
+
+        function yearlySpend() {
+            const byYear = {};
+            allTransactions().filter(isDated).forEach((r) => {
+                const y = r.transaction_date.slice(0, 4);
+                byYear[y] = (byYear[y] || 0) + (r.price_usd || 0);
+            });
+            return Object.keys(byYear).sort().map((y) => ({ label: y, value: byYear[y] }));
+        }
+
+        function niceMax(n) {
+            if (n <= 0) return 1;
+            const mag = Math.pow(10, Math.floor(Math.log10(n)));
+            return Math.ceil(n / (mag / 2)) * (mag / 2);
+        }
+
+        function dataTable(id, rows, headers) {
+            $('#' + id).innerHTML = `<table><thead><tr><th>${esc(headers[0])}</th><th class="c-num">${esc(headers[1])}</th></tr></thead>
+                <tbody>${rows.map((r) => `<tr><td>${esc(r.label)}</td><td class="c-num">${usd(r.value)}</td></tr>`).join('')}</tbody></table>`;
+        }
+
+        function renderOverview() {
+            const cats = categorySpend();
+            const grand = sum(cats, (c) => c.value);
+
+            countTo($('#grand-total'), grand, usd0);
+
+            const games = mediaData.finished.filter((i) => i.type === 'game');
+            const top = cats[0];
+            $('#overview-note').textContent =
+                `${mediaData.finished.length} titles finished across ${new Set(mediaData.finished.map((i) => i.year)).size} tracked periods, ` +
+                `${allDiscs().length + allSteelbooks().length} discs on the shelf, and ` +
+                `${mediaData.ps_digital.length + mediaData.nintendo_digital.length + mediaData.steam_digital.length} recorded transactions. ` +
+                `${top.label} is the largest single line at ${usd0(top.value)}, and the ${games.length} finished games add up to ` +
+                `${Math.round(sum(games, hoursOf)).toLocaleString('en-US')} hours of playtime.`;
+
+            // Chart A — horizontal bars, one hue, value direct-labelled on every row
+            const maxCat = cats[0].value;
+            $('#chart-category').innerHTML = cats.map((c) => `
+                <div class="bar-row" data-tip="${esc(c.label)}: ${usd(c.value)}">
+                    <div class="bar-label"><span>${esc(c.label)}</span><b>${usd0(c.value)}</b></div>
+                    <div class="bar-track"><div class="bar-fill" style="--pct: ${(c.value / maxCat * 100).toFixed(1)}%"></div></div>
+                </div>`).join('');
+            dataTable('table-category', cats, ['Category', 'Spend (USD)']);
+
+            // Chart B — columns by year, labels only on the peak and the latest
+            const years = yearlySpend();
+            const undated = allTransactions().filter((r) => !isDated(r));
+            $('#years-excluded').textContent = undated.length
+                ? ` · ${undated.length} undated purchases (${usd(sum(undated, (i) => i.price_usd))}) not shown`
+                : '';
+            const peak = Math.max(...years.map((y) => y.value));
+            const axisMax = niceMax(peak);
+            const peakYear = years.find((y) => y.value === peak);
+            const lastYear = years[years.length - 1];
+
+            $('#chart-years-grid').innerHTML = [0, 0.5, 1].map((f) => `
+                <div class="gridline" style="bottom: ${f * 100}%"><span>${f === 0 ? '$0' : usd0(axisMax * f)}</span></div>`).join('');
+
+            $('#chart-years').innerHTML = years.map((y) => {
+                const h = (y.value / axisMax * 100).toFixed(1) + '%';
+                const labelled = y === peakYear || y === lastYear;
+                return `<div class="col" style="--h: ${h}" data-tip="${esc(y.label)}: ${usd(y.value)}">
+                        ${labelled ? `<span class="col-v">${usd0(y.value)}</span>` : ''}
+                        <div class="col-fill"></div>
+                        <span class="col-x">'${y.label.slice(2)}</span>
+                    </div>`;
+            }).join('');
+            dataTable('table-years', years, ['Year', 'Digital spend (USD)']);
+
+            // Latest purchases across all three stores (undated rows can't rank)
+            const recent = [
+                ...mediaData.ps_digital.map((r) => ({ ...r, store: 'PS Store' })),
+                ...mediaData.nintendo_digital.map((r) => ({ ...r, store: 'eShop' })),
+                ...mediaData.steam_digital.map((r) => ({ ...r, store: 'Steam' }))
+            ].filter(isDated).sort((a, b) => b.transaction_date.localeCompare(a.transaction_date)).slice(0, 8);
+
+            $('#recent').innerHTML = recent.map((r) => `
+                <div class="recent-row">
+                    <span class="r-date">${esc(r.transaction_date)}</span>
+                    <span class="r-title">${esc(r.game_title)} <span class="pill">${esc(r.store)}</span></span>
+                    <span class="r-price">${usd(r.price_usd)}</span>
+                </div>`).join('');
+        }
+
+        /* ------------------------------------------------------------------
+           Filtering & sorting
+        ------------------------------------------------------------------ */
+        function applyFilter() {
+            const tab = tabOf(state.tab);
+            const view = document.getElementById(tab.view);
+            const q = state.query.trim().toLowerCase();
+            let shown = 0, total = 0;
+
+            $$('.tile', view).forEach((el) => {
+                const yearOk = tab.view !== 'view-finished' || el.dataset.year === state.tab;
+                const hit = !q || el.dataset.search.includes(q);
+                if (yearOk) total++;
+                el.classList.toggle('is-hidden', !(yearOk && hit));
+                if (yearOk && hit) shown++;
+            });
+
+            $$('tbody tr', view).forEach((row) => {
+                total++;
+                const hit = !q || row.dataset.search.includes(q);
+                row.classList.toggle('is-hidden', !hit);
+                if (hit) shown++;
+            });
+
+            // a group whose wall is now empty shouldn't leave a dangling header
+            $$('[data-group]', view).forEach((group) => {
+                const wall = $('.wall', group);
+                const live = $$('.tile:not(.is-hidden)', wall).length;
+                group.classList.toggle('is-hidden', live === 0);
+                const counter = $('[data-count-for="' + wall.id + '"]', group);
+                if (counter) counter.textContent = live;
+            });
+
+            if (state.tab !== 'overview') {
+                $('#result-count').textContent = q ? `${shown} of ${total}` : `${total} item${total === 1 ? '' : 's'}`;
+                $('#empty-state').classList.toggle('is-hidden', shown > 0);
+                $('#empty-term').textContent = '“' + state.query + '”';
+            }
+
+            applySort();
+            paintKpis();
+        }
+
+        function applySort() {
+            const view = document.getElementById(tabOf(state.tab).view);
+            $$('.wall', view).forEach((wall) => {
+                const tiles = $$('.tile', wall);
+                if (state.sort === 'default') { tiles.forEach((t) => { t.style.order = ''; }); return; }
+
+                const dir = state.sort.endsWith('-asc') ? 1 : -1;
+                const byTitle = state.sort.startsWith('title');
+                tiles.slice().sort((a, b) => dir * (byTitle
+                    ? a.dataset.title.localeCompare(b.dataset.title)
+                    : Number(a.dataset.num) - Number(b.dataset.num)
+                )).forEach((t, i) => { t.style.order = i; });
+            });
+        }
+
+        /* ------------------------------------------------------------------
+           Tabs & routing
+        ------------------------------------------------------------------ */
+        function buildTabs() {
+            $('#tabs').innerHTML = TABS.map((t, i) => `
+                <button class="tab" role="tab" type="button" id="tab-${t.id}" data-tab="${t.id}"
+                        aria-selected="false" aria-controls="${t.view}" tabindex="-1">
+                    ${esc(t.label)}<span class="tab-n">${i + 1}</span>
+                </button>`).join('');
+
+            $$('#tabs .tab').forEach((btn) => {
+                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+                btn.addEventListener('keydown', (e) => {
+                    const i = TABS.findIndex((t) => t.id === state.tab);
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + TABS.length) % TABS.length;
+                        switchTab(TABS[next].id, { focus: true });
+                    }
+                });
+            });
+        }
+
+        function switchTab(id, opts = {}) {
+            const tab = tabOf(id) || TABS[1];
+            state.tab = tab.id;
+            state.query = '';
+            state.sort = 'default';
+            $('#search').value = '';
+
+            $('#page-eyebrow').textContent = tab.eyebrow;
+            $('#page-title').textContent = tab.title;
+            $('#page-subtitle').textContent = tab.sub;
+            document.title = tab.id === 'overview' ? 'Media Log' : tab.title + ' · Media Log';
+
+            $$('#tabs .tab').forEach((btn) => {
+                const on = btn.dataset.tab === tab.id;
+                btn.setAttribute('aria-selected', String(on));
+                btn.tabIndex = on ? 0 : -1;
+                if (on && opts.focus) btn.focus();
+                if (on) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            });
+
+            $$('.view').forEach((v) => { v.hidden = v.id !== tab.view; });
+
+            // the toolbar only makes sense where there is a list to narrow
+            const isOverview = tab.id === 'overview';
+            $('#toolbar').hidden = isOverview;
+            (isOverview ? $('#kpis-slot') : $('#kpis-top')).appendChild($('#kpis'));
+            $('#empty-state').classList.add('is-hidden');
+
+            const sortSet = tab.view === 'view-finished' ? SORTS.finished
+                : (tab.view === 'view-steelbooks' || tab.view === 'view-discs') ? SORTS.collection
+                : null;
+            $('.sorter').hidden = !sortSet;
+            if (sortSet) {
+                $('#sort').innerHTML = sortSet.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+                $('#sort').value = 'default';
+            }
+
+            if (isOverview) { paintKpis(); } else { applyFilter(); }
+
+            if (location.hash.slice(1) !== tab.id) history.replaceState(null, '', '#' + tab.id);
+        }
+
+        /* ------------------------------------------------------------------
+           Chart tooltip
+        ------------------------------------------------------------------ */
+        function wireTooltip() {
+            const tip = $('#tip');
+            document.addEventListener('pointerover', (e) => {
+                const host = e.target.closest('[data-tip]');
+                if (!host) return;
+                tip.innerHTML = '<b>' + esc(host.dataset.tip) + '</b>';
+                const r = host.getBoundingClientRect();
+                tip.style.left = (r.left + r.width / 2) + 'px';
+                tip.style.top = (r.top - 8) + 'px';
+                tip.style.opacity = '1';
+            });
+            document.addEventListener('pointerout', (e) => {
+                if (e.target.closest('[data-tip]')) tip.style.opacity = '0';
+            });
+        }
+
+        /* ------------------------------------------------------------------
+           Boot
+        ------------------------------------------------------------------ */
+        function init() {
+            let saved = 'dark';
+            try { saved = localStorage.getItem('theme') || 'dark'; } catch (e) { /* private mode */ }
+            setTheme(saved);
+            $('#theme-toggle').addEventListener('click', () => {
+                setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            });
+
+            renderFinished();
+            renderSteelbooks('wall-manta', mediaData.steelbooks.manta_lab);
+            renderSteelbooks('wall-nolan', mediaData.steelbooks.nolan);
+            renderSteelbooks('wall-steel-other', mediaData.steelbooks.other);
+            renderSteelbooks('wall-steel-ce', mediaData.steelbooks.other2);
+            renderDiscs('wall-switch', mediaData.game_discs.switch, 'switch');
+            renderDiscs('wall-ps3', mediaData.game_discs.ps3, 'ps');
+            renderDiscs('wall-ps4', mediaData.game_discs.ps4, 'ps');
+            renderDiscs('wall-ps5', mediaData.game_discs.ps5, 'ps');
+            wireTables();
+            renderOverview();
+
+            buildTabs();
+            wireTooltip();
+
+            $('#search').addEventListener('input', (e) => { state.query = e.target.value; applyFilter(); });
+            $('#sort').addEventListener('change', (e) => { state.sort = e.target.value; applySort(); });
+
+            $$('[data-table-toggle]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const panel = document.getElementById(btn.dataset.tableToggle);
+                    panel.hidden = !panel.hidden;
+                    btn.textContent = panel.hidden ? 'Show data table' : 'Hide data table';
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+                    e.preventDefault();
+                    $('#search').focus();
+                } else if (e.key === 'Escape' && state.query) {
+                    $('#search').value = '';
+                    state.query = '';
+                    applyFilter();
+                } else if (/^[1-8]$/.test(e.key) && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+                    switchTab(TABS[Number(e.key) - 1].id);
+                }
+            });
+
+            window.addEventListener('hashchange', () => switchTab(location.hash.slice(1)));
+            switchTab(location.hash.slice(1) || 'overview');
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
