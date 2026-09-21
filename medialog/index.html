@@ -5,1371 +5,820 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Log</title>
-    <meta name="description" content="A personal log of finished games and books, and a catalogue of a physical and digital media collection.">
+    <!-- Imported Google Fonts for Inter & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        /* ============================================================
-           MEDIA LOG — cinematic poster wall
-           Palette roles: gold = UI chrome only (never encodes a value)
-                          blue = the single data hue (charts)
-           ============================================================ */
-
         :root {
-            color-scheme: dark;
+            /* Light Theme Variables */
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #2d3436;
+            --text-muted: #636e72;
+            --border: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --header-title: #0f172a;
+            --tab-bg: #e2e8f0;
+            --tab-hover: #cbd5e1;
+            --tab-active-bg: #0f172a;
+            --tab-active-text: #ffffff;
+            --subtag-bg: #e2e8f0;
+            --table-header-bg: #f1f5f9;
 
-            /* Surfaces */
-            --bg: #07080b;
-            --surface: #101218;
-            --surface-2: #171a22;
-            --line: rgba(255, 255, 255, 0.09);
-            --line-strong: rgba(255, 255, 255, 0.16);
-
-            /* Ink */
-            --text: #f2f0ea;
-            --text-2: #b9bac4;
-            --muted: #8b8d99;
-
-            /* UI chrome */
-            --gold: #e0a33c;
-            --gold-soft: rgba(224, 163, 60, 0.14);
-
-            /* Data hue (validated against the dark surface) */
-            --data: #3987e5;
-            --data-track: rgba(57, 135, 229, 0.16);
-
-            /* Category identity — chips and hairlines only */
-            --c-game: #8fa2ff;
-            --c-book: #3ec98a;
-            --c-steel: #f0954a;
-            --c-ps: #4aa3e8;
-            --c-switch: #ff6b6b;
-            --c-digital: #9085e9;
-            --c-nintendo: #ff5a5f;
-            --c-steam: #66c0f4;
-
-            --shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
-            --shadow-lift: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
-            --radius: 14px;
-            --scrim: linear-gradient(to top, rgba(4, 5, 8, 0.94) 0%, rgba(4, 5, 8, 0.72) 28%, rgba(4, 5, 8, 0.12) 62%, rgba(4, 5, 8, 0) 100%);
-
-            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            /* Category Accents */
+            --accent-game: #6366f1;
+            --accent-book: #10b981;
+            --accent-steelbook: #f97316;
+            --accent-ps: #0284c7;
+            --accent-switch: #ef4444;
+            --accent-digital: #8b5cf6;
+            --accent-nintendo-digital: #e60012;
+            --accent-steam: #171a21;
+            --accent-steam-text: #66c0f4;
         }
 
-        [data-theme="light"] {
-            color-scheme: light;
-
-            --bg: #f2efe8;
-            --surface: #fbf9f4;
-            --surface-2: #f4f1ea;
-            --line: rgba(20, 21, 26, 0.12);
-            --line-strong: rgba(20, 21, 26, 0.22);
-
-            --text: #15161b;
-            --text-2: #43454f;
-            --muted: #5c5e6b;
-
-            --gold: #8a5a0c;
-            --gold-soft: rgba(138, 90, 12, 0.10);
-
-            --data: #2a78d6;
-            --data-track: rgba(42, 120, 214, 0.14);
-
-            --c-game: #4a41c4;
-            --c-book: #0f7a54;
-            --c-steel: #a8540c;
-            --c-ps: #10639f;
-            --c-switch: #c0392b;
-            --c-digital: #5b46c9;
-            --c-nintendo: #b3281f;
-            --c-steam: #14638f;
-
-            --shadow: 0 14px 30px -20px rgba(20, 21, 26, 0.5);
-            --shadow-lift: 0 26px 50px -18px rgba(20, 21, 26, 0.38);
+        [data-theme="dark"] {
+            /* Dark Theme Variables */
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            --header-title: #f8fafc;
+            --tab-bg: #1e293b;
+            --tab-hover: #334155;
+            --tab-active-bg: #38bdf8;
+            --tab-active-text: #0f172a;
+            --subtag-bg: #334155;
+            --table-header-bg: #0f172a;
         }
 
-        * { box-sizing: border-box; }
-
-        html { scroll-behavior: smooth; }
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
 
         body {
-            margin: 0;
-            min-height: 100vh;
-            padding: 0 0 96px;
-            background: var(--bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
             color: var(--text);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 15px;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 24px 16px;
+            min-height: 100vh;
         }
 
-        /* ---------- Ambient projector light + grain ---------- */
-        .ambient {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .ambient::before {
-            content: "";
-            position: absolute;
-            inset: -20% -10% auto -10%;
-            height: 78vh;
-            background:
-                radial-gradient(60% 55% at 22% 0%, rgba(224, 163, 60, 0.13), transparent 70%),
-                radial-gradient(55% 55% at 82% 8%, rgba(57, 135, 229, 0.13), transparent 70%);
-            filter: blur(8px);
-        }
-
-        .ambient::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            opacity: 0.045;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        [data-theme="light"] .ambient::before {
-            background:
-                radial-gradient(60% 55% at 22% 0%, rgba(224, 163, 60, 0.20), transparent 70%),
-                radial-gradient(55% 55% at 82% 8%, rgba(57, 135, 229, 0.12), transparent 70%);
-        }
-
-        [data-theme="light"] .ambient::after { opacity: 0.025; }
-
-        .wrap {
-            position: relative;
-            z-index: 1;
-            max-width: 1240px;
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
-            padding-inline: 20px;
         }
 
-        /* ---------- Masthead ---------- */
-        .brandbar {
+        /* HEADER & RESPONSIVE TOGGLE */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .theme-toggle-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding-block: 22px 0;
-        }
-
-        .wordmark {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.66rem;
-            font-weight: 700;
-            letter-spacing: 0.34em;
-            text-transform: uppercase;
-            color: var(--gold);
-        }
-
-        .wordmark::before {
-            content: "";
-            width: 22px;
-            height: 1px;
-            background: currentColor;
-            opacity: 0.7;
-        }
-
-        .ghost-btn {
-            display: inline-flex;
-            align-items: center;
             gap: 8px;
-            padding: 8px 14px;
-            border: 1px solid var(--line-strong);
-            border-radius: 999px;
-            background: transparent;
-            color: var(--text-2);
-            font: inherit;
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: color 0.2s, border-color 0.2s, background-color 0.2s, transform 0.2s var(--ease);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, background-color 0.3s;
             touch-action: manipulation;
         }
 
-        .ghost-btn:hover { color: var(--text); border-color: var(--gold); background: var(--gold-soft); }
-        .ghost-btn:active { transform: scale(0.96); }
-
-        .hero {
-            padding-block: 34px 26px;
-            max-width: 52ch;
+        .theme-toggle-btn:active {
+            transform: scale(0.96);
         }
 
-        .eyebrow {
-            display: block;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 14px;
+        .header-content {
+            text-align: center;
         }
 
         h1 {
-            margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 800;
-            font-size: clamp(2.6rem, 8vw, 5rem);
-            line-height: 0.94;
-            letter-spacing: -0.045em;
-            max-width: 15ch;
+            margin: 0 0 8px 0;
         }
 
-        .hero p {
-            margin: 16px 0 0;
-            max-width: 46ch;
-            color: var(--text-2);
+        header p {
+            color: var(--text-muted);
+            margin: 0;
             font-size: 1rem;
         }
 
-        /* ---------- Tabs ---------- */
-        .tabstrip {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            margin-top: 10px;
-            padding-block: 12px;
-            background: color-mix(in srgb, var(--bg) 86%, transparent);
-            backdrop-filter: blur(14px) saturate(140%);
-            border-bottom: 1px solid var(--line);
+        /* CUSTOM APPLIED STYLES */
+        /* Custom Header Styling (Matches "Steelbook Collection" & Main Page Titles) */
+        .steelbook-header-title {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 800;
+            font-size: 2.25rem; /* Responsive breakpoint increases to 3rem on larger screens (min-width: 768px) */
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            color: #0f172a; /* Light mode default fallback */
+            
+            /* Modern Gradient Text Overlay */
+            background: linear-gradient(135deg, var(--text) 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .tabs {
+        /* Category Subheaders & Accent Colors */
+        .steelbook-category-header {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-steelbook, #f97316);
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 40px 20px;
+            }
+
+            .top-bar {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin-bottom: 0;
+                width: auto;
+            }
+
+            .steelbook-header-title {
+                font-size: 3rem;
+            }
+        }
+
+        /* NAV TABS */
+        .nav-tabs {
             display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
+            justify-content: center;
+            gap: 8px;
+            margin: 25px 0 35px;
+            flex-wrap: wrap;
         }
 
-        .tabs::-webkit-scrollbar { display: none; }
-
-        .tab {
-            flex: 0 0 auto;
-            position: relative;
-            padding: 9px 15px;
-            border: 1px solid transparent;
-            border-radius: 999px;
-            background: transparent;
-            color: var(--muted);
-            font: inherit;
-            font-size: 0.82rem;
+        .tab-btn {
+            background: var(--tab-bg);
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.85rem;
             font-weight: 600;
-            white-space: nowrap;
+            color: var(--text-muted);
+            border-radius: 30px;
             cursor: pointer;
-            transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+            transition: all 0.2s ease;
             touch-action: manipulation;
         }
 
-        .tab:hover { color: var(--text); background: var(--surface-2); }
+        @media (min-width: 768px) {
+            .nav-tabs {
+                gap: 12px;
+                margin: 35px 0 45px;
+            }
 
-        .tab[aria-selected="true"] {
-            color: var(--gold);
-            background: var(--gold-soft);
-            border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+            .tab-btn {
+                padding: 10px 24px;
+                font-size: 0.95rem;
+            }
         }
 
-        .tab .tab-n {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.68rem;
-            opacity: 0.55;
-            margin-left: 7px;
-        }
-
-        /* ---------- Toolbar ---------- */
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-            padding-block: 22px 4px;
-        }
-
-        .search {
-            position: relative;
-            flex: 1 1 260px;
-            min-width: 0;
-        }
-
-        .search svg {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            translate: 0 -50%;
-            width: 15px;
-            height: 15px;
-            stroke: var(--muted);
-            stroke-width: 2;
-            fill: none;
-            pointer-events: none;
-        }
-
-        .search input {
-            width: 100%;
-            padding: 11px 74px 11px 38px;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            background: var(--surface);
+        .tab-btn:hover {
+            background: var(--tab-hover);
             color: var(--text);
-            font: inherit;
-            font-size: 0.88rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .search input::placeholder { color: var(--muted); }
-
-        .search input:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px var(--gold-soft);
+        .tab-btn.active {
+            background: var(--tab-active-bg);
+            color: var(--tab-active-text);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
         }
 
-        .search kbd {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            translate: 0 -50%;
-            padding: 2px 7px;
-            border: 1px solid var(--line-strong);
-            border-radius: 5px;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.68rem;
-            color: var(--muted);
-            pointer-events: none;
-        }
-
-        .search input:not(:placeholder-shown) ~ kbd { opacity: 0; }
-
-        .sorter {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 600;
-        }
-
-        .sorter select {
-            padding: 9px 12px;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            background: var(--surface);
-            color: var(--text);
-            font: inherit;
-            font-size: 0.82rem;
-            letter-spacing: 0;
-            text-transform: none;
-            cursor: pointer;
-        }
-
-        .sorter select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-
-        .result-count {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.74rem;
-            color: var(--muted);
-            margin-left: auto;
-        }
-
-        /* ---------- KPI row ---------- */
-        .kpis {
+        /* STATS BAR */
+        .stats-bar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1px;
-            margin: 22px 0 8px;
-            background: var(--line);
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            overflow: hidden;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 35px;
         }
 
-        .kpi {
-            background: var(--surface);
-            padding: 18px 16px;
-            position: relative;
+        @media (min-width: 768px) {
+            .stats-bar {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-bottom: 50px;
+            }
         }
 
-        .kpi::before {
-            content: "";
-            position: absolute;
-            left: 16px;
-            top: 0;
-            width: 26px;
-            height: 2px;
-            background: var(--kpi-accent, var(--gold));
+        .stat-card {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border);
+            border-bottom: 4px solid var(--border);
         }
 
-        .kpi-value {
+        .stat-card.games { border-bottom-color: var(--accent-game); }
+        .stat-card.books { border-bottom-color: var(--accent-book); }
+        .stat-card.steelbooks { border-bottom-color: var(--accent-steelbook); }
+        .stat-card.ps-discs { border-bottom-color: var(--accent-ps); }
+        .stat-card.digital { border-bottom-color: var(--accent-digital); }
+        .stat-card.nintendo-digital { border-bottom-color: var(--accent-nintendo-digital); }
+        .stat-card.steam-digital { border-bottom-color: var(--accent-steam-text); }
+
+        .stat-value {
             display: block;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.4rem;
             font-weight: 800;
-            font-size: clamp(1.25rem, 2.6vw, 1.7rem);
-            letter-spacing: -0.02em;
-            line-height: 1.1;
+            color: var(--text);
         }
 
-        .kpi-label {
-            display: block;
-            margin-top: 6px;
+        @media (min-width: 768px) {
+            .stat-value {
+                font-size: 1.8rem;
+            }
+        }
+
+        .stat-label {
             font-size: 0.68rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
+            color: var(--text-muted);
             text-transform: uppercase;
-            color: var(--muted);
+            letter-spacing: 1px;
+            margin-top: 4px;
+            font-weight: 700;
         }
 
-        /* ---------- Section headers ---------- */
-        .sec { margin-top: 44px; }
-
-        .sec-head {
+        /* SECTIONS & GRID */
+        .section-header {
             display: flex;
-            align-items: baseline;
-            gap: 14px;
-            margin-bottom: 18px;
+            align-items: center;
+            margin: 35px 0 20px;
         }
 
-        .sec-head h2 {
+        .section-header h2 {
             margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 800;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--sec-accent, var(--text));
         }
 
-        .sec-head .rule {
-            flex: 1;
+        .line {
+            flex-grow: 1;
             height: 1px;
-            background: linear-gradient(to right, var(--line-strong), transparent);
+            background: var(--border);
+            margin-left: 15px;
         }
 
-        .sec-head .count {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.72rem;
-            color: var(--muted);
-        }
-
-        /* ---------- Poster wall ---------- */
-        .wall {
+        .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 14px;
+            gap: 16px;
         }
 
-        @media (min-width: 720px) {
-            .wall { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; }
+        @media (min-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 25px;
+            }
         }
 
-        .tile {
+        .card {
             position: relative;
-            display: block;
-            border-radius: var(--radius);
+            background: var(--card-bg);
+            border-radius: 14px;
             overflow: hidden;
-            background: var(--surface-2);
             box-shadow: var(--shadow);
-            isolation: isolate;
-            transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            color: var(--text);
+            border: 1px solid var(--border);
         }
 
-        .tile::after {
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stretched-link::after {
             content: "";
             position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            border: 1px solid var(--line);
-            pointer-events: none;
-            transition: border-color 0.35s;
-            z-index: 3;
-        }
-
-        .tile-art {
-            display: block;
-            width: 100%;
-            aspect-ratio: 392 / 500;
-            object-fit: cover;
-            background: var(--surface-2);
-            transition: transform 0.6s var(--ease), filter 0.45s;
-        }
-
-        .tile-scrim {
-            position: absolute;
-            inset: 0;
-            background: var(--scrim);
-            opacity: 0.92;
-            transition: opacity 0.35s;
+            top: 0; right: 0; bottom: 0; left: 0;
             z-index: 1;
         }
 
-        .tile-body {
-            position: absolute;
-            inset: auto 0 0 0;
-            z-index: 2;
-            padding: 12px 13px 13px;
+        .hidden { display: none !important; }
+
+        .cover {
+            width: 100%;
+            aspect-ratio: 392 / 500;
+            background: var(--border);
+            object-fit: cover;
+            display: block;
+        }
+
+        .info {
+            padding: 12px;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .tile-title {
-            margin: 0;
-            font-size: 0.86rem;
-            font-weight: 700;
-            line-height: 1.25;
-            color: #fff;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        @media (min-width: 768px) {
+            .info { padding: 18px; }
         }
 
-        /* Collapses to nothing when not revealed, so the title always sits on the
-           bottom edge of the poster instead of floating above reserved space. */
-        .tile-reveal { display: grid; grid-template-rows: 1fr; }
+        .info strong {
+            display: block;
+            font-size: 0.9rem;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
 
-        .tile-reveal-in {
-            overflow: hidden;
+        @media (min-width: 768px) {
+            .info strong {
+                font-size: 1rem;
+                margin: 10px 0;
+            }
+        }
+
+        .tag-container {
             display: flex;
-            flex-direction: column;
-            gap: 7px;
-            padding-top: 8px;
-        }
-
-        .tile-index {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 2;
-            padding: 3px 7px;
-            border-radius: 6px;
-            background: rgba(4, 5, 8, 0.6);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.64rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.82);
-        }
-
-        .chips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
-
-        .chip {
-            display: inline-flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 4px;
-            padding: 2px 7px;
-            border-radius: 5px;
-            font-size: 0.58rem;
+            align-items: center;
+        }
+
+        .tag {
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+            align-self: flex-start;
+        }
+
+        .tag-game { background: var(--accent-game); }
+        .tag-book { background: var(--accent-book); }
+        .tag-steelbook { background: var(--accent-steelbook); }
+        .tag-ps { background: var(--accent-ps); }
+        .tag-switch { background: var(--accent-switch); }
+
+        .sub-tag {
+            font-size: 0.6rem;
             font-weight: 700;
-            letter-spacing: 0.08em;
+            padding: 2px 5px;
+            border-radius: 4px;
+            background: var(--subtag-bg);
+            color: var(--text-muted);
             text-transform: uppercase;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.13);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            white-space: nowrap;
         }
 
-        .chip-lead {
-            background: color-mix(in srgb, var(--chip, var(--gold)) 82%, transparent);
-            border-color: transparent;
-            color: #08090c;
-        }
-
-        .tile-meta {
+        .card-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.14);
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.86);
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
-        .tile-meta .m-left { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+        .meta-left {
+            display: flex;
+            align-items: center;
+        }
 
-        .tile-meta svg {
-            width: 13px;
-            height: 13px;
-            flex: none;
+        .meta-left svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 4px;
             stroke: currentColor;
-            stroke-width: 2;
+            stroke-width: 2.2;
             fill: none;
         }
 
-        .tile-meta .truncate {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .price-main { color: #fff; font-weight: 500; }
-        .price-alt { color: var(--gold); }
-
-        .tile-link {
+        .bluray-link {
             position: relative;
-            z-index: 4;
-            color: var(--gold);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.66rem;
-            font-weight: 700;
+            z-index: 2;
+            color: var(--accent-steelbook);
             text-decoration: none;
-            white-space: nowrap;
+            font-size: 0.7rem;
+            font-weight: 700;
         }
 
-        .tile-link:hover { text-decoration: underline; }
+        .bluray-link:hover { text-decoration: underline; }
 
-        .stretch::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: 3;
+        .price-container {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
         }
 
-        /* Hover reveal — only where hovering is real */
-        @media (hover: hover) and (min-width: 720px) {
-            .tile-reveal {
-                grid-template-rows: 0fr;
-                opacity: 0;
-                transition: grid-template-rows 0.4s var(--ease), opacity 0.3s var(--ease);
-            }
-
-            .tile-scrim { opacity: 0.6; }
-
-            .tile:hover,
-            .tile:focus-within {
-                transform: translateY(-6px);
-                box-shadow: var(--shadow-lift);
-            }
-
-            .tile:hover .tile-art,
-            .tile:focus-within .tile-art { transform: scale(1.05); }
-
-            .tile:hover .tile-scrim,
-            .tile:focus-within .tile-scrim { opacity: 1; }
-
-            .tile:hover .tile-reveal,
-            .tile:focus-within .tile-reveal { grid-template-rows: 1fr; opacity: 1; }
-
-            .tile:hover::after,
-            .tile:focus-within::after { border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+        .price-usd {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-ps);
         }
 
-        .tile a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-
-        /* ---------- Tables ---------- */
-        .table-shell {
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            background: var(--surface);
-            overflow: hidden;
+        /* TABLE STYLES FOR DIGITAL PURCHASES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
-        .table-scroll { overflow-x: auto; }
-
-        table {
+        .custom-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.86rem;
+            text-align: left;
+            font-size: 0.9rem;
         }
 
-        thead th {
-            position: sticky;
-            top: 0;
-            z-index: 2;
-            background: var(--surface-2);
-            padding: 12px 14px;
-            text-align: left;
-            font-size: 0.66rem;
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--text);
+            padding: 14px 16px;
             font-weight: 700;
-            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--muted);
-            border-bottom: 1px solid var(--line-strong);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .date-col {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
             white-space: nowrap;
         }
 
-        th.sortable { cursor: pointer; user-select: none; }
-        th.sortable:hover { color: var(--text); }
-        th[aria-sort] { color: var(--gold); }
+        .title-col {
+            font-weight: 600;
+        }
+
+        .desc-col {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .price-col {
+            text-align: right;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* SORTABLE TABLE HEADERS */
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sortable:hover {
+            background-color: var(--tab-hover);
+        }
 
         .sort-icon {
             display: inline-block;
-            width: 10px;
             margin-left: 4px;
-            font-size: 0.7rem;
-            opacity: 0.85;
-        }
-
-        tbody td {
-            padding: 11px 14px;
-            border-bottom: 1px solid var(--line);
-            vertical-align: top;
-        }
-
-        tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover td { background: var(--surface-2); }
-
-        .c-date {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.78rem;
-            color: var(--muted);
-            white-space: nowrap;
-        }
-
-        .c-title { font-weight: 600; min-width: 200px; }
-        .c-desc { color: var(--text-2); font-size: 0.82rem; }
-
-        .c-num {
-            text-align: right;
-            white-space: nowrap;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .c-num.accent { color: var(--gold); }
-
-        .pill {
-            display: inline-block;
-            padding: 2px 8px;
-            border: 1px solid var(--line-strong);
-            border-radius: 999px;
-            font-size: 0.68rem;
-            color: var(--text-2);
-            white-space: nowrap;
-        }
-
-        /* ---------- Charts ---------- */
-        .chart-grid {
-            display: grid;
-            gap: 20px;
-            grid-template-columns: 1fr;
-        }
-
-        @media (min-width: 900px) {
-            .chart-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        figure.chart {
-            margin: 0;
-            padding: 20px;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            background: var(--surface);
-            min-width: 0;
-        }
-
-        figure.chart figcaption { margin-bottom: 20px; }
-
-        figure.chart h3 {
-            margin: 0;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-
-        figure.chart .sub {
-            margin: 4px 0 0;
-            font-size: 0.76rem;
-            color: var(--muted);
-        }
-
-        /* horizontal bars */
-        .barlist { display: flex; flex-direction: column; gap: 14px; }
-
-        .bar-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
-
-        .bar-label {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            font-size: 0.78rem;
-            color: var(--text-2);
-        }
-
-        .bar-label b {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-variant-numeric: tabular-nums;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .bar-track {
-            position: relative;
-            height: 14px;
-            border-radius: 3px;
-            background: var(--data-track);
-        }
-
-        .bar-fill {
-            position: absolute;
-            inset: 0 auto 0 0;
-            width: var(--pct);
-            background: var(--data);
-            border-radius: 0 4px 4px 0;
-            transition: width 0.9s var(--ease);
-        }
-
-        /* columns */
-        .cols-wrap { position: relative; padding-left: 42px; }
-
-        .cols-grid {
-            position: absolute;
-            inset: 0 0 26px 42px;
-            pointer-events: none;
-        }
-
-        .gridline {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--line);
-        }
-
-        .gridline span {
-            position: absolute;
-            right: calc(100% + 8px);
-            top: 50%;
-            translate: 0 -50%;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.66rem;
-            color: var(--muted);
-            white-space: nowrap;
-        }
-
-        .cols {
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            height: 170px;
-            padding-bottom: 26px;
-            border-bottom: 1px solid var(--line-strong);
-        }
-
-        .col {
-            position: relative;
-            flex: 1 1 0;
-            min-width: 0;
-            height: 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            cursor: default;
-        }
-
-        .col-fill {
-            width: 100%;
-            max-width: 24px;
-            height: var(--h);
-            min-height: 2px;
-            background: var(--data);
-            border-radius: 4px 4px 0 0;
-            transition: height 0.9s var(--ease), background-color 0.2s;
-        }
-
-        .col:hover .col-fill { background: color-mix(in srgb, var(--data) 75%, #fff); }
-
-        .col-x {
-            position: absolute;
-            top: calc(100% + 7px);
-            left: 50%;
-            translate: -50% 0;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.62rem;
-            color: var(--muted);
-        }
-
-        .col-v {
-            position: absolute;
-            bottom: calc(var(--h) + 6px);
-            left: 50%;
-            translate: -50% 0;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.64rem;
-            font-weight: 500;
-            color: var(--text);
-            white-space: nowrap;
-        }
-
-        .chart-foot {
-            margin-top: 22px;
-            padding-top: 14px;
-            border-top: 1px solid var(--line);
-        }
-
-        .linkish {
-            border: 0;
-            background: none;
-            padding: 0;
-            font: inherit;
-            font-size: 0.74rem;
-            font-weight: 600;
-            color: var(--muted);
-            cursor: pointer;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-        }
-
-        .linkish:hover { color: var(--gold); }
-
-        .chart-table table { font-size: 0.78rem; margin-top: 12px; }
-        .chart-table td, .chart-table th { padding: 7px 10px; }
-        .chart-table thead th { position: static; background: transparent; }
-
-        /* tooltip */
-        #tip {
-            position: fixed;
-            z-index: 60;
-            pointer-events: none;
-            opacity: 0;
-            transform: translate(-50%, -100%);
-            padding: 7px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--line-strong);
-            background: var(--surface-2);
-            box-shadow: var(--shadow);
-            font-size: 0.76rem;
-            white-space: nowrap;
-            transition: opacity 0.15s;
-        }
-
-        #tip b { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 500; }
-
-        /* ---------- Recent strip ---------- */
-        .recent { display: flex; flex-direction: column; }
-
-        .recent-row {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 14px;
-            align-items: baseline;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .recent-row:last-child { border-bottom: none; }
-
-        .recent-row .r-date {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.74rem;
-            color: var(--muted);
-        }
-
-        .recent-row .r-title {
-            font-size: 0.86rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .recent-row .r-price {
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.8rem;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .hero-figure {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 800;
-            font-size: clamp(3rem, 9vw, 4.6rem);
-            line-height: 1;
-            letter-spacing: -0.04em;
-            margin: 0;
-        }
-
-        .hero-figure-label {
-            margin: 10px 0 0;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        .spotlight {
-            display: grid;
-            gap: 26px;
-            align-items: center;
-            padding: 28px 24px;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            background:
-                radial-gradient(90% 140% at 0% 0%, var(--gold-soft), transparent 60%),
-                var(--surface);
-        }
-
-        @media (min-width: 760px) {
-            .spotlight { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); padding: 34px 32px; }
-        }
-
-        .spotlight p.note {
-            margin: 0;
-            color: var(--text-2);
-            font-size: 0.88rem;
-        }
-
-        /* ---------- Utility ---------- */
-        [hidden] { display: none !important; }
-        .is-hidden { display: none !important; }
-
-        .empty {
-            padding: 46px 20px;
-            text-align: center;
-            color: var(--muted);
-            border: 1px dashed var(--line-strong);
-            border-radius: var(--radius);
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px; height: 1px;
-            padding: 0; margin: -1px;
-            overflow: hidden;
-            clip: rect(0 0 0 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .skip {
-            position: absolute;
-            left: -9999px;
-            top: 8px;
-            z-index: 100;
-            padding: 10px 16px;
-            border-radius: 8px;
-            background: var(--gold);
-            color: #08090c;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .skip:focus { left: 20px; }
-
-        footer.pagefoot {
-            margin-top: 64px;
-            padding-top: 22px;
-            border-top: 1px solid var(--line);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px 20px;
-            justify-content: space-between;
-            font-size: 0.74rem;
-            color: var(--muted);
-        }
-
-        footer.pagefoot kbd {
-            padding: 1px 6px;
-            border: 1px solid var(--line-strong);
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', ui-monospace, monospace;
-            font-size: 0.7rem;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            html { scroll-behavior: auto; }
-            *, *::before, *::after {
-                animation-duration: 0.001ms !important;
-                transition-duration: 0.001ms !important;
-            }
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
 
 <body>
-    <a class="skip" href="#main">Skip to content</a>
-    <div class="ambient" aria-hidden="true"></div>
 
-    <div class="wrap">
-        <div class="brandbar">
-            <span class="wordmark">Media Log</span>
-            <button class="ghost-btn" id="theme-toggle" type="button" aria-label="Switch colour theme">
-                <span id="theme-icon" aria-hidden="true">☀</span>
-                <span id="theme-text">Light</span>
-            </button>
-        </div>
-
-        <header class="hero">
-            <span class="eyebrow" id="page-eyebrow">Collection</span>
-            <h1 id="page-title">Media Log</h1>
-            <p id="page-subtitle">A gallery of finished adventures and stories.</p>
+    <div class="container">
+        <header>
+            <div class="top-bar">
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <span id="theme-icon">☀️</span>
+                    <span id="theme-text">Light</span>
+                </button>
+            </div>
+            <div class="header-content">
+                <h1 id="page-title" class="steelbook-header-title">Finished in 2026</h1>
+                <p id="page-subtitle">A gallery of my completed adventures and stories.</p>
+            </div>
         </header>
-    </div>
 
-    <div class="tabstrip">
-        <div class="wrap">
-            <div class="tabs" id="tabs" role="tablist" aria-label="Collection views"></div>
+        <div class="nav-tabs">
+            <button class="tab-btn" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">2022-2025</button>
+            <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">2026</button>
+            <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">Movie discs</button>
+            <button class="tab-btn" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game discs', 'My physical collection of PlayStation and Nintendo games.')">Game discs</button>
+            <button class="tab-btn" data-page="ps-digital" onclick="switchPage('ps-digital', 'PlayStation Digital Purchases', 'Complete history of my digital purchases on PlayStation Store.')">PS digital</button>
+            <button class="tab-btn" data-page="nintendo-digital" onclick="switchPage('nintendo-digital', 'Nintendo Digital Purchases', 'History of my digital purchases on Nintendo eShop.')">Nintendo digital</button>
+            <button class="tab-btn" data-page="steam-digital" onclick="switchPage('steam-digital', 'Steam Digital Purchases', 'Detailed log of PC and Steam game purchases, playtime, and licenses.')">Steam</button>
+        </div>
+
+        <!-- STATS SECTIONS -->
+        <div class="stats-bar" id="stats-games-books">
+            <div class="stat-card games">
+                <span class="stat-value" id="game-count">0</span>
+                <span class="stat-label">Games Completed</span>
+            </div>
+            <div class="stat-card games">
+                <span class="stat-value" id="total-game-time">0h</span>
+                <span class="stat-label">Total Playtime</span>
+            </div>
+            <div class="stat-card books">
+                <span class="stat-value" id="book-count">0</span>
+                <span class="stat-label">Books Read</span>
+            </div>
+            <div class="stat-card books">
+                <span class="stat-value" id="total-pages">0</span>
+                <span class="stat-label">Pages Read</span>
+            </div>
+        </div>
+
+        <div class="stats-bar hidden" id="stats-steelbooks">
+            <div class="stat-card steelbooks">
+                <span class="stat-value" id="steelbook-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Steelbooks Collected</span>
+            </div>
+            <div class="stat-card steelbooks">
+                <span class="stat-value" id="total-spent-uah" style="font-size: 1.3rem;">0 UAH</span>
+                <span class="stat-label">Total Spent (UAH)</span>
+            </div>
+            <div class="stat-card steelbooks">
+                <span class="stat-value" id="total-spent-usd" style="font-size: 1.3rem;">0 US$</span>
+                <span class="stat-label">Total Spent (USD)</span>
+            </div>
+            <div class="stat-card steelbooks">
+                <span class="stat-value" style="font-size: 1.3rem;">4K UHD</span>
+                <span class="stat-label">Primary Format</span>
+            </div>
+        </div>
+
+        <div class="stats-bar hidden" id="stats-ps-discs">
+            <div class="stat-card ps-discs">
+                <span class="stat-value" id="ps-disc-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Physical Games</span>
+            </div>
+            <div class="stat-card ps-discs">
+                <span class="stat-value" id="total-ps-spent" style="font-size: 1.3rem;">$0.00</span>
+                <span class="stat-label">Total spent</span>
+            </div>
+            <div class="stat-card ps-discs">
+                <span class="stat-value" style="font-size: 1.1rem;">Switch / PS3 / PS4 / PS5</span>
+                <span class="stat-label">Platforms</span>
+            </div>
+        </div>
+
+        <div class="stats-bar hidden" id="stats-ps-digital">
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Transactions</span>
+            </div>
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-spent-uah" style="font-size: 1.3rem;">0 UAH</span>
+                <span class="stat-label">Total Spent (UAH)</span>
+            </div>
+            <div class="stat-card digital">
+                <span class="stat-value" id="digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
+                <span class="stat-label">Total Spent (USD)</span>
+            </div>
+        </div>
+
+        <div class="stats-bar hidden" id="stats-nintendo-digital">
+            <div class="stat-card nintendo-digital">
+                <span class="stat-value" id="nintendo-digital-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Transactions</span>
+            </div>
+            <div class="stat-card nintendo-digital">
+                <span class="stat-value" id="nintendo-digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
+                <span class="stat-label">Total Spent (USD)</span>
+            </div>
+        </div>
+
+        <div class="stats-bar hidden" id="stats-steam-digital">
+            <div class="stat-card steam-digital">
+                <span class="stat-value" id="steam-digital-count" style="font-size: 1.5rem;">0</span>
+                <span class="stat-label">Transactions</span>
+            </div>
+            <div class="stat-card steam-digital">
+                <span class="stat-value" id="steam-playtime" style="font-size: 1.5rem;">0h</span>
+                <span class="stat-label">Total Playtime</span>
+            </div>
+            <div class="stat-card steam-digital">
+                <span class="stat-value" id="steam-digital-spent-uah" style="font-size: 1.3rem;">0 UAH</span>
+                <span class="stat-label">Total Spent (UAH)</span>
+            </div>
+            <div class="stat-card steam-digital">
+                <span class="stat-value" id="steam-digital-spent-usd" style="font-size: 1.3rem;">0 US$</span>
+                <span class="stat-label">Total Spent (USD)</span>
+            </div>
+        </div>
+
+        <!-- CONTENT CONTAINERS -->
+        <div id="section-games-books">
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-game)">Games</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-games"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-book)">Books</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-books"></div>
+        </div>
+
+        <div id="section-steelbooks" class="hidden">
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Premium physical movie media - Manta Lab</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-manta-lab"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Christopher Nolan 4K Collection</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-nolan"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Other</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-steelbooks-other"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-steelbook)">Collector's editions</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-steelbooks-other2"></div>
+        </div>
+
+        <div id="section-ps-discs" class="hidden">
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-switch)">Nintendo Switch</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-discs-switch"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 3</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-discs-ps3"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 4</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-discs-ps4"></div>
+
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-ps)">PlayStation 5</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid" id="grid-discs-ps5"></div>
+        </div>
+
+        <div id="section-ps-digital" class="hidden">
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-digital)">Digital Purchases History</h2>
+                <div class="line"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortDigitalTable('transaction_date')">
+                                Date <span id="sort-transaction_date" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortDigitalTable('game_title')">
+                                Game Title <span id="sort-game_title" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortDigitalTable('item_description')">
+                                Item Description <span id="sort-item_description" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortDigitalTable('price_uah')">
+                                Price (UAH) <span id="sort-price_uah" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortDigitalTable('price_usd')">
+                                Price (USD) <span id="sort-price_usd" class="sort-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-digital-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-nintendo-digital" class="hidden">
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-nintendo-digital)">Nintendo Digital Purchases History</h2>
+                <div class="line"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortNintendoDigitalTable('transaction_date')">
+                                Date <span id="sort-nin-transaction_date" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortNintendoDigitalTable('game_title')">
+                                Title <span id="sort-nin-game_title" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortNintendoDigitalTable('item_description')">
+                                Item Description <span id="sort-nin-item_description" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortNintendoDigitalTable('price_usd')">
+                                Price (USD) <span id="sort-nin-price_usd" class="sort-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-nintendo-digital-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-steam-digital" class="hidden">
+            <div class="section-header">
+                <h2 class="steelbook-category-header" style="color: var(--accent-steam-text)">Steam Digital Purchases & Library History</h2>
+                <div class="line"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortSteamDigitalTable('transaction_date')">
+                                Date <span id="sort-steam-transaction_date" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortSteamDigitalTable('game_title')">
+                                Title <span id="sort-steam-game_title" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortSteamDigitalTable('item_description')">
+                                Item Description / Type <span id="sort-steam-item_description" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortSteamDigitalTable('playtime_hours')">
+                                Playtime <span id="sort-steam-playtime_hours" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortSteamDigitalTable('platform_type')">
+                                Store / Platform <span id="sort-steam-platform_type" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortSteamDigitalTable('price_uah')">
+                                Price (UAH) <span id="sort-steam-price_uah" class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" style="text-align: right;" onclick="sortSteamDigitalTable('price_usd')">
+                                Price (USD) <span id="sort-steam-price_usd" class="sort-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-steam-digital-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
-    <main class="wrap" id="main">
-        <div class="toolbar" id="toolbar">
-            <div class="search">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-                <input type="search" id="search" placeholder="Filter this view…" autocomplete="off" aria-label="Filter items in this view">
-                <kbd>/</kbd>
-            </div>
-            <label class="sorter" for="sort">Sort
-                <select id="sort"></select>
-            </label>
-            <span class="result-count" id="result-count"></span>
-        </div>
-
-        <div id="kpis-top"><div class="kpis" id="kpis"></div></div>
-
-        <!-- ============ OVERVIEW ============ -->
-        <section id="view-overview" class="view" hidden>
-            <div class="sec">
-                <div class="spotlight">
-                    <div>
-                        <p class="hero-figure" id="grand-total">$0</p>
-                        <p class="hero-figure-label">Lifetime spend on media</p>
-                    </div>
-                    <p class="note" id="overview-note"></p>
-                </div>
-            </div>
-
-            <!-- the hero figure leads; the KPI row moves in beneath it -->
-            <div id="kpis-slot"></div>
-
-            <div class="sec">
-                <div class="sec-head">
-                    <h2>The numbers</h2>
-                    <div class="rule"></div>
-                </div>
-                <div class="chart-grid">
-                    <figure class="chart">
-                        <figcaption>
-                            <h3>Spend by category</h3>
-                            <p class="sub">All-time, converted to US$</p>
-                        </figcaption>
-                        <div class="barlist" id="chart-category"></div>
-                        <div class="chart-foot">
-                            <button class="linkish" type="button" data-table-toggle="table-category">Show data table</button>
-                            <div class="chart-table" id="table-category" hidden></div>
-                        </div>
-                    </figure>
-
-                    <figure class="chart">
-                        <figcaption>
-                            <h3>Digital spend by year</h3>
-                            <p class="sub">PlayStation Store · Nintendo eShop · Steam, in US$<span id="years-excluded"></span></p>
-                        </figcaption>
-                        <div class="cols-wrap">
-                            <div class="cols-grid" id="chart-years-grid"></div>
-                            <div class="cols" id="chart-years"></div>
-                        </div>
-                        <div class="chart-foot">
-                            <button class="linkish" type="button" data-table-toggle="table-years">Show data table</button>
-                            <div class="chart-table" id="table-years" hidden></div>
-                        </div>
-                    </figure>
-                </div>
-            </div>
-
-            <div class="sec">
-                <div class="sec-head">
-                    <h2>Latest purchases</h2>
-                    <div class="rule"></div>
-                </div>
-                <div class="recent" id="recent"></div>
-            </div>
-        </section>
-
-        <!-- ============ FINISHED (2026 / archive) ============ -->
-        <section id="view-finished" class="view" hidden>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-game)">
-                    <h2>Games</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-games"></span>
-                </div>
-                <div class="wall" id="wall-games"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-book)">
-                    <h2>Books</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-books"></span>
-                </div>
-                <div class="wall" id="wall-books"></div>
-            </div>
-        </section>
-
-        <!-- ============ MOVIE DISCS ============ -->
-        <section id="view-steelbooks" class="view" hidden>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-steel)">
-                    <h2>Manta Lab exclusives</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-manta"></span>
-                </div>
-                <div class="wall" id="wall-manta"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-steel)">
-                    <h2>Christopher Nolan 4K collection</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-nolan"></span>
-                </div>
-                <div class="wall" id="wall-nolan"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-steel)">
-                    <h2>Other steelbooks</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-steel-other"></span>
-                </div>
-                <div class="wall" id="wall-steel-other"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-steel)">
-                    <h2>Collector's editions</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-steel-ce"></span>
-                </div>
-                <div class="wall" id="wall-steel-ce"></div>
-            </div>
-        </section>
-
-        <!-- ============ GAME DISCS ============ -->
-        <section id="view-discs" class="view" hidden>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-switch)">
-                    <h2>Nintendo Switch</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-switch"></span>
-                </div>
-                <div class="wall" id="wall-switch"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-ps)">
-                    <h2>PlayStation 3</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-ps3"></span>
-                </div>
-                <div class="wall" id="wall-ps3"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-ps)">
-                    <h2>PlayStation 4</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-ps4"></span>
-                </div>
-                <div class="wall" id="wall-ps4"></div>
-            </div>
-            <div class="sec" data-group>
-                <div class="sec-head" style="--sec-accent: var(--c-ps)">
-                    <h2>PlayStation 5</h2>
-                    <div class="rule"></div>
-                    <span class="count" data-count-for="wall-ps5"></span>
-                </div>
-                <div class="wall" id="wall-ps5"></div>
-            </div>
-        </section>
-
-        <!-- ============ PS DIGITAL ============ -->
-        <section id="view-ps-digital" class="view" hidden>
-            <div class="sec">
-                <div class="sec-head" style="--sec-accent: var(--c-digital)">
-                    <h2>PlayStation Store history</h2>
-                    <div class="rule"></div>
-                </div>
-                <div class="table-shell">
-                    <div class="table-scroll">
-                        <table id="tbl-ps">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-key="transaction_date">Date <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="game_title">Title <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="item_description">Item <span class="sort-icon"></span></th>
-                                    <th class="sortable c-num" data-key="price_uah">UAH <span class="sort-icon"></span></th>
-                                    <th class="sortable c-num" data-key="price_usd">USD <span class="sort-icon"></span></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============ NINTENDO DIGITAL ============ -->
-        <section id="view-nintendo-digital" class="view" hidden>
-            <div class="sec">
-                <div class="sec-head" style="--sec-accent: var(--c-nintendo)">
-                    <h2>Nintendo eShop history</h2>
-                    <div class="rule"></div>
-                </div>
-                <div class="table-shell">
-                    <div class="table-scroll">
-                        <table id="tbl-nintendo">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-key="transaction_date">Date <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="game_title">Title <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="item_description">Item <span class="sort-icon"></span></th>
-                                    <th class="sortable c-num" data-key="price_usd">USD <span class="sort-icon"></span></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============ STEAM ============ -->
-        <section id="view-steam-digital" class="view" hidden>
-            <div class="sec">
-                <div class="sec-head" style="--sec-accent: var(--c-steam)">
-                    <h2>Steam purchases &amp; library</h2>
-                    <div class="rule"></div>
-                </div>
-                <div class="table-shell">
-                    <div class="table-scroll">
-                        <table id="tbl-steam">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-key="transaction_date">Date <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="game_title">Title <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="item_description">Item <span class="sort-icon"></span></th>
-                                    <th class="sortable c-num" data-key="playtime_hours">Played <span class="sort-icon"></span></th>
-                                    <th class="sortable" data-key="platform_type">Store <span class="sort-icon"></span></th>
-                                    <th class="sortable c-num" data-key="price_uah">UAH <span class="sort-icon"></span></th>
-                                    <th class="sortable c-num" data-key="price_usd">USD <span class="sort-icon"></span></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="empty is-hidden" id="empty-state">
-            No items match <b id="empty-term"></b> in this view.
-        </div>
-
-        <footer class="pagefoot">
-            <span>Prices shown as recorded at purchase.</span>
-            <span><kbd>/</kbd> filter · <kbd>←</kbd><kbd>→</kbd> switch view · <kbd>Esc</kbd> clear</span>
-        </footer>
-    </main>
-
-    <div id="tip" role="status" aria-live="polite"></div>
 
     <script>
         const mediaData = {
@@ -1607,655 +1056,457 @@
   ]
         };
 
-        /* ------------------------------------------------------------------
-           Config
-        ------------------------------------------------------------------ */
-        const TABS = [
-            { id: 'overview',         label: 'Overview',  view: 'view-overview',         eyebrow: 'Dashboard',        title: 'Media Log',            sub: 'Everything finished, owned and bought — at a glance.' },
-            { id: '2026',             label: '2026',      view: 'view-finished',         eyebrow: 'Finished',         title: 'Finished in 2026',     sub: 'A gallery of completed adventures and stories.' },
-            { id: '2022-2025',        label: '2022–2025', view: 'view-finished',         eyebrow: 'Archive',          title: 'Finished 2022–2025',   sub: 'Everything completed before this year.' },
-            { id: 'steelbooks',       label: 'Movie discs', view: 'view-steelbooks',     eyebrow: 'Physical media',   title: 'Steelbook Collection', sub: 'Boutique 4K steelbooks and collector’s editions.' },
-            { id: 'ps-discs',         label: 'Game discs', view: 'view-discs',           eyebrow: 'Physical media',   title: 'Game Discs',           sub: 'PlayStation and Nintendo, on a shelf rather than a server.' },
-            { id: 'ps-digital',       label: 'PS digital', view: 'view-ps-digital',      eyebrow: 'Purchase history', title: 'PlayStation Store',    sub: 'Every digital purchase since 2015.' },
-            { id: 'nintendo-digital', label: 'Nintendo',  view: 'view-nintendo-digital', eyebrow: 'Purchase history', title: 'Nintendo eShop',       sub: 'Every digital purchase on the eShop.' },
-            { id: 'steam-digital',    label: 'Steam',     view: 'view-steam-digital',    eyebrow: 'Purchase history', title: 'Steam Library',        sub: 'Purchases, keys, wallet top-ups and playtime.' }
-        ];
+        let currentPage = '2026';
+        let currentSortColumn = null;
+        let isAscending = true;
+        let currentNintendoSortColumn = null;
+        let isNintendoAscending = true;
+        let currentSteamSortColumn = null;
+        let isSteamAscending = true;
 
-        const SORTS = {
-            finished:   [['default', 'Default'], ['title-asc', 'Title A–Z'], ['title-desc', 'Title Z–A'], ['num-desc', 'Longest first'], ['num-asc', 'Shortest first']],
-            collection: [['default', 'Default'], ['title-asc', 'Title A–Z'], ['title-desc', 'Title Z–A'], ['num-desc', 'Most expensive'], ['num-asc', 'Least expensive']]
-        };
+        const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+        const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        const discIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><line x1="6" y1="6" x2="18" y2="6"></line></svg>`;
 
-        const ICONS = {
-            clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
-            book:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg>',
-            disc:  '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/></svg>'
-        };
-
-        const state = { tab: '2026', query: '', sort: 'default' };
-
-        /* ------------------------------------------------------------------
-           Small helpers
-        ------------------------------------------------------------------ */
-        const $ = (sel, root = document) => root.querySelector(sel);
-        const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-        const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const usd = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const usd0 = (n) => '$' + Math.round(n).toLocaleString('en-US');
-        const uah = (n) => n.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₴';
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const tabOf = (id) => TABS.find((t) => t.id === id);
-
-        const hoursOf = (item) => parseFloat(item.val) || 0;
-        const pagesOf = (item) => parseInt(String(item.val).replace(/,/g, ''), 10) || 0;
-        const finishedIn = (year) => mediaData.finished.filter((i) => i.year === year);
-        const allSteelbooks = () => Object.values(mediaData.steelbooks).flat();
-        const allDiscs = () => Object.values(mediaData.game_discs).flat();
-        const sum = (arr, fn) => arr.reduce((a, b) => a + (fn(b) || 0), 0);
-
-        /* ------------------------------------------------------------------
-           Theme
-        ------------------------------------------------------------------ */
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            try { localStorage.setItem('theme', theme); } catch (e) { /* private mode */ }
-            $('#theme-icon').textContent = theme === 'dark' ? '☀' : '☾';
-            $('#theme-text').textContent = theme === 'dark' ? 'Light' : 'Dark';
+        function init() {
+            renderAll();
+            switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.');
+            
+            // Load saved theme or default to dark
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            setTheme(savedTheme);
         }
 
-        /* ------------------------------------------------------------------
-           Tile builders — every tile is a poster first
-        ------------------------------------------------------------------ */
-        function tile({ art, title, index, chips, meta, search, href, linkText }) {
-            return `
-                <article class="tile${href ? ' stretch' : ''}" data-search="${esc(search.toLowerCase())}" data-title="${esc(title.toLowerCase())}" data-num="${meta.num ?? 0}">
-                    ${href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(title)}"></a>` : ''}
-                    <img class="tile-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">
-                    <div class="tile-scrim"></div>
-                    <span class="tile-index">${String(index).padStart(2, '0')}</span>
-                    <div class="tile-body">
-                        <h3 class="tile-title">${esc(title)}</h3>
-                        <div class="tile-reveal">
-                            <div class="tile-reveal-in">
-                                <div class="chips">${chips}</div>
-                                <div class="tile-meta">
-                                    <span class="m-left">${meta.icon}<span class="truncate">${meta.text}</span></span>
-                                    ${linkText ? `<a class="tile-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(linkText)}</a>` : (meta.right || '')}
-                                </div>
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (theme === 'dark') {
+                icon.innerText = '☀️';
+                text.innerText = 'Light';
+            } else {
+                icon.innerText = '🌙';
+                text.innerText = 'Dark';
+            }
+        }
+
+        function renderAll() {
+            // 1. Finished Games & Books
+            const gamesGrid = document.getElementById('grid-games');
+            const booksGrid = document.getElementById('grid-books');
+
+            gamesGrid.innerHTML = mediaData.finished.filter(i => i.type === 'game').map(item => `
+                <div class="card" data-year="${item.year}">
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <div class="tag-container">
+                            <span class="tag tag-game">GAME</span>
+                            ${item.tags.map(t => `<span class="sub-tag">${t}</span>`).join('')}
+                        </div>
+                        <strong>${item.title}</strong>
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                ${clockIcon}
+                                <span class="duration-val">${item.val}</span>
                             </div>
                         </div>
                     </div>
-                </article>`;
+                </div>
+            `).join('');
+
+            booksGrid.innerHTML = mediaData.finished.filter(i => i.type === 'book').map(item => `
+                <div class="card" data-year="${item.year}">
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <span class="tag tag-book">BOOK</span>
+                        <strong>${item.title}</strong>
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                ${bookIcon}
+                                <span class="page-val">${item.val}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 2. Steelbooks
+            renderSteelbookGrid('grid-manta-lab', mediaData.steelbooks.manta_lab);
+            renderSteelbookGrid('grid-nolan', mediaData.steelbooks.nolan);
+            renderSteelbookGrid('grid-steelbooks-other', mediaData.steelbooks.other);
+            renderSteelbookGrid('grid-steelbooks-other2', mediaData.steelbooks.other2);
+
+            // 3. Game Discs
+            renderDiscGrid('grid-discs-switch', mediaData.game_discs.switch, 'tag-switch');
+            renderDiscGrid('grid-discs-ps3', mediaData.game_discs.ps3, 'tag-ps');
+            renderDiscGrid('grid-discs-ps4', mediaData.game_discs.ps4, 'tag-ps');
+            renderDiscGrid('grid-discs-ps5', mediaData.game_discs.ps5, 'tag-ps');
+
+            // 4. Digital Purchases Tables
+            renderDigitalTable();
+            renderNintendoDigitalTable();
+            renderSteamDigitalTable();
         }
 
-        function renderFinished() {
-            const build = (list, kind) => list.map((item, i) => {
-                const isGame = kind === 'game';
-                const chips = [`<span class="chip chip-lead" style="--chip: var(--c-${isGame ? 'game' : 'book'})">${isGame ? 'Game' : 'Book'}</span>`]
-                    .concat((item.tags || []).map((t) => `<span class="chip">${esc(t)}</span>`)).join('');
-                return tile({
-                    art: item.cover,
-                    title: item.title,
-                    index: i + 1,
-                    chips,
-                    search: [item.title, ...(item.tags || []), item.val].join(' '),
-                    meta: {
-                        icon: isGame ? ICONS.clock : ICONS.book,
-                        text: esc(item.val),
-                        num: isGame ? hoursOf(item) : pagesOf(item)
-                    }
-                });
-            }).join('');
+        function renderSteelbookGrid(containerId, list) {
+            const container = document.getElementById(containerId);
+            if (!container || !list) return;
 
-            $('#wall-games').innerHTML = build(mediaData.finished.filter((i) => i.type === 'game'), 'game');
-            $('#wall-books').innerHTML = build(mediaData.finished.filter((i) => i.type === 'book'), 'book');
-            // year is the switch between the 2026 tab and the archive tab
-            mediaData.finished.filter((i) => i.type === 'game').forEach((item, i) => {
-                $('#wall-games').children[i].dataset.year = item.year;
-            });
-            mediaData.finished.filter((i) => i.type === 'book').forEach((item, i) => {
-                $('#wall-books').children[i].dataset.year = item.year;
-            });
+            container.innerHTML = list.map(item => `
+                <div class="card">
+                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="${item.title}"></a>
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <div class="tag-container">
+                            ${(item.tags || []).map(t => `<span class="tag tag-steelbook">${t}</span>`).join('')}
+                            ${(item.subTags || []).map(t => `<span class="sub-tag">${t}</span>`).join('')}
+                        </div>
+                        <strong>${item.title}</strong>
+                        <div class="price-container" data-uah="${item.priceUah}" data-usd="${item.priceUsd}">
+                            ${item.priceUah.toLocaleString('uk-UA', {minimumFractionDigits: 2})} UAH 
+                            <span class="price-usd">(${item.priceUsd.toFixed(2)} US$)</span>
+                        </div>
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                ${discIcon}
+                                <span class="steelbook-item">${item.itemMeta}</span>
+                            </div>
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="bluray-link">${item.linkText}</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function renderSteelbooks(id, list) {
-            $('#' + id).innerHTML = (list || []).map((item, i) => tile({
-                art: item.cover,
-                title: item.title,
-                index: i + 1,
-                href: item.link,
-                linkText: item.linkText,
-                search: [item.title, item.itemMeta, ...(item.subTags || [])].join(' '),
-                chips: (item.tags || []).map((t) => `<span class="chip chip-lead" style="--chip: var(--c-steel)">${esc(t)}</span>`)
-                    .concat((item.subTags || []).map((t) => `<span class="chip">${esc(t)}</span>`)).join(''),
-                meta: {
-                    icon: ICONS.disc,
-                    text: `<span class="price-main">${uah(item.priceUah)}</span> <span class="price-alt">${usd(item.priceUsd)}</span>`,
-                    num: item.priceUsd
-                }
-            })).join('');
+        function renderDiscGrid(containerId, list, tagClass) {
+            const container = document.getElementById(containerId);
+            if (!container || !list) return;
+
+            container.innerHTML = list.map(item => `
+                <div class="card">
+                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="info">
+                        <div class="tag-container">
+                            <span class="tag ${tagClass}">${item.platform}</span>
+                            <span class="sub-tag">${item.subTag}</span>
+                        </div>
+                        <strong>${item.title}</strong>
+                        <div class="price-container" data-usd="${item.priceUsd}">
+                            <span class="price-usd">$${item.priceUsd.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function renderDiscs(id, list, accent) {
-            $('#' + id).innerHTML = (list || []).map((item, i) => tile({
-                art: item.cover,
-                title: item.title,
-                index: i + 1,
-                search: [item.title, item.platform, item.subTag].join(' '),
-                chips: `<span class="chip chip-lead" style="--chip: var(--c-${accent})">${esc(item.platform)}</span><span class="chip">${esc(item.subTag)}</span>`,
-                meta: {
-                    icon: ICONS.disc,
-                    text: `<span class="price-main">${usd(item.priceUsd)}</span>`,
-                    num: item.priceUsd
-                }
-            })).join('');
+        function renderDigitalTable() {
+            const tbody = document.getElementById('table-digital-body');
+            if (!tbody || !mediaData.ps_digital) return;
+
+            tbody.innerHTML = mediaData.ps_digital.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description}</td>
+                    <td class="price-col">${item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2})} UAH</td>
+                    <td class="price-col" style="color: var(--accent-ps);">$${item.price_usd.toFixed(2)}</td>
+                </tr>
+            `).join('');
         }
 
-        /* ------------------------------------------------------------------
-           Tables
-        ------------------------------------------------------------------ */
-        const TABLES = {
-            'tbl-ps': {
-                data: () => mediaData.ps_digital,
-                sort: { key: 'transaction_date', asc: false },
-                row: (r) => `<tr data-search="${esc((r.game_title + ' ' + r.item_description + ' ' + r.transaction_date).toLowerCase())}">
-                        <td class="c-date">${esc(r.transaction_date)}</td>
-                        <td class="c-title">${esc(r.game_title)}</td>
-                        <td class="c-desc">${esc(r.item_description)}</td>
-                        <td class="c-num">${uah(r.price_uah)}</td>
-                        <td class="c-num accent">${usd(r.price_usd)}</td>
-                    </tr>`
-            },
-            'tbl-nintendo': {
-                data: () => mediaData.nintendo_digital,
-                sort: { key: 'transaction_date', asc: false },
-                row: (r) => `<tr data-search="${esc((r.game_title + ' ' + r.item_description + ' ' + r.transaction_date).toLowerCase())}">
-                        <td class="c-date">${esc(r.transaction_date)}</td>
-                        <td class="c-title">${esc(r.game_title)}</td>
-                        <td class="c-desc">${esc(r.item_description)}</td>
-                        <td class="c-num accent">${usd(r.price_usd)}</td>
-                    </tr>`
-            },
-            'tbl-steam': {
-                data: () => mediaData.steam_digital,
-                sort: { key: 'transaction_date', asc: false },
-                row: (r) => `<tr data-search="${esc((r.game_title + ' ' + r.item_description + ' ' + r.platform_type + ' ' + r.transaction_date).toLowerCase())}">
-                        <td class="c-date">${esc(r.transaction_date)}</td>
-                        <td class="c-title">${esc(r.game_title)}</td>
-                        <td class="c-desc">${esc(r.item_description)}</td>
-                        <td class="c-num">${r.playtime_hours ? r.playtime_hours.toFixed(1) + 'h' : '—'}</td>
-                        <td><span class="pill">${esc(r.platform_type)}</span></td>
-                        <td class="c-num">${uah(r.price_uah)}</td>
-                        <td class="c-num accent">${usd(r.price_usd)}</td>
-                    </tr>`
-            }
-        };
+        function renderNintendoDigitalTable() {
+            const tbody = document.getElementById('table-nintendo-digital-body');
+            if (!tbody || !mediaData.nintendo_digital) return;
 
-        function renderTable(id) {
-            const cfg = TABLES[id];
-            const table = document.getElementById(id);
-            const { key, asc } = cfg.sort;
-
-            const rows = cfg.data().slice().sort((a, b) => {
-                const va = a[key], vb = b[key];
-                const cmp = typeof va === 'string' ? va.localeCompare(vb, undefined, { numeric: true }) : (va - vb);
-                return asc ? cmp : -cmp;
-            });
-
-            $('tbody', table).innerHTML = rows.map(cfg.row).join('');
-            $$('th.sortable', table).forEach((th) => {
-                const active = th.dataset.key === key;
-                th.toggleAttribute('aria-sort', active);
-                if (active) th.setAttribute('aria-sort', asc ? 'ascending' : 'descending');
-                $('.sort-icon', th).textContent = active ? (asc ? '▲' : '▼') : '';
-            });
+            tbody.innerHTML = mediaData.nintendo_digital.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description}</td>
+                    <td class="price-col" style="color: var(--accent-nintendo-digital);">$${item.price_usd.toFixed(2)}</td>
+                </tr>
+            `).join('');
         }
 
-        function wireTables() {
-            Object.keys(TABLES).forEach((id) => {
-                const table = document.getElementById(id);
-                $$('th.sortable', table).forEach((th) => {
-                    th.tabIndex = 0;
-                    const go = () => {
-                        const cfg = TABLES[id];
-                        cfg.sort = cfg.sort.key === th.dataset.key
-                            ? { key: th.dataset.key, asc: !cfg.sort.asc }
-                            : { key: th.dataset.key, asc: true };
-                        renderTable(id);
-                        applyFilter();
-                    };
-                    th.addEventListener('click', go);
-                    th.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-                    });
-                });
-                renderTable(id);
-            });
+        function renderSteamDigitalTable() {
+            const tbody = document.getElementById('table-steam-digital-body');
+            if (!tbody || !mediaData.steam_digital) return;
+
+            tbody.innerHTML = mediaData.steam_digital.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description}</td>
+                    <td class="price-col" style="color: var(--text-muted);">${item.playtime_hours}h</td>
+                    <td class="desc-col"><span class="sub-tag">${item.platform_type}</span></td>
+                    <td class="price-col">${item.price_uah > 0 ? item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2}) + ' UAH' : '-'}</td>
+                    <td class="price-col" style="color: var(--accent-steam-text);">${item.price_usd > 0 ? '$' + item.price_usd.toFixed(2) : '-'}</td>
+                </tr>
+            `).join('');
         }
 
-        /* ------------------------------------------------------------------
-           KPIs — the numbers react to the active tab and the filter
-        ------------------------------------------------------------------ */
-        function visibleTiles(viewId) {
-            return $$('#' + viewId + ' .tile:not(.is-hidden)');
-        }
+        function sortDigitalTable(columnKey) {
+            if (!mediaData.ps_digital) return;
 
-        function kpisFor(tab) {
-            const t = tab.id;
-
-            if (t === 'overview') {
-                const digitalCount = mediaData.ps_digital.length + mediaData.nintendo_digital.length + mediaData.steam_digital.length;
-                return [
-                    { label: 'Titles finished', value: mediaData.finished.length, accent: 'var(--c-game)' },
-                    { label: 'Hours played', value: sum(mediaData.finished.filter((i) => i.type === 'game'), hoursOf), digits: 0, suffix: 'h', accent: 'var(--c-game)' },
-                    { label: 'Pages read', value: sum(mediaData.finished.filter((i) => i.type === 'book'), pagesOf), accent: 'var(--c-book)' },
-                    { label: 'Discs owned', value: allDiscs().length + allSteelbooks().length, accent: 'var(--c-steel)' },
-                    { label: 'Transactions', value: digitalCount, accent: 'var(--c-digital)' }
-                ];
+            if (currentSortColumn === columnKey) {
+                isAscending = !isAscending;
+            } else {
+                currentSortColumn = columnKey;
+                isAscending = true;
             }
 
-            if (t === '2026' || t === '2022-2025') {
-                const games = visibleTiles('view-finished').filter((el) => el.closest('.wall').id === 'wall-games');
-                const books = visibleTiles('view-finished').filter((el) => el.closest('.wall').id === 'wall-books');
-                const hours = games.reduce((a, el) => a + Number(el.dataset.num), 0);
-                const pages = books.reduce((a, el) => a + Number(el.dataset.num), 0);
-                return [
-                    { label: 'Games completed', value: games.length, accent: 'var(--c-game)' },
-                    { label: 'Hours played', value: hours, digits: 1, suffix: 'h', accent: 'var(--c-game)' },
-                    { label: 'Books read', value: books.length, accent: 'var(--c-book)' },
-                    { label: 'Pages read', value: pages, accent: 'var(--c-book)' }
-                ];
-            }
+            mediaData.ps_digital.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
 
-            if (t === 'steelbooks') {
-                const tiles = visibleTiles('view-steelbooks');
-                const titles = new Set(tiles.map((el) => el.dataset.title));
-                const items = allSteelbooks().filter((i) => titles.has(i.title.toLowerCase()));
-                return [
-                    { label: 'Discs collected', value: tiles.length, accent: 'var(--c-steel)' },
-                    { label: 'Spent (UAH)', value: sum(items, (i) => i.priceUah), format: uah, accent: 'var(--c-steel)' },
-                    { label: 'Spent (USD)', value: sum(items, (i) => i.priceUsd), format: usd, accent: 'var(--c-steel)' },
-                    { label: 'Primary format', text: '4K UHD', accent: 'var(--c-steel)' }
-                ];
-            }
-
-            if (t === 'ps-discs') {
-                const tiles = visibleTiles('view-discs');
-                const titles = new Set(tiles.map((el) => el.dataset.title));
-                const items = allDiscs().filter((i) => titles.has(i.title.toLowerCase()));
-                return [
-                    { label: 'Physical games', value: tiles.length, accent: 'var(--c-ps)' },
-                    { label: 'Total spent', value: sum(items, (i) => i.priceUsd), format: usd, accent: 'var(--c-ps)' },
-                    { label: 'Platforms', text: 'Switch · PS3 · PS4 · PS5', accent: 'var(--c-switch)' }
-                ];
-            }
-
-            const tableFor = { 'ps-digital': 'tbl-ps', 'nintendo-digital': 'tbl-nintendo', 'steam-digital': 'tbl-steam' }[t];
-            const rows = $$('#' + tableFor + ' tbody tr:not(.is-hidden)');
-            const keys = new Set(rows.map((r) => r.dataset.search));
-            const src = { 'ps-digital': mediaData.ps_digital, 'nintendo-digital': mediaData.nintendo_digital, 'steam-digital': mediaData.steam_digital }[t];
-            const items = src.filter((r) => keys.has(
-                (r.game_title + ' ' + r.item_description + (t === 'steam-digital' ? ' ' + r.platform_type : '') + ' ' + r.transaction_date).toLowerCase()
-            ));
-
-            const out = [{ label: 'Transactions', value: rows.length, accent: 'var(--c-digital)' }];
-            if (t === 'steam-digital') out.push({ label: 'Playtime', value: sum(items, (i) => i.playtime_hours), digits: 1, suffix: 'h', accent: 'var(--c-steam)' });
-            if (t !== 'nintendo-digital') out.push({ label: 'Spent (UAH)', value: sum(items, (i) => i.price_uah), format: uah, accent: 'var(--c-digital)' });
-            out.push({ label: 'Spent (USD)', value: sum(items, (i) => i.price_usd), format: usd, accent: 'var(--gold)' });
-            return out;
-        }
-
-        function paintKpis() {
-            const specs = kpisFor(tabOf(state.tab));
-            const host = $('#kpis');
-
-            if (host.childElementCount !== specs.length) {
-                host.innerHTML = specs.map(() => '<div class="kpi"><span class="kpi-value"></span><span class="kpi-label"></span></div>').join('');
-            }
-
-            specs.forEach((spec, i) => {
-                const card = host.children[i];
-                const valueEl = $('.kpi-value', card);
-                card.style.setProperty('--kpi-accent', spec.accent || 'var(--gold)');
-                $('.kpi-label', card).textContent = spec.label;
-
-                if (spec.text !== undefined) {
-                    valueEl.style.fontSize = '1.05rem';
-                    valueEl.textContent = spec.text;
-                    return;
+                if (typeof valA === 'string') {
+                    const comparison = valA.localeCompare(valB);
+                    return isAscending ? comparison : -comparison;
                 }
 
-                valueEl.style.fontSize = '';
-                const fmt = spec.format || ((n) => n.toLocaleString('en-US', {
-                    minimumFractionDigits: spec.digits || 0,
-                    maximumFractionDigits: spec.digits || 0
-                }) + (spec.suffix || ''));
-                countTo(valueEl, spec.value, fmt);
-            });
-        }
-
-        function countTo(el, target, fmt) {
-            const from = Number(el.dataset.raw || 0);
-            el.dataset.raw = target;
-
-            if (reduceMotion || from === target) { el.textContent = fmt(target); return; }
-
-            const start = performance.now();
-            const dur = 650;
-            cancelAnimationFrame(Number(el.dataset.raf));
-            const step = (now) => {
-                const p = Math.min(1, (now - start) / dur);
-                const eased = 1 - Math.pow(1 - p, 3);
-                el.textContent = fmt(from + (target - from) * eased);
-                if (p < 1) el.dataset.raf = requestAnimationFrame(step);
-            };
-            el.dataset.raf = requestAnimationFrame(step);
-        }
-
-        /* ------------------------------------------------------------------
-           Overview — hero figure, two single-series charts, recent list
-        ------------------------------------------------------------------ */
-        function categorySpend() {
-            return [
-                { label: 'PlayStation Store', value: sum(mediaData.ps_digital, (i) => i.price_usd) },
-                { label: 'Steam / PC', value: sum(mediaData.steam_digital, (i) => i.price_usd) },
-                { label: 'Nintendo eShop', value: sum(mediaData.nintendo_digital, (i) => i.price_usd) },
-                { label: 'Movie discs', value: sum(allSteelbooks(), (i) => i.priceUsd) },
-                { label: 'Game discs', value: sum(allDiscs(), (i) => i.priceUsd) }
-            ].sort((a, b) => b.value - a.value);
-        }
-
-        // Some eShop rows carry no purchase date ("N/A"); they can't sit on a
-        // timeline, so they're excluded here and disclosed under the chart.
-        const DATED = /^\d{4}-\d{2}-\d{2}$/;
-        const isDated = (r) => DATED.test(String(r.transaction_date));
-        const allTransactions = () => [
-            ...mediaData.ps_digital,
-            ...mediaData.nintendo_digital,
-            ...mediaData.steam_digital
-        ];
-
-        function yearlySpend() {
-            const byYear = {};
-            allTransactions().filter(isDated).forEach((r) => {
-                const y = r.transaction_date.slice(0, 4);
-                byYear[y] = (byYear[y] || 0) + (r.price_usd || 0);
-            });
-            return Object.keys(byYear).sort().map((y) => ({ label: y, value: byYear[y] }));
-        }
-
-        function niceMax(n) {
-            if (n <= 0) return 1;
-            const mag = Math.pow(10, Math.floor(Math.log10(n)));
-            return Math.ceil(n / (mag / 2)) * (mag / 2);
-        }
-
-        function dataTable(id, rows, headers) {
-            $('#' + id).innerHTML = `<table><thead><tr><th>${esc(headers[0])}</th><th class="c-num">${esc(headers[1])}</th></tr></thead>
-                <tbody>${rows.map((r) => `<tr><td>${esc(r.label)}</td><td class="c-num">${usd(r.value)}</td></tr>`).join('')}</tbody></table>`;
-        }
-
-        function renderOverview() {
-            const cats = categorySpend();
-            const grand = sum(cats, (c) => c.value);
-
-            countTo($('#grand-total'), grand, usd0);
-
-            const games = mediaData.finished.filter((i) => i.type === 'game');
-            const top = cats[0];
-            $('#overview-note').textContent =
-                `${mediaData.finished.length} titles finished across ${new Set(mediaData.finished.map((i) => i.year)).size} tracked periods, ` +
-                `${allDiscs().length + allSteelbooks().length} discs on the shelf, and ` +
-                `${mediaData.ps_digital.length + mediaData.nintendo_digital.length + mediaData.steam_digital.length} recorded transactions. ` +
-                `${top.label} is the largest single line at ${usd0(top.value)}, and the ${games.length} finished games add up to ` +
-                `${Math.round(sum(games, hoursOf)).toLocaleString('en-US')} hours of playtime.`;
-
-            // Chart A — horizontal bars, one hue, value direct-labelled on every row
-            const maxCat = cats[0].value;
-            $('#chart-category').innerHTML = cats.map((c) => `
-                <div class="bar-row" data-tip="${esc(c.label)}: ${usd(c.value)}">
-                    <div class="bar-label"><span>${esc(c.label)}</span><b>${usd0(c.value)}</b></div>
-                    <div class="bar-track"><div class="bar-fill" style="--pct: ${(c.value / maxCat * 100).toFixed(1)}%"></div></div>
-                </div>`).join('');
-            dataTable('table-category', cats, ['Category', 'Spend (USD)']);
-
-            // Chart B — columns by year, labels only on the peak and the latest
-            const years = yearlySpend();
-            const undated = allTransactions().filter((r) => !isDated(r));
-            $('#years-excluded').textContent = undated.length
-                ? ` · ${undated.length} undated purchases (${usd(sum(undated, (i) => i.price_usd))}) not shown`
-                : '';
-            const peak = Math.max(...years.map((y) => y.value));
-            const axisMax = niceMax(peak);
-            const peakYear = years.find((y) => y.value === peak);
-            const lastYear = years[years.length - 1];
-
-            $('#chart-years-grid').innerHTML = [0, 0.5, 1].map((f) => `
-                <div class="gridline" style="bottom: ${f * 100}%"><span>${f === 0 ? '$0' : usd0(axisMax * f)}</span></div>`).join('');
-
-            $('#chart-years').innerHTML = years.map((y) => {
-                const h = (y.value / axisMax * 100).toFixed(1) + '%';
-                const labelled = y === peakYear || y === lastYear;
-                return `<div class="col" style="--h: ${h}" data-tip="${esc(y.label)}: ${usd(y.value)}">
-                        ${labelled ? `<span class="col-v">${usd0(y.value)}</span>` : ''}
-                        <div class="col-fill"></div>
-                        <span class="col-x">'${y.label.slice(2)}</span>
-                    </div>`;
-            }).join('');
-            dataTable('table-years', years, ['Year', 'Digital spend (USD)']);
-
-            // Latest purchases across all three stores (undated rows can't rank)
-            const recent = [
-                ...mediaData.ps_digital.map((r) => ({ ...r, store: 'PS Store' })),
-                ...mediaData.nintendo_digital.map((r) => ({ ...r, store: 'eShop' })),
-                ...mediaData.steam_digital.map((r) => ({ ...r, store: 'Steam' }))
-            ].filter(isDated).sort((a, b) => b.transaction_date.localeCompare(a.transaction_date)).slice(0, 8);
-
-            $('#recent').innerHTML = recent.map((r) => `
-                <div class="recent-row">
-                    <span class="r-date">${esc(r.transaction_date)}</span>
-                    <span class="r-title">${esc(r.game_title)} <span class="pill">${esc(r.store)}</span></span>
-                    <span class="r-price">${usd(r.price_usd)}</span>
-                </div>`).join('');
-        }
-
-        /* ------------------------------------------------------------------
-           Filtering & sorting
-        ------------------------------------------------------------------ */
-        function applyFilter() {
-            const tab = tabOf(state.tab);
-            const view = document.getElementById(tab.view);
-            const q = state.query.trim().toLowerCase();
-            let shown = 0, total = 0;
-
-            $$('.tile', view).forEach((el) => {
-                const yearOk = tab.view !== 'view-finished' || el.dataset.year === state.tab;
-                const hit = !q || el.dataset.search.includes(q);
-                if (yearOk) total++;
-                el.classList.toggle('is-hidden', !(yearOk && hit));
-                if (yearOk && hit) shown++;
+                return isAscending ? valA - valB : valB - valA;
             });
 
-            $$('tbody tr', view).forEach((row) => {
-                total++;
-                const hit = !q || row.dataset.search.includes(q);
-                row.classList.toggle('is-hidden', !hit);
-                if (hit) shown++;
-            });
+            renderDigitalTable();
 
-            // a group whose wall is now empty shouldn't leave a dangling header
-            $$('[data-group]', view).forEach((group) => {
-                const wall = $('.wall', group);
-                const live = $$('.tile:not(.is-hidden)', wall).length;
-                group.classList.toggle('is-hidden', live === 0);
-                const counter = $('[data-count-for="' + wall.id + '"]', group);
-                if (counter) counter.textContent = live;
-            });
+            document.querySelectorAll('#section-ps-digital .sort-icon').forEach(el => el.innerText = '');
+            const activeHeaderIcon = document.getElementById(`sort-${columnKey}`);
+            if (activeHeaderIcon) {
+                activeHeaderIcon.innerText = isAscending ? '▲' : '▼';
+            }
+        }
 
-            if (state.tab !== 'overview') {
-                $('#result-count').textContent = q ? `${shown} of ${total}` : `${total} item${total === 1 ? '' : 's'}`;
-                $('#empty-state').classList.toggle('is-hidden', shown > 0);
-                $('#empty-term').textContent = '“' + state.query + '”';
+        function sortNintendoDigitalTable(columnKey) {
+            if (!mediaData.nintendo_digital) return;
+
+            if (currentNintendoSortColumn === columnKey) {
+                isNintendoAscending = !isNintendoAscending;
+            } else {
+                currentNintendoSortColumn = columnKey;
+                isNintendoAscending = true;
             }
 
-            applySort();
-            paintKpis();
-        }
+            mediaData.nintendo_digital.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
 
-        function applySort() {
-            const view = document.getElementById(tabOf(state.tab).view);
-            $$('.wall', view).forEach((wall) => {
-                const tiles = $$('.tile', wall);
-                if (state.sort === 'default') { tiles.forEach((t) => { t.style.order = ''; }); return; }
+                if (typeof valA === 'string') {
+                    const comparison = valA.localeCompare(valB);
+                    return isNintendoAscending ? comparison : -comparison;
+                }
 
-                const dir = state.sort.endsWith('-asc') ? 1 : -1;
-                const byTitle = state.sort.startsWith('title');
-                tiles.slice().sort((a, b) => dir * (byTitle
-                    ? a.dataset.title.localeCompare(b.dataset.title)
-                    : Number(a.dataset.num) - Number(b.dataset.num)
-                )).forEach((t, i) => { t.style.order = i; });
-            });
-        }
-
-        /* ------------------------------------------------------------------
-           Tabs & routing
-        ------------------------------------------------------------------ */
-        function buildTabs() {
-            $('#tabs').innerHTML = TABS.map((t, i) => `
-                <button class="tab" role="tab" type="button" id="tab-${t.id}" data-tab="${t.id}"
-                        aria-selected="false" aria-controls="${t.view}" tabindex="-1">
-                    ${esc(t.label)}<span class="tab-n">${i + 1}</span>
-                </button>`).join('');
-
-            $$('#tabs .tab').forEach((btn) => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-                btn.addEventListener('keydown', (e) => {
-                    const i = TABS.findIndex((t) => t.id === state.tab);
-                    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + TABS.length) % TABS.length;
-                        switchTab(TABS[next].id, { focus: true });
-                    }
-                });
-            });
-        }
-
-        function switchTab(id, opts = {}) {
-            const tab = tabOf(id) || TABS[1];
-            state.tab = tab.id;
-            state.query = '';
-            state.sort = 'default';
-            $('#search').value = '';
-
-            $('#page-eyebrow').textContent = tab.eyebrow;
-            $('#page-title').textContent = tab.title;
-            $('#page-subtitle').textContent = tab.sub;
-            document.title = tab.id === 'overview' ? 'Media Log' : tab.title + ' · Media Log';
-
-            $$('#tabs .tab').forEach((btn) => {
-                const on = btn.dataset.tab === tab.id;
-                btn.setAttribute('aria-selected', String(on));
-                btn.tabIndex = on ? 0 : -1;
-                if (on && opts.focus) btn.focus();
-                if (on) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+                return isNintendoAscending ? valA - valB : valB - valA;
             });
 
-            $$('.view').forEach((v) => { v.hidden = v.id !== tab.view; });
+            renderNintendoDigitalTable();
 
-            // the toolbar only makes sense where there is a list to narrow
-            const isOverview = tab.id === 'overview';
-            $('#toolbar').hidden = isOverview;
-            (isOverview ? $('#kpis-slot') : $('#kpis-top')).appendChild($('#kpis'));
-            $('#empty-state').classList.add('is-hidden');
+            document.querySelectorAll('#section-nintendo-digital .sort-icon').forEach(el => el.innerText = '');
+            const activeHeaderIcon = document.getElementById(`sort-nin-${columnKey}`);
+            if (activeHeaderIcon) {
+                activeHeaderIcon.innerText = isNintendoAscending ? '▲' : '▼';
+            }
+        }
 
-            const sortSet = tab.view === 'view-finished' ? SORTS.finished
-                : (tab.view === 'view-steelbooks' || tab.view === 'view-discs') ? SORTS.collection
-                : null;
-            $('.sorter').hidden = !sortSet;
-            if (sortSet) {
-                $('#sort').innerHTML = sortSet.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
-                $('#sort').value = 'default';
+        function sortSteamDigitalTable(columnKey) {
+            if (!mediaData.steam_digital) return;
+
+            if (currentSteamSortColumn === columnKey) {
+                isSteamAscending = !isSteamAscending;
+            } else {
+                currentSteamSortColumn = columnKey;
+                isSteamAscending = true;
             }
 
-            if (isOverview) { paintKpis(); } else { applyFilter(); }
+            mediaData.steam_digital.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
 
-            if (location.hash.slice(1) !== tab.id) history.replaceState(null, '', '#' + tab.id);
+                if (typeof valA === 'string') {
+                    const comparison = valA.localeCompare(valB);
+                    return isSteamAscending ? comparison : -comparison;
+                }
+
+                return isSteamAscending ? valA - valB : valB - valA;
+            });
+
+            renderSteamDigitalTable();
+
+            document.querySelectorAll('#section-steam-digital .sort-icon').forEach(el => el.innerText = '');
+            const activeHeaderIcon = document.getElementById(`sort-steam-${columnKey}`);
+            if (activeHeaderIcon) {
+                activeHeaderIcon.innerText = isSteamAscending ? '▲' : '▼';
+            }
         }
 
-        /* ------------------------------------------------------------------
-           Chart tooltip
-        ------------------------------------------------------------------ */
-        function wireTooltip() {
-            const tip = $('#tip');
-            document.addEventListener('pointerover', (e) => {
-                const host = e.target.closest('[data-tip]');
-                if (!host) return;
-                tip.innerHTML = '<b>' + esc(host.dataset.tip) + '</b>';
-                const r = host.getBoundingClientRect();
-                tip.style.left = (r.left + r.width / 2) + 'px';
-                tip.style.top = (r.top - 8) + 'px';
-                tip.style.opacity = '1';
-            });
-            document.addEventListener('pointerout', (e) => {
-                if (e.target.closest('[data-tip]')) tip.style.opacity = '0';
-            });
-        }
+        function switchPage(page, headerTitle, subtitle) {
+            currentPage = page;
+            document.getElementById('page-title').innerText = headerTitle;
+            document.getElementById('page-subtitle').innerText = subtitle;
 
-        /* ------------------------------------------------------------------
-           Boot
-        ------------------------------------------------------------------ */
-        function init() {
-            let saved = 'dark';
-            try { saved = localStorage.getItem('theme') || 'dark'; } catch (e) { /* private mode */ }
-            setTheme(saved);
-            $('#theme-toggle').addEventListener('click', () => {
-                setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-page') === page);
             });
 
-            renderFinished();
-            renderSteelbooks('wall-manta', mediaData.steelbooks.manta_lab);
-            renderSteelbooks('wall-nolan', mediaData.steelbooks.nolan);
-            renderSteelbooks('wall-steel-other', mediaData.steelbooks.other);
-            renderSteelbooks('wall-steel-ce', mediaData.steelbooks.other2);
-            renderDiscs('wall-switch', mediaData.game_discs.switch, 'switch');
-            renderDiscs('wall-ps3', mediaData.game_discs.ps3, 'ps');
-            renderDiscs('wall-ps4', mediaData.game_discs.ps4, 'ps');
-            renderDiscs('wall-ps5', mediaData.game_discs.ps5, 'ps');
-            wireTables();
-            renderOverview();
+            const gbStats = document.getElementById('stats-games-books');
+            const sbStats = document.getElementById('stats-steelbooks');
+            const psStats = document.getElementById('stats-ps-discs');
+            const digitalStats = document.getElementById('stats-ps-digital');
+            const nintendoDigitalStats = document.getElementById('stats-nintendo-digital');
+            const steamDigitalStats = document.getElementById('stats-steam-digital');
 
-            buildTabs();
-            wireTooltip();
+            const gbSection = document.getElementById('section-games-books');
+            const sbSection = document.getElementById('section-steelbooks');
+            const psSection = document.getElementById('section-ps-discs');
+            const digitalSection = document.getElementById('section-ps-digital');
+            const nintendoDigitalSection = document.getElementById('section-nintendo-digital');
+            const steamDigitalSection = document.getElementById('section-steam-digital');
 
-            $('#search').addEventListener('input', (e) => { state.query = e.target.value; applyFilter(); });
-            $('#sort').addEventListener('change', (e) => { state.sort = e.target.value; applySort(); });
+            gbStats.classList.add('hidden');
+            sbStats.classList.add('hidden');
+            psStats.classList.add('hidden');
+            digitalStats.classList.add('hidden');
+            nintendoDigitalStats.classList.add('hidden');
+            steamDigitalStats.classList.add('hidden');
 
-            $$('[data-table-toggle]').forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const panel = document.getElementById(btn.dataset.tableToggle);
-                    panel.hidden = !panel.hidden;
-                    btn.textContent = panel.hidden ? 'Show data table' : 'Hide data table';
+            gbSection.classList.add('hidden');
+            sbSection.classList.add('hidden');
+            psSection.classList.add('hidden');
+            digitalSection.classList.add('hidden');
+            nintendoDigitalSection.classList.add('hidden');
+            steamDigitalSection.classList.add('hidden');
+
+            if (page === 'steelbooks') {
+                sbStats.classList.remove('hidden');
+                sbSection.classList.remove('hidden');
+                calculateSteelbookTotals();
+            } else if (page === 'ps-discs') {
+                psStats.classList.remove('hidden');
+                psSection.classList.remove('hidden');
+                calculatePSDiscTotals();
+            } else if (page === 'ps-digital') {
+                digitalStats.classList.remove('hidden');
+                digitalSection.classList.remove('hidden');
+                calculateDigitalTotals();
+            } else if (page === 'nintendo-digital') {
+                nintendoDigitalStats.classList.remove('hidden');
+                nintendoDigitalSection.classList.remove('hidden');
+                calculateNintendoDigitalTotals();
+            } else if (page === 'steam-digital') {
+                steamDigitalStats.classList.remove('hidden');
+                steamDigitalSection.classList.remove('hidden');
+                calculateSteamDigitalTotals();
+            } else {
+                gbStats.classList.remove('hidden');
+                gbSection.classList.remove('hidden');
+
+                document.querySelectorAll('#section-games-books .card').forEach(card => {
+                    card.classList.toggle('hidden', card.getAttribute('data-year') !== page);
                 });
-            });
+                calculateTotals();
+            }
+        }
 
-            document.addEventListener('keydown', (e) => {
-                if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
-                    e.preventDefault();
-                    $('#search').focus();
-                } else if (e.key === 'Escape' && state.query) {
-                    $('#search').value = '';
-                    state.query = '';
-                    applyFilter();
-                } else if (/^[1-8]$/.test(e.key) && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
-                    switchTab(TABS[Number(e.key) - 1].id);
+        function calculateTotals() {
+            const activeGames = document.querySelectorAll('#grid-games .card:not(.hidden) .duration-val');
+            let totalHours = 0;
+            activeGames.forEach(el => totalHours += parseFloat(el.innerText) || 0);
+
+            document.getElementById('game-count').innerText = activeGames.length;
+            document.getElementById('total-game-time').innerText = Number(totalHours.toFixed(1)) + 'h';
+
+            const activeBooks = document.querySelectorAll('#grid-books .card:not(.hidden) .page-val');
+            let totalPages = 0;
+            activeBooks.forEach(el => totalPages += parseInt(el.innerText.replace(/,/g, '')) || 0);
+
+            document.getElementById('book-count').innerText = activeBooks.length;
+            document.getElementById('total-pages').innerText = totalPages.toLocaleString();
+        }
+
+        function calculateSteelbookTotals() {
+            const steelbooks = document.querySelectorAll('#section-steelbooks .card');
+            document.getElementById('steelbook-count').innerText = steelbooks.length;
+
+            let totalUah = 0, totalUsd = 0;
+            steelbooks.forEach(card => {
+                const priceEl = card.querySelector('.price-container');
+                if (priceEl) {
+                    totalUah += parseFloat(priceEl.getAttribute('data-uah')) || 0;
+                    totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
                 }
             });
 
-            window.addEventListener('hashchange', () => switchTab(location.hash.slice(1)));
-            switchTab(location.hash.slice(1) || 'overview');
+            document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
+            document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
         }
 
-        init();
+        function calculatePSDiscTotals() {
+            const psDiscs = document.querySelectorAll('#section-ps-discs .card');
+            document.getElementById('ps-disc-count').innerText = psDiscs.length;
+
+            let totalUsd = 0;
+            psDiscs.forEach(card => {
+                const priceEl = card.querySelector('.price-container');
+                if (priceEl) totalUsd += parseFloat(priceEl.getAttribute('data-usd')) || 0;
+            });
+
+            document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calculateDigitalTotals() {
+            const items = mediaData.ps_digital || [];
+            document.getElementById('digital-count').innerText = items.length;
+
+            let totalUah = 0;
+            let totalUsd = 0;
+
+            items.forEach(item => {
+                totalUah += item.price_uah || 0;
+                totalUsd += item.price_usd || 0;
+            });
+
+            document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
+            document.getElementById('digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+        }
+
+        function calculateNintendoDigitalTotals() {
+            const items = mediaData.nintendo_digital || [];
+            document.getElementById('nintendo-digital-count').innerText = items.length;
+
+            let totalUsd = 0;
+            items.forEach(item => {
+                totalUsd += item.price_usd || 0;
+            });
+
+            document.getElementById('nintendo-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+        }
+
+        function calculateSteamDigitalTotals() {
+            const items = mediaData.steam_digital || [];
+            document.getElementById('steam-digital-count').innerText = items.length;
+
+            let totalUah = 0;
+            let totalUsd = 0;
+            let totalPlaytime = 0;
+
+            items.forEach(item => {
+                totalUah += item.price_uah || 0;
+                totalUsd += item.price_usd || 0;
+                totalPlaytime += item.playtime_hours || 0;
+            });
+
+            document.getElementById('steam-playtime').innerText = totalPlaytime.toFixed(1) + 'h';
+            document.getElementById('steam-digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' UAH';
+            document.getElementById('steam-digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' US$';
+        }
+
+        window.onload = init;
     </script>
 </body>
 
