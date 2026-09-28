@@ -359,9 +359,9 @@
             position: relative;
             background: var(--card-bg);
             border-radius: 14px;
-            overflow: hidden;
+            overflow: visible; /* разрешаем «ауре» выходить за границы карточки */
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             color: var(--text);
@@ -369,7 +369,7 @@
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
             box-shadow: var(--shadow-hover);
         }
 
@@ -382,19 +382,63 @@
 
         .hidden { display: none !important; }
 
-        .cover {
+        /* POSTER WRAPPER WITH REALISTIC CSS AURA EFFECT */
+        .cover-wrapper {
+            position: relative;
             width: 100%;
+            aspect-ratio: 392 / 500;
+            border-top-left-radius: 13px;
+            border-top-right-radius: 13px;
+        }
+
+        /* Реалистичный полупрозрачный «аура»-эффект из деталей самого постера */
+        .cover-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--poster-img);
+            background-size: cover;
+            background-position: center;
+            border-radius: 13px;
+            filter: blur(25px) brightness(1.2) saturate(1.4);
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card:hover .cover-wrapper::before {
+            opacity: 0.8;
+            transform: scale(1.12);
+        }
+
+        .cover {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
             aspect-ratio: 392 / 500;
             background: var(--border);
             object-fit: cover;
             display: block;
+            border-top-left-radius: 13px;
+            border-top-right-radius: 13px;
         }
 
         .info {
+            position: relative;
+            z-index: 2;
             padding: 12px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            background: var(--card-bg);
+            border-bottom-left-radius: 13px;
+            border-bottom-right-radius: 13px;
         }
 
         @media (min-width: 768px) {
@@ -1268,7 +1312,9 @@
 
             gamesGrid.innerHTML = mediaData.finished.filter(i => i.type === 'game').map(item => `
                 <div class="card" data-year="${item.year}">
-                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
+                        <img src="${item.cover}" alt="${item.title}" class="cover">
+                    </div>
                     <div class="info">
                         <div class="tag-container">
                             <span class="tag tag-game">GAME</span>
@@ -1287,7 +1333,9 @@
 
             booksGrid.innerHTML = mediaData.finished.filter(i => i.type === 'book').map(item => `
                 <div class="card" data-year="${item.year}">
-                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
+                        <img src="${item.cover}" alt="${item.title}" class="cover">
+                    </div>
                     <div class="info">
                         <span class="tag tag-book">BOOK</span>
                         <strong>${item.title}</strong>
@@ -1317,43 +1365,43 @@
             renderDigitalCombinedTable();
         }
 
-        function renderSteelbookGrid(containerId, list) {
+        function renderSteelbookGrid(containerId, data) {
             const container = document.getElementById(containerId);
-            if (!container || !list) return;
+            if (!container || !data) return;
 
-            container.innerHTML = list.map(item => `
+            container.innerHTML = data.map(item => `
                 <div class="card">
-                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="stretched-link" aria-label="${item.title}"></a>
-                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
+                        <img src="${item.cover}" alt="${item.title}" class="cover">
+                    </div>
                     <div class="info">
                         <div class="tag-container">
-                            ${(item.tags || []).map(t => `<span class="tag tag-steelbook">${t}</span>`).join('')}
-                            ${(item.subTags || []).map(t => `<span class="sub-tag">${t}</span>`).join('')}
+                            ${item.tags ? item.tags.map(t => `<span class="tag tag-steelbook">${t}</span>`).join('') : ''}
+                            ${item.subTags ? item.subTags.map(st => `<span class="sub-tag">${st}</span>`).join('') : ''}
                         </div>
                         <strong>${item.title}</strong>
-                        <div class="price-container" data-uah="${item.priceUah}" data-usd="${item.priceUsd}">
-                            ${item.priceUah.toLocaleString('uk-UA', {minimumFractionDigits: 2})} UAH 
-                            <span class="price-usd">(${item.priceUsd.toFixed(2)} US$)</span>
-                        </div>
                         <div class="card-meta">
-                            <div class="meta-left">
-                                ${discIcon}
-                                <span class="steelbook-item">${item.itemMeta}</span>
-                            </div>
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="bluray-link">${item.linkText}</a>
+                            <span>${item.itemMeta || ''}</span>
+                            <a href="${item.link}" target="_blank" class="bluray-link stretched-link">${item.linkText}</a>
+                        </div>
+                        <div class="price-container" data-uah="${item.priceUah}" data-usd="${item.priceUsd}">
+                            ${item.priceUah ? item.priceUah.toLocaleString('uk-UA', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' UAH' : ''}
+                            ${item.priceUsd ? `<span class="price-usd">($${item.priceUsd.toFixed(2)})</span>` : ''}
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function renderDiscGrid(containerId, list, tagClass) {
+        function renderDiscGrid(containerId, data, tagClass) {
             const container = document.getElementById(containerId);
-            if (!container || !list) return;
+            if (!container || !data) return;
 
-            container.innerHTML = list.map(item => `
+            container.innerHTML = data.map(item => `
                 <div class="card">
-                    <img src="${item.cover}" alt="${item.title}" class="cover">
+                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
+                        <img src="${item.cover}" alt="${item.title}" class="cover">
+                    </div>
                     <div class="info">
                         <div class="tag-container">
                             <span class="tag ${tagClass}">${item.platform}</span>
@@ -1361,36 +1409,10 @@
                         </div>
                         <strong>${item.title}</strong>
                         <div class="price-container" data-usd="${item.priceUsd}">
-                            <span class="price-usd">$${item.priceUsd.toFixed(2)}</span>
+                            <span class="price-usd">${item.priceUsd > 0 ? '$' + item.priceUsd.toFixed(2) : 'Free / Included'}</span>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-
-        function getFilteredDigitalItems() {
-            if (activeDigitalFilter === 'all') {
-                return combinedDigitalData;
-            }
-            return combinedDigitalData.filter(item => item.platform_key === activeDigitalFilter);
-        }
-
-        function renderDigitalCombinedTable() {
-            const tbody = document.getElementById('table-digital-combined-body');
-            if (!tbody) return;
-
-            const items = getFilteredDigitalItems();
-
-            tbody.innerHTML = items.map(item => `
-                <tr>
-                    <td class="date-col">${item.transaction_date}</td>
-                    <td class="title-col">${item.game_title}</td>
-                    <td class="desc-col">${item.item_description}</td>
-                    <td class="desc-col"><span class="sub-tag">${item.platform_type}</span></td>
-                    <td class="price-col" style="color: var(--text-muted);">${item.playtime_hours ? item.playtime_hours + 'h' : '-'}</td>
-                    <td class="price-col">${item.price_uah > 0 ? item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2}) + ' UAH' : '-'}</td>
-                    <td class="price-col" style="color: ${item.accent_color || 'var(--text)'};">${item.price_usd > 0 ? '$' + item.price_usd.toFixed(2) : '-'}</td>
-                </tr>
             `).join('');
         }
 
@@ -1398,6 +1420,13 @@
             activeDigitalFilter = platformKey;
             renderDigitalCombinedTable();
             calculateDigitalCombinedTotals();
+        }
+
+        function getFilteredDigitalItems() {
+            if (activeDigitalFilter === 'all') {
+                return combinedDigitalData;
+            }
+            return combinedDigitalData.filter(item => item.platform_key === activeDigitalFilter);
         }
 
         function sortDigitalCombinedTable(columnKey) {
@@ -1408,26 +1437,57 @@
                 isDigitalCombinedAscending = true;
             }
 
-            combinedDigitalData.sort((a, b) => {
-                let valA = a[columnKey] !== undefined ? a[columnKey] : '';
-                let valB = b[columnKey] !== undefined ? b[columnKey] : '';
-
-                if (typeof valA === 'string') {
-                    const comparison = valA.localeCompare(valB);
-                    return isDigitalCombinedAscending ? comparison : -comparison;
-                }
-
-                return isDigitalCombinedAscending ? valA - valB : valB - valA;
-            });
-
-            renderDigitalCombinedTable();
-
             document.querySelectorAll('#section-all-digital .sort-icon').forEach(el => el.innerText = '');
             const activeIcon = document.getElementById(`sort-dig-${columnKey}`);
             if (activeIcon) {
                 activeIcon.innerText = isDigitalCombinedAscending ? '▲' : '▼';
             }
+
+            combinedDigitalData.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
+
+                if (valA === undefined || valA === null || valA === 'N/A') valA = '';
+                if (valB === undefined || valB === null || valB === 'N/A') valB = '';
+
+                if (typeof valA === 'number' && typeof valB === 'number') {
+                    return isDigitalCombinedAscending ? valA - valB : valB - valA;
+                }
+
+                valA = valA.toString().toLowerCase();
+                valB = valB.toString().toLowerCase();
+
+                if (valA < valB) return isDigitalCombinedAscending ? -1 : 1;
+                if (valA > valB) return isDigitalCombinedAscending ? 1 : -1;
+                return 0;
+            });
+
+            renderDigitalCombinedTable();
+        }
+
+        function renderDigitalCombinedTable() {
+            const tbody = document.getElementById('table-digital-combined-body');
+            if (!tbody) return;
+
+            const items = getFilteredDigitalItems();
+
+            tbody.innerHTML = items.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date || 'N/A'}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description}</td>
+                    <td>
+                        <span class="sub-tag" style="color: ${item.accent_color}; border: 1px solid currentColor;">
+                            ${item.platform_type}
+                        </span>
+                    </td>
+                    <td class="price-col">${item.playtime_hours > 0 ? item.playtime_hours.toFixed(1) + 'h' : '-'}</td>
+                    <td class="price-col">${item.price_uah ? item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00'}</td>
+                    <td class="price-col price-usd">${item.price_usd ? '$' + item.price_usd.toFixed(2) : '$0.00'}</td>
+                </tr>
+            `).join('');
         }
     </script>
 </body>
+
 </html>
