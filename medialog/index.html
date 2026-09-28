@@ -382,13 +382,14 @@
 
         .hidden { display: none !important; }
 
-        /* POSTER WRAPPER WITH REALISTIC CSS AURA EFFECT */
+        /* POSTER WRAPPER WITH REALISTIC CSS AURA EFFECT (SAFARI FIX APPLIED) */
         .cover-wrapper {
             position: relative;
             width: 100%;
             aspect-ratio: 392 / 500;
             border-top-left-radius: 13px;
             border-top-right-radius: 13px;
+            isolation: isolate; /* Создаёт отдельный stacking context для Safari */
         }
 
         /* Реалистичный полупрозрачный «аура»-эффект из деталей самого постера */
@@ -397,23 +398,27 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0; /* Фикс для WebKit: явное позиционирование по всем 4 сторонам вместо height:100% */
             background-image: var(--poster-img);
             background-size: cover;
             background-position: center;
             border-radius: 13px;
             filter: blur(25px) brightness(1.2) saturate(1.4);
+            -webkit-filter: blur(25px) brightness(1.2) saturate(1.4);
             opacity: 0;
             transform: scale(0.92);
+            -webkit-transform: scale(0.92);
             transition: opacity 0.4s ease, transform 0.4s ease;
             z-index: 0;
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
         .card:hover .cover-wrapper::before {
             opacity: 0.8;
             transform: scale(1.12);
+            -webkit-transform: scale(1.12);
         }
 
         .cover {
@@ -427,6 +432,9 @@
             display: block;
             border-top-left-radius: 13px;
             border-top-right-radius: 13px;
+            overflow: hidden;
+            transform: translateZ(0); /* Аппаратное ускорение фиксации border-radius в WebKit */
+            -webkit-transform: translateZ(0);
         }
 
         .info {
@@ -1151,6 +1159,7 @@
                     combinedDigitalData.push({
                         ...item,
                         platform_key: 'steam',
+                        platform_type: item.platform_type || 'Steam',
                         accent_color: 'var(--accent-steam-text)'
                     });
                 });
@@ -1158,33 +1167,31 @@
         }
 
         function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             setTheme(newTheme);
         }
 
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
-            const icon = document.getElementById('theme-icon');
-            const text = document.getElementById('theme-text');
-            if (theme === 'dark') {
-                icon.innerText = '☀️';
-                text.innerText = 'Light';
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            if (theme === 'light') {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
             } else {
-                icon.innerText = '🌙';
-                text.innerText = 'Dark';
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
             }
         }
 
-        function switchPage(pageKey, titleText, subtitleText) {
+        function switchPage(pageKey, title, subtitle) {
             currentPage = pageKey;
+            
+            document.getElementById('page-title').textContent = title;
+            document.getElementById('page-subtitle').textContent = subtitle;
 
-            // Header titles
-            document.getElementById('page-title').innerText = titleText;
-            document.getElementById('page-subtitle').innerText = subtitleText;
-
-            // Nav tabs active state
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 if (btn.getAttribute('data-page') === pageKey) {
                     btn.classList.add('active');
@@ -1193,7 +1200,6 @@
                 }
             });
 
-            // Sections visibilities
             document.getElementById('section-games-books').classList.add('hidden');
             document.getElementById('section-steelbooks').classList.add('hidden');
             document.getElementById('section-ps-discs').classList.add('hidden');
@@ -1207,285 +1213,207 @@
             if (pageKey === '2026' || pageKey === '2022-2025') {
                 document.getElementById('section-games-books').classList.remove('hidden');
                 document.getElementById('stats-games-books').classList.remove('hidden');
-                filterFinishedItems(pageKey);
+                renderYearSection(pageKey);
             } else if (pageKey === 'steelbooks') {
                 document.getElementById('section-steelbooks').classList.remove('hidden');
                 document.getElementById('stats-steelbooks').classList.remove('hidden');
-                calculateSteelbookTotals();
+                renderSteelbooksSection();
             } else if (pageKey === 'ps-discs') {
                 document.getElementById('section-ps-discs').classList.remove('hidden');
                 document.getElementById('stats-ps-discs').classList.remove('hidden');
-                calculatePsDiscTotals();
+                renderDiscsSection();
             } else if (pageKey === 'all-digital') {
                 document.getElementById('section-all-digital').classList.remove('hidden');
                 document.getElementById('stats-all-digital').classList.remove('hidden');
-                calculateDigitalCombinedTotals();
+                renderDigitalCombinedSection();
             }
-        }
-
-        function filterFinishedItems(yearKey) {
-            let gamesCount = 0;
-            let totalPlaytime = 0;
-            let booksCount = 0;
-            let totalPages = 0;
-
-            document.querySelectorAll('#grid-games .card').forEach(card => {
-                if (card.getAttribute('data-year') === yearKey) {
-                    card.classList.remove('hidden');
-                    gamesCount++;
-                    const dur = card.querySelector('.duration-val')?.innerText || '0h';
-                    totalPlaytime += parseFloat(dur) || 0;
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-
-            document.querySelectorAll('#grid-books .card').forEach(card => {
-                if (card.getAttribute('data-year') === yearKey) {
-                    card.classList.remove('hidden');
-                    booksCount++;
-                    const pages = card.querySelector('.page-val')?.innerText || '0 pages';
-                    totalPages += parseInt(pages) || 0;
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-
-            document.getElementById('game-count').innerText = gamesCount;
-            document.getElementById('total-game-time').innerText = totalPlaytime.toFixed(1).replace('.0', '') + 'h';
-            document.getElementById('book-count').innerText = booksCount;
-            document.getElementById('total-pages').innerText = totalPages.toLocaleString();
-        }
-
-        function calculateSteelbookTotals() {
-            let count = 0;
-            let totalUah = 0;
-            let totalUsd = 0;
-
-            document.querySelectorAll('#section-steelbooks .price-container').forEach(el => {
-                count++;
-                totalUah += parseFloat(el.getAttribute('data-uah')) || 0;
-                totalUsd += parseFloat(el.getAttribute('data-usd')) || 0;
-            });
-
-            document.getElementById('steelbook-count').innerText = count;
-            document.getElementById('total-spent-uah').innerText = totalUah.toLocaleString('uk-UA', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' UAH';
-            document.getElementById('total-spent-usd').innerText = totalUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' US$';
-        }
-
-        function calculatePsDiscTotals() {
-            let count = 0;
-            let totalUsd = 0;
-
-            document.querySelectorAll('#section-ps-discs .price-container').forEach(el => {
-                count++;
-                totalUsd += parseFloat(el.getAttribute('data-usd')) || 0;
-            });
-
-            document.getElementById('ps-disc-count').innerText = count;
-            document.getElementById('total-ps-spent').innerText = '$' + totalUsd.toFixed(2);
-        }
-
-        function calculateDigitalCombinedTotals() {
-            const items = getFilteredDigitalItems();
-            let count = items.length;
-            let totalPlaytime = 0;
-            let totalUah = 0;
-            let totalUsd = 0;
-
-            items.forEach(item => {
-                totalPlaytime += item.playtime_hours || 0;
-                totalUah += item.price_uah || 0;
-                totalUsd += item.price_usd || 0;
-            });
-
-            document.getElementById('digital-count').innerText = count;
-            document.getElementById('digital-playtime').innerText = totalPlaytime.toFixed(1).replace('.0', '') + 'h';
-            document.getElementById('digital-spent-uah').innerText = totalUah.toLocaleString('uk-UA', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' UAH';
-            document.getElementById('digital-spent-usd').innerText = totalUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' US$';
         }
 
         function renderAll() {
-            // 1. Finished Games & Books
-            const gamesGrid = document.getElementById('grid-games');
-            const booksGrid = document.getElementById('grid-books');
-
-            gamesGrid.innerHTML = mediaData.finished.filter(i => i.type === 'game').map(item => `
-                <div class="card" data-year="${item.year}">
-                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
-                        <img src="${item.cover}" alt="${item.title}" class="cover">
-                    </div>
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag tag-game">GAME</span>
-                            ${item.tags.map(t => `<span class="sub-tag">${t}</span>`).join('')}
-                        </div>
-                        <strong>${item.title}</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                ${clockIcon}
-                                <span class="duration-val">${item.val}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            booksGrid.innerHTML = mediaData.finished.filter(i => i.type === 'book').map(item => `
-                <div class="card" data-year="${item.year}">
-                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
-                        <img src="${item.cover}" alt="${item.title}" class="cover">
-                    </div>
-                    <div class="info">
-                        <span class="tag tag-book">BOOK</span>
-                        <strong>${item.title}</strong>
-                        <div class="card-meta">
-                            <div class="meta-left">
-                                ${bookIcon}
-                                <span class="page-val">${item.val}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            // 2. Steelbooks
-            renderSteelbookGrid('grid-manta-lab', mediaData.steelbooks.manta_lab);
-            renderSteelbookGrid('grid-nolan', mediaData.steelbooks.nolan);
-            renderSteelbookGrid('grid-steelbooks-other', mediaData.steelbooks.other);
-            renderSteelbookGrid('grid-steelbooks-other2', mediaData.steelbooks.other2);
-
-            // 3. Game Discs
-            renderDiscGrid('grid-discs-switch', mediaData.game_discs.switch, 'tag-switch');
-            renderDiscGrid('grid-discs-ps3', mediaData.game_discs.ps3, 'tag-ps');
-            renderDiscGrid('grid-discs-ps4', mediaData.game_discs.ps4, 'tag-ps');
-            renderDiscGrid('grid-discs-ps5', mediaData.game_discs.ps5, 'tag-ps');
-
-            // 4. Digital Purchases Table
-            renderDigitalCombinedTable();
+            renderYearSection('2026');
+            renderSteelbooksSection();
+            renderDiscsSection();
+            renderDigitalCombinedSection();
         }
 
-        function renderSteelbookGrid(containerId, data) {
-            const container = document.getElementById(containerId);
-            if (!container || !data) return;
-
-            container.innerHTML = data.map(item => `
-                <div class="card">
-                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
-                        <img src="${item.cover}" alt="${item.title}" class="cover">
+        function createCardHtml(item, iconSvg) {
+            const tagHtml = item.tags ? item.tags.map(t => `<span class="tag tag-${item.type || 'game'}">${t}</span>`).join('') : '';
+            const subTagHtml = item.subTags ? item.subTags.map(st => `<span class="sub-tag">${st}</span>`).join('') : '';
+            
+            let priceSection = '';
+            if (item.priceUah !== undefined || item.priceUsd !== undefined) {
+                priceSection = `
+                    <div class="price-container">
+                        ${item.priceUah !== undefined ? `<span>${item.priceUah.toLocaleString('uk-UA')} UAH</span>` : ''}
+                        ${item.priceUsd !== undefined ? `<div class="price-usd">$${item.priceUsd.toFixed(2)}</div>` : ''}
                     </div>
-                    <div class="info">
-                        <div class="tag-container">
-                            ${item.tags ? item.tags.map(t => `<span class="tag tag-steelbook">${t}</span>`).join('') : ''}
-                            ${item.subTags ? item.subTags.map(st => `<span class="sub-tag">${st}</span>`).join('') : ''}
-                        </div>
-                        <strong>${item.title}</strong>
-                        <div class="card-meta">
-                            <span>${item.itemMeta || ''}</span>
-                            <a href="${item.link}" target="_blank" class="bluray-link stretched-link">${item.linkText}</a>
-                        </div>
-                        <div class="price-container" data-uah="${item.priceUah}" data-usd="${item.priceUsd}">
-                            ${item.priceUah ? item.priceUah.toLocaleString('uk-UA', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' UAH' : ''}
-                            ${item.priceUsd ? `<span class="price-usd">($${item.priceUsd.toFixed(2)})</span>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderDiscGrid(containerId, data, tagClass) {
-            const container = document.getElementById(containerId);
-            if (!container || !data) return;
-
-            container.innerHTML = data.map(item => `
-                <div class="card">
-                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
-                        <img src="${item.cover}" alt="${item.title}" class="cover">
-                    </div>
-                    <div class="info">
-                        <div class="tag-container">
-                            <span class="tag ${tagClass}">${item.platform}</span>
-                            <span class="sub-tag">${item.subTag}</span>
-                        </div>
-                        <strong>${item.title}</strong>
-                        <div class="price-container" data-usd="${item.priceUsd}">
-                            <span class="price-usd">${item.priceUsd > 0 ? '$' + item.priceUsd.toFixed(2) : 'Free / Included'}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterDigitalPlatform(platformKey) {
-            activeDigitalFilter = platformKey;
-            renderDigitalCombinedTable();
-            calculateDigitalCombinedTotals();
-        }
-
-        function getFilteredDigitalItems() {
-            if (activeDigitalFilter === 'all') {
-                return combinedDigitalData;
+                `;
             }
-            return combinedDigitalData.filter(item => item.platform_key === activeDigitalFilter);
+
+            let metaLeft = '';
+            if (item.val) {
+                metaLeft = `<div class="meta-left">${iconSvg}<span>${item.val}</span></div>`;
+            } else if (item.itemMeta) {
+                metaLeft = `<div class="meta-left"><span>${item.itemMeta}</span></div>`;
+            }
+
+            let linkHtml = '';
+            if (item.link) {
+                linkHtml = `<a href="${item.link}" target="_blank" rel="noopener" class="bluray-link stretched-link">${item.linkText || 'View Details'}</a>`;
+            }
+
+            return `
+                <div class="card">
+                    <div class="cover-wrapper" style="--poster-img: url('${item.cover}');">
+                        <img class="cover" src="${item.cover}" alt="${item.title}" loading="lazy">
+                    </div>
+                    <div class="info">
+                        <div class="tag-container">
+                            ${tagHtml}
+                            ${subTagHtml}
+                        </div>
+                        <strong>${item.title}</strong>
+                        ${priceSection}
+                        <div class="card-meta">
+                            ${metaLeft}
+                            ${linkHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        function sortDigitalCombinedTable(columnKey) {
-            if (currentDigitalCombinedSortColumn === columnKey) {
+        function renderYearSection(yearKey) {
+            const items = mediaData.finished.filter(i => i.year === yearKey);
+            const games = items.filter(i => i.type === 'game');
+            const books = items.filter(i => i.type === 'book');
+
+            document.getElementById('grid-games').innerHTML = games.map(g => createCardHtml(g, clockIcon)).join('');
+            document.getElementById('grid-books').innerHTML = books.map(b => createCardHtml(b, bookIcon)).join('');
+
+            document.getElementById('game-count').textContent = games.length;
+            const totalHours = games.reduce((acc, g) => acc + (parseFloat(g.val) || 0), 0);
+            document.getElementById('total-game-time').textContent = Math.round(totalHours) + 'h';
+
+            document.getElementById('book-count').textContent = books.length;
+            const totalPages = books.reduce((acc, b) => acc + (parseInt(b.val) || 0), 0);
+            document.getElementById('total-pages').textContent = totalPages.toLocaleString();
+        }
+
+        function renderSteelbooksSection() {
+            const manta = mediaData.steelbooks.manta_lab || [];
+            const nolan = mediaData.steelbooks.nolan || [];
+            const other = mediaData.steelbooks.other || [];
+            const other2 = mediaData.steelbooks.other2 || [];
+
+            document.getElementById('grid-manta-lab').innerHTML = manta.map(s => createCardHtml(s, discIcon)).join('');
+            document.getElementById('grid-nolan').innerHTML = nolan.map(s => createCardHtml(s, discIcon)).join('');
+            document.getElementById('grid-steelbooks-other').innerHTML = other.map(s => createCardHtml(s, discIcon)).join('');
+            document.getElementById('grid-steelbooks-other2').innerHTML = other2.map(s => createCardHtml(s, discIcon)).join('');
+
+            const allSteelbooks = [...manta, ...nolan, ...other, ...other2];
+            document.getElementById('steelbook-count').textContent = allSteelbooks.length;
+
+            const totalUah = allSteelbooks.reduce((acc, s) => acc + (s.priceUah || 0), 0);
+            const totalUsd = allSteelbooks.reduce((acc, s) => acc + (s.priceUsd || 0), 0);
+
+            document.getElementById('total-spent-uah').textContent = Math.round(totalUah).toLocaleString('uk-UA') + ' UAH';
+            document.getElementById('total-spent-usd').textContent = '$' + totalUsd.toFixed(2);
+        }
+
+        function renderDiscsSection() {
+            const switchDiscs = mediaData.game_discs.switch || [];
+            const ps3Discs = mediaData.game_discs.ps3 || [];
+            const ps4Discs = mediaData.game_discs.ps4 || [];
+            const ps5Discs = mediaData.game_discs.ps5 || [];
+
+            const mapDisc = d => ({
+                ...d,
+                type: 'game',
+                tags: [d.platform],
+                subTags: [d.subTag]
+            });
+
+            document.getElementById('grid-discs-switch').innerHTML = switchDiscs.map(mapDisc).map(d => createCardHtml(d, discIcon)).join('');
+            document.getElementById('grid-discs-ps3').innerHTML = ps3Discs.map(mapDisc).map(d => createCardHtml(d, discIcon)).join('');
+            document.getElementById('grid-discs-ps4').innerHTML = ps4Discs.map(mapDisc).map(d => createCardHtml(d, discIcon)).join('');
+            document.getElementById('grid-discs-ps5').innerHTML = ps5Discs.map(mapDisc).map(d => createCardHtml(d, discIcon)).join('');
+
+            const allDiscs = [...switchDiscs, ...ps3Discs, ...ps4Discs, ...ps5Discs];
+            document.getElementById('ps-disc-count').textContent = allDiscs.length;
+
+            const totalSpent = allDiscs.reduce((acc, d) => acc + (d.priceUsd || 0), 0);
+            document.getElementById('total-ps-spent').textContent = '$' + totalSpent.toFixed(2);
+        }
+
+        function filterDigitalPlatform(val) {
+            activeDigitalFilter = val;
+            renderDigitalCombinedSection();
+        }
+
+        function renderDigitalCombinedSection() {
+            let filtered = combinedDigitalData;
+            if (activeDigitalFilter !== 'all') {
+                filtered = combinedDigitalData.filter(i => i.platform_key === activeDigitalFilter);
+            }
+
+            const tbody = document.getElementById('table-digital-combined-body');
+            tbody.innerHTML = filtered.map(item => `
+                <tr>
+                    <td class="date-col">${item.transaction_date || 'N/A'}</td>
+                    <td class="title-col">${item.game_title}</td>
+                    <td class="desc-col">${item.item_description || '-'}</td>
+                    <td><span style="color: ${item.accent_color}; font-weight: 700;">${item.platform_type}</span></td>
+                    <td style="text-align: right; font-weight: 600;">${item.playtime_hours ? item.playtime_hours + 'h' : '-'}</td>
+                    <td class="price-col">${item.price_uah ? item.price_uah.toLocaleString('uk-UA') + ' ₴' : '-'}</td>
+                    <td class="price-col">${item.price_usd ? '$' + item.price_usd.toFixed(2) : '-'}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('digital-count').textContent = filtered.length;
+            
+            const totalHours = filtered.reduce((acc, i) => acc + (i.playtime_hours || 0), 0);
+            document.getElementById('digital-playtime').textContent = Math.round(totalHours) + 'h';
+
+            const totalUah = filtered.reduce((acc, i) => acc + (i.price_uah || 0), 0);
+            const totalUsd = filtered.reduce((acc, i) => acc + (i.price_usd || 0), 0);
+
+            document.getElementById('digital-spent-uah').textContent = Math.round(totalUah).toLocaleString('uk-UA') + ' UAH';
+            document.getElementById('digital-spent-usd').textContent = '$' + totalUsd.toFixed(2);
+        }
+
+        function sortDigitalCombinedTable(column) {
+            if (currentDigitalCombinedSortColumn === column) {
                 isDigitalCombinedAscending = !isDigitalCombinedAscending;
             } else {
-                currentDigitalCombinedSortColumn = columnKey;
+                currentDigitalCombinedSortColumn = column;
                 isDigitalCombinedAscending = true;
             }
 
-            document.querySelectorAll('#section-all-digital .sort-icon').forEach(el => el.innerText = '');
-            const activeIcon = document.getElementById(`sort-dig-${columnKey}`);
-            if (activeIcon) {
-                activeIcon.innerText = isDigitalCombinedAscending ? '▲' : '▼';
-            }
-
             combinedDigitalData.sort((a, b) => {
-                let valA = a[columnKey];
-                let valB = b[columnKey];
+                let valA = a[column];
+                let valB = b[column];
 
                 if (valA === undefined || valA === null || valA === 'N/A') valA = '';
                 if (valB === undefined || valB === null || valB === 'N/A') valB = '';
 
-                if (typeof valA === 'number' && typeof valB === 'number') {
-                    return isDigitalCombinedAscending ? valA - valB : valB - valA;
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
                 }
-
-                valA = valA.toString().toLowerCase();
-                valB = valB.toString().toLowerCase();
 
                 if (valA < valB) return isDigitalCombinedAscending ? -1 : 1;
                 if (valA > valB) return isDigitalCombinedAscending ? 1 : -1;
                 return 0;
             });
 
-            renderDigitalCombinedTable();
-        }
+            document.querySelectorAll('#section-all-digital .sort-icon').forEach(icon => icon.textContent = '');
+            const activeIcon = document.getElementById(`sort-dig-${column}`);
+            if (activeIcon) {
+                activeIcon.textContent = isDigitalCombinedAscending ? '▲' : '▼';
+            }
 
-        function renderDigitalCombinedTable() {
-            const tbody = document.getElementById('table-digital-combined-body');
-            if (!tbody) return;
-
-            const items = getFilteredDigitalItems();
-
-            tbody.innerHTML = items.map(item => `
-                <tr>
-                    <td class="date-col">${item.transaction_date || 'N/A'}</td>
-                    <td class="title-col">${item.game_title}</td>
-                    <td class="desc-col">${item.item_description}</td>
-                    <td>
-                        <span class="sub-tag" style="color: ${item.accent_color}; border: 1px solid currentColor;">
-                            ${item.platform_type}
-                        </span>
-                    </td>
-                    <td class="price-col">${item.playtime_hours > 0 ? item.playtime_hours.toFixed(1) + 'h' : '-'}</td>
-                    <td class="price-col">${item.price_uah ? item.price_uah.toLocaleString('uk-UA', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00'}</td>
-                    <td class="price-col price-usd">${item.price_usd ? '$' + item.price_usd.toFixed(2) : '$0.00'}</td>
-                </tr>
-            `).join('');
+            renderDigitalCombinedSection();
         }
     </script>
 </body>
