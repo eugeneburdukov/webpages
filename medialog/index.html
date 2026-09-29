@@ -186,12 +186,20 @@
             header p { font-size: 1rem; }
         }
 
-        /* NAVIGATION MENU - DESKTOP BASE */
+        /* NAVIGATION MENU - DESKTOP BASE (sticky только на десктопе от 600px) */
         .nav-container {
             display: flex;
             justify-content: center;
             margin: 25px 0 35px;
             width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            .nav-container {
+                position: sticky;
+                top: 20px;
+                z-index: 1000;
+            }
         }
 
         .nav-tabs {
@@ -464,6 +472,60 @@
         .sortable { cursor: pointer; user-select: none; }
         .sortable:hover { background-color: var(--tab-hover); }
         .sort-icon { display: inline-block; margin-left: 4px; font-size: 0.75rem; color: var(--text-muted); }
+
+        /* Стили для плавающей кнопки «Вверх» */
+        .scroll-to-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--nav-border);
+            border-radius: 50%;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-hover);
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.9);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.2s;
+        }
+
+        .scroll-to-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .scroll-to-top-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .scroll-to-top-btn:hover {
+            background: var(--tab-hover);
+        }
+
+        @media (max-width: 599px) {
+            .scroll-to-top-btn {
+                bottom: 90px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+        }
 
         /* Оптимизация для смартфонов в альбомной ориентации */
         @media (max-height: 500px) and (orientation: landscape) {
@@ -803,6 +865,13 @@
         </div>
     </div>
 
+    <!-- Кнопка «Наверх» -->
+    <button class="scroll-to-top-btn interactive-el" id="scrollToTopBtn" onclick="scrollToTop()" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
     <script>
         const mediaData = {
           "finished": [
@@ -1075,7 +1144,6 @@
 
             const startTime = performance.now();
 
-            // Алгоритм easeInOutQuint: плавный разгон и очень мягкое торможение
             function easeInOutQuint(t) {
                 return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
             }
@@ -1096,6 +1164,22 @@
 
             requestAnimationFrame(scrollAnimation);
         }
+
+        function scrollToTop() {
+            smoothScrollToTop(850);
+        }
+
+        // Поведение кнопки «Вверх» при скролле
+        window.addEventListener('scroll', () => {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+            if (!scrollBtn) return;
+            
+            if (window.scrollY > 400) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        });
 
         function toggleTheme() {
             const html = document.documentElement;
@@ -1159,14 +1243,10 @@
             const elementsToReveal = document.querySelectorAll('.card:not(.reveal), .stat-card:not(.reveal), .section-header:not(.reveal)');
             
             elementsToReveal.forEach((el, index) => {
-                // Игнорируем элементы в скрытых табах
                 if (el.closest('.hidden')) return;
-
-                // Игнорируем элементы внутри вкладки Digital Games
                 if (el.closest('#section-all-digital') || el.closest('#stats-all-digital')) return;
 
                 el.classList.add('reveal');
-                
                 el.style.transitionDelay = `${(index % 12) * 0.05}s`;
                 
                 el.addEventListener('transitionend', function(e) {
@@ -1209,9 +1289,7 @@
             }
             
             bindAppleInteractions();
-            setTimeout(initReveal, 50); // Вызываем анимацию для новых элементов
-            
-            // Запускаем плавный скролл наверх
+            setTimeout(initReveal, 50);
             smoothScrollToTop(850);
         }
 
@@ -1389,7 +1467,6 @@
             else if (activeDigitalFilter === 'nintendo') filtered = filtered.filter(i => i.platform_type === 'Nintendo');
             else if (activeDigitalFilter === 'steam') filtered = filtered.filter(i => i.platform_type.includes('Steam'));
 
-            // Пересчитываем карточки статистики на основе отфильтрованных данных
             calculateDigitalStats(filtered);
 
             filtered.forEach(item => {
@@ -1397,7 +1474,7 @@
                 tr.innerHTML = `
                     <td class="date-col">${item.transaction_date}</td>
                     <td class="title-col">${item.game_title}</td>
-                    <td class="desc-col">${item.item_description}</td>
+                    <td class="origin-col desc-col">${item.item_description}</td>
                     <td><span class="sub-tag">${item.platform_type}</span></td>
                     <td style="text-align: right;">${item.playtime_hours ? `${item.playtime_hours}h` : '-'}</td>
                     <td class="price-col">${item.price_uah ? `${item.price_uah.toFixed(2)} ₴` : '-'}</td>
@@ -1440,7 +1517,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderFinishedMedia('2026');
             bindAppleInteractions();
-            initReveal(); // Вызываем анимацию при первой загрузке страницы
+            initReveal();
         });
     </script>
 </body>
