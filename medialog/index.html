@@ -120,11 +120,11 @@
             margin-bottom: 12px;
         }
 
-        /* УНИВЕРСАЛЬНАЯ КНОПКА ТЕМЫ (и для мобайла, и для десктопа) */
+        /* УНИВЕРСАЛЬНАЯ КНОПКА ТЕМЫ (мобильная) */
         .theme-toggle-btn {
             background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--nav-border);
             color: var(--text-muted);
             width: 44px;
@@ -152,7 +152,6 @@
             transition: none !important;
         }
 
-        /* СТИЛЬ ИКОНКИ SVG */
         .theme-icon-svg {
             width: 20px;
             height: 20px;
@@ -199,7 +198,7 @@
             color: var(--accent-steelbook, #f97316);
         }
 
-        /* КОНТЕЙНЕР НАВИГАЦИИ (идеальное центрирование) */
+        /* КОНТЕЙНЕР НАВИГАЦИИ */
         .sticky-nav-wrapper {
             display: flex;
             justify-content: center;
@@ -211,6 +210,7 @@
         }
 
         .nav-tabs {
+            position: relative;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -226,25 +226,21 @@
 
         /* ДЕСКТОП И ЛАНДШАФТ ПЛАНШЕТА */
         @media (min-width: 600px) {
-            header {
-                margin-bottom: 45px; 
-            }
-            
-            /* Скрываем верхнюю плашку с мобильной кнопкой темы */
+            header { margin-bottom: 45px; }
             .top-bar { display: none; }
 
-            /* Липкий контейнер на всю ширину (1100px), чтобы элементы были идеально выровнены по краям */
             .sticky-nav-wrapper {
+                margin: 0 auto 35px;
                 position: sticky;
                 top: 20px;
-                pointer-events: none; /* Пропускаем клики сквозь пустую область */
+                max-width: 1100px;
+                pointer-events: none;
             }
 
             .nav-tabs, .theme-toggle-btn-desktop {
-                pointer-events: auto; /* Включаем клики для кнопок */
+                pointer-events: auto;
             }
 
-            /* Кнопка темы жестко привязана к правому краю 1100px контейнера */
             .theme-toggle-btn-desktop {
                 display: flex !important;
                 position: absolute;
@@ -253,30 +249,64 @@
                 height: 46px;
             }
 
-            /* Красивая подсветка при прокрутке для темной темы */
-            .nav-tabs.scrolled,
-            .theme-toggle-btn.scrolled {
-                backdrop-filter: blur(32px) saturate(200%) !important;
-                -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
-                border-color: rgba(255, 255, 255, 0.4) !important;
-                box-shadow: 
-                    0 0 15px rgba(255, 255, 255, 0.15),
-                    0 0 5px rgba(255, 255, 255, 0.3),
-                    0 25px 50px -12px rgba(0, 0, 0, 0.7),
-                    inset 0 0 12px rgba(255, 255, 255, 0.1) !important;
-                background: rgba(15, 23, 42, 0.65) !important; 
+            .scroll-to-top-btn {
+                width: 46px;
+                height: 46px;
+                right: max(20px, calc((100vw - 1100px) / 2 + 20px));
             }
-            .theme-toggle-btn.scrolled { color: var(--text); }
 
-            /* Идеальная, четкая подсветка и тень для светлой темы */
+            /* 
+               МАГИЯ: Ауры размытия (Blur Halo) 
+               Отдельный слой, фиксированный позади элементов для размытия окружения
+            */
+            .sticky-nav-wrapper::before {
+                content: "";
+                position: fixed; 
+                top: 0; 
+                left: 0; 
+                right: 0;
+                height: 140px; /* Захватываем область вокруг кнопок с запасом для градиента */
+                z-index: -1;
+                backdrop-filter: blur(35px) saturate(200%);
+                -webkit-backdrop-filter: blur(35px) saturate(200%);
+                -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+                mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.5s ease;
+            }
+
+            .sticky-nav-wrapper.scrolled::before {
+                opacity: 1;
+            }
+
+            /* Единый стиль стеклянных кнопок при скролле (ТЕМНАЯ ТЕМА) */
+            .nav-tabs.scrolled,
+            .theme-toggle-btn.scrolled,
+            .scroll-to-top-btn.visible {
+                backdrop-filter: blur(24px) saturate(200%) !important;
+                -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+                border-color: rgba(255, 255, 255, 0.3) !important;
+                
+                box-shadow: 
+                    0 4px 15px rgba(0, 0, 0, 0.5),
+                    0 0 15px rgba(255, 255, 255, 0.1),
+                    inset 0 0 10px rgba(255, 255, 255, 0.1) !important;
+                    
+                background: rgba(15, 23, 42, 0.55) !important; 
+                color: var(--text) !important;
+            }
+
+            /* Единый стиль стеклянных кнопок при скролле (СВЕТЛАЯ ТЕМА) */
             [data-theme="light"] .nav-tabs.scrolled,
-            [data-theme="light"] .theme-toggle-btn.scrolled {
+            [data-theme="light"] .theme-toggle-btn.scrolled,
+            [data-theme="light"] .scroll-to-top-btn.visible {
                 border-color: rgba(15, 23, 42, 0.15) !important;
                 box-shadow: 
-                    0 0 0 1px rgba(255,255,255,0.7) inset,
-                    0 12px 25px -5px rgba(0, 0, 0, 0.1),
-                    0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
-                background: rgba(255, 255, 255, 0.9) !important;
+                    0 4px 15px rgba(0, 0, 0, 0.08),
+                    0 0 15px rgba(15, 23, 42, 0.05),
+                    inset 0 0 10px rgba(255, 255, 255, 0.8) !important;
+                background: rgba(255, 255, 255, 0.7) !important;
             }
 
             /* Цветные пиктограммы вкладок при скролле */
@@ -289,9 +319,12 @@
             /* Вращение и окраска иконки темы */
             [data-theme="dark"] .theme-toggle-btn.scrolled .theme-icon-svg { stroke: #fbbf24 !important; transform: scale(1.2) rotate(15deg); }
             [data-theme="light"] .theme-toggle-btn.scrolled .theme-icon-svg { stroke: #6366f1 !important; transform: scale(1.2) rotate(-15deg); }
+            
+            /* Цвет иконки наверх при скролле */
+            .scroll-to-top-btn.visible svg { transition: stroke 0.4s ease, transform 0.4s ease; }
+            .scroll-to-top-btn.visible:hover svg { transform: translateY(-2px); stroke: var(--tab-active-bg); }
         }
 
-        /* Скрываем десктопную кнопку темы на мобилках */
         @media (max-width: 599px) {
             .theme-toggle-btn-desktop { display: none !important; }
         }
@@ -566,10 +599,33 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 40px); /* Учитываем padding body (20px с каждой стороны) */
+            width: calc(100% - 40px);
             max-width: 1100px;
-            pointer-events: none; /* Пропускаем клики сквозь обертку */
+            pointer-events: none; 
             z-index: 1100;
+        }
+
+        /* Аура (Blur Halo) для кнопки "Наверх" */
+        .scroll-wrapper::before {
+            content: "";
+            position: absolute;
+            right: -40px; /* Центрируем ореол размером 126px относительно кнопки 46px */
+            bottom: -40px;
+            width: 126px;
+            height: 126px;
+            border-radius: 50%;
+            z-index: -1;
+            backdrop-filter: blur(35px) saturate(200%);
+            -webkit-backdrop-filter: blur(35px) saturate(200%);
+            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+            mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .scroll-wrapper.visible::before {
+            opacity: 1;
         }
 
         .scroll-to-top-btn {
@@ -579,21 +635,21 @@
             width: 46px;
             height: 46px;
             background: var(--nav-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--nav-border);
             border-radius: 50%;
-            color: var(--text);
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: var(--shadow-hover);
-            pointer-events: auto; /* Включаем клики для самой кнопки */
+            box-shadow: var(--shadow);
+            pointer-events: auto; 
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px) scale(0.9);
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.2s;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, color 0.3s ease;
         }
 
         .scroll-to-top-btn.visible {
@@ -614,17 +670,26 @@
 
         .scroll-to-top-btn:hover {
             background: var(--tab-hover);
+            color: var(--text);
+        }
+        
+        .scroll-to-top-btn.visible:active,
+        .scroll-to-top-btn.visible.is-pressed {
+            transform: translateY(0) scale(0.92) !important;
+            background-color: var(--pressed-bg) !important;
+            transition: none !important;
         }
 
         @media (max-width: 599px) {
             .scroll-wrapper {
                 bottom: 90px;
-                width: calc(100% - 24px); /* Padding body 12px с каждой стороны */
+                width: calc(100% - 24px);
             }
             .scroll-to-top-btn {
                 width: 40px;
                 height: 40px;
             }
+            .scroll-wrapper::before { display: none; } /* Отключаем ореол на смартфонах для экономии ресурсов */
         }
 
         /* Оптимизация для смартфонов в альбомной ориентации */
@@ -634,16 +699,19 @@
             header { margin-bottom: 15px !important; }
             
             .sticky-nav-wrapper { margin: 0 0 15px !important; top: 10px !important; position: sticky !important; }
+            .sticky-nav-wrapper::before { height: 90px !important; } /* Уменьшаем ауру */
             
             .theme-toggle-btn-desktop { 
                 display: flex !important;
                 width: 38px !important; 
                 height: 38px !important; 
+                right: 0 !important;
             }
             
             .tab-btn { padding: 6px 14px !important; font-size: 0.75rem !important; }
             
             .scroll-wrapper { bottom: 15px !important; width: calc(100% - 32px) !important; }
+            .scroll-wrapper::before { display: none; }
             .scroll-to-top-btn { width: 38px !important; height: 38px !important; }
             
             .stats-bar { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; margin-bottom: 15px !important; }
@@ -1297,26 +1365,32 @@
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY || document.documentElement.scrollTop;
             const scrollBtn = document.getElementById('scrollToTopBtn');
+            const scrollWrapper = document.querySelector('.scroll-wrapper');
             
-            if (scrollBtn) {
+            if (scrollBtn && scrollWrapper) {
                 if (scrollY > 400) {
                     scrollBtn.classList.add('visible');
+                    scrollWrapper.classList.add('visible');
                 } else {
                     scrollBtn.classList.remove('visible');
+                    scrollWrapper.classList.remove('visible');
                 }
             }
 
             // Логика динамического эффекта для навбара и кнопки темы (только для десктопа)
             const navTabs = document.querySelector('.nav-tabs');
             const themeBtn = document.querySelector('.theme-toggle-btn-desktop');
+            const stickyNavWrapper = document.querySelector('.sticky-nav-wrapper');
             
             if (window.innerWidth >= 600) {
                 if (scrollY > 20) {
                     if(navTabs) navTabs.classList.add('scrolled');
                     if(themeBtn) themeBtn.classList.add('scrolled');
+                    if(stickyNavWrapper) stickyNavWrapper.classList.add('scrolled');
                 } else {
                     if(navTabs) navTabs.classList.remove('scrolled');
                     if(themeBtn) themeBtn.classList.remove('scrolled');
+                    if(stickyNavWrapper) stickyNavWrapper.classList.remove('scrolled');
                 }
             }
         });
