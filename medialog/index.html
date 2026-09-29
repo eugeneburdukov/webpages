@@ -263,12 +263,6 @@
             }
         }
 
-        @media (min-width: 768px) {
-            .nav-container { margin: 35px 0 45px; }
-            .tab-btn { padding: 10px 22px; font-size: 0.9rem; gap: 8px; }
-            .tab-btn svg { width: 18px; height: 18px; }
-        }
-
         /* MOBILE BOTTOM NAVIGATION BAR (iOS UITabBar style) */
         @media (max-width: 599px) {
             body { padding-bottom: 80px; }
@@ -487,6 +481,31 @@
             .stat-label { font-size: 0.55rem !important; margin-top: 2px; }
             .section-header { margin: 15px 0 10px !important; }
             .section-header h2 { font-size: 0.8rem; }
+        }
+
+        /* --- Плавное появление элементов при скролле (в стиле Apple) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease, filter 0.4s ease !important;
+            will-change: opacity, transform;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Восстанавливаем hover/active эффекты для карточек */
+        .card.reveal.active:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card.reveal.active:active,
+        .card.reveal.active.is-pressed {
+            transform: scale(0.96) !important;
+            transition: none !important;
         }
     </style>
 </head>
@@ -1093,6 +1112,44 @@
             }
         });
 
+        // --- Логика плавного появления (Intersection Observer) ---
+        const scrollObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px 0px -20px 0px',
+            threshold: 0
+        });
+
+        function initReveal() {
+            const elementsToReveal = document.querySelectorAll('.card:not(.reveal), .stat-card:not(.reveal), .section-header:not(.reveal)');
+            
+            elementsToReveal.forEach((el, index) => {
+                // Игнорируем элементы в скрытых табах
+                if (el.closest('.hidden')) return;
+
+                // Игнорируем элементы внутри вкладки Digital Games
+                if (el.closest('#section-all-digital') || el.closest('#stats-all-digital')) return;
+
+                el.classList.add('reveal');
+                
+                el.style.transitionDelay = `${(index % 12) * 0.05}s`;
+                
+                el.addEventListener('transitionend', function(e) {
+                    if (e.propertyName === 'opacity') {
+                        el.style.transitionDelay = '0s';
+                    }
+                }, { once: true });
+
+                scrollObserver.observe(el);
+            });
+        }
+
         function switchPage(page, title, subtitle) {
             currentPage = page;
             document.getElementById('page-title').textContent = title;
@@ -1123,6 +1180,7 @@
             }
             
             bindAppleInteractions();
+            setTimeout(initReveal, 50); // Вызываем анимацию для новых элементов
         }
 
         function renderFinishedMedia(year) {
@@ -1350,6 +1408,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderFinishedMedia('2026');
             bindAppleInteractions();
+            initReveal(); // Вызываем анимацию при первой загрузке страницы
         });
     </script>
 </body>
