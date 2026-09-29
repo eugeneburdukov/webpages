@@ -101,9 +101,10 @@
         .container {
             max-width: 1100px;
             margin: 0 auto;
+            position: relative;
         }
 
-        /* HEADER & RESPONSIVE TOGGLE */
+        /* HEADER */
         header {
             display: flex;
             flex-direction: column;
@@ -119,29 +120,48 @@
             margin-bottom: 12px;
         }
 
+        /* УНИВЕРСАЛЬНАЯ КНОПКА ТЕМЫ (и для мобайла, и для десктопа) */
         .theme-toggle-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 16px;
-            border-radius: 20px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--nav-border);
+            color: var(--text-muted);
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            justify-content: center;
             box-shadow: var(--shadow);
             touch-action: manipulation;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.3s, border-color 0.3s;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, color 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            color: var(--text);
+            background: var(--tab-hover);
         }
 
         .theme-toggle-btn:active,
         .theme-toggle-btn.is-pressed {
-            transform: scale(0.94) !important;
+            transform: scale(0.92) !important;
             background-color: var(--pressed-bg) !important;
-            border-color: transparent !important;
             transition: none !important;
+        }
+
+        /* СТИЛЬ ИКОНКИ SVG */
+        .theme-icon-svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .header-content {
@@ -179,19 +199,15 @@
             color: var(--accent-steelbook, #f97316);
         }
 
-        @media (min-width: 768px) {
-            body { padding: 40px 20px; }
-            .top-bar { position: absolute; top: 0; right: 0; margin-bottom: 0; width: auto; }
-            .steelbook-header-title { font-size: 3rem; }
-            header p { font-size: 1rem; }
-        }
-
-        /* NAVIGATION MENU - DESKTOP BASE */
-        .nav-container {
+        /* КОНТЕЙНЕР НАВИГАЦИИ (идеальное центрирование) */
+        .sticky-nav-wrapper {
             display: flex;
             justify-content: center;
-            margin: 25px 0 35px;
+            align-items: center;
             width: 100%;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1000;
         }
 
         .nav-tabs {
@@ -205,52 +221,85 @@
             border: 1px solid var(--nav-border);
             border-radius: 9999px;
             box-shadow: var(--shadow);
-            /* Добавляем плавные переходы для всех меняющихся свойств */
             transition: background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
         }
 
-        /* Динамические стили навбара при скролле (только десктоп) */
+        /* ДЕСКТОП И ЛАНДШАФТ ПЛАНШЕТА */
         @media (min-width: 600px) {
-            .nav-container {
+            header {
+                margin-bottom: 45px; 
+            }
+            
+            /* Скрываем верхнюю плашку с мобильной кнопкой темы */
+            .top-bar { display: none; }
+
+            /* Липкий контейнер на всю ширину (1100px), чтобы элементы были идеально выровнены по краям */
+            .sticky-nav-wrapper {
                 position: sticky;
                 top: 20px;
-                z-index: 1000;
+                pointer-events: none; /* Пропускаем клики сквозь пустую область */
             }
-            
-            .nav-tabs.scrolled {
+
+            .nav-tabs, .theme-toggle-btn-desktop {
+                pointer-events: auto; /* Включаем клики для кнопок */
+            }
+
+            /* Кнопка темы жестко привязана к правому краю 1100px контейнера */
+            .theme-toggle-btn-desktop {
+                display: flex !important;
+                position: absolute;
+                right: 0;
+                width: 46px; 
+                height: 46px;
+            }
+
+            /* Красивая подсветка при прокрутке для темной темы */
+            .nav-tabs.scrolled,
+            .theme-toggle-btn.scrolled {
                 backdrop-filter: blur(32px) saturate(200%) !important;
                 -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
-                /* Светящаяся белая обводка и комбинированная тень */
                 border-color: rgba(255, 255, 255, 0.4) !important;
                 box-shadow: 
-                    0 0 15px rgba(255, 255, 255, 0.15), /* внешнее мягкое свечение */
-                    0 0 5px rgba(255, 255, 255, 0.3),  /* контурное свечение */
-                    0 25px 50px -12px rgba(0, 0, 0, 0.7), /* черная тень внизу для отрыва */
-                    inset 0 0 12px rgba(255, 255, 255, 0.1) /* легкое внутреннее свечение */
-                    !important;
+                    0 0 15px rgba(255, 255, 255, 0.15),
+                    0 0 5px rgba(255, 255, 255, 0.3),
+                    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+                    inset 0 0 12px rgba(255, 255, 255, 0.1) !important;
                 background: rgba(15, 23, 42, 0.65) !important; 
             }
-            
-            [data-theme="light"] .nav-tabs.scrolled {
-                border-color: rgba(15, 23, 42, 0.25) !important;
+            .theme-toggle-btn.scrolled { color: var(--text); }
+
+            /* Идеальная, четкая подсветка и тень для светлой темы */
+            [data-theme="light"] .nav-tabs.scrolled,
+            [data-theme="light"] .theme-toggle-btn.scrolled {
+                border-color: rgba(15, 23, 42, 0.15) !important;
                 box-shadow: 
-                    0 0 15px rgba(15, 23, 42, 0.1),
-                    0 0 5px rgba(15, 23, 42, 0.15),
-                    0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
-                background: rgba(241, 245, 249, 0.85) !important;
+                    0 0 0 1px rgba(255,255,255,0.7) inset,
+                    0 12px 25px -5px rgba(0, 0, 0, 0.1),
+                    0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+                background: rgba(255, 255, 255, 0.9) !important;
             }
 
-            /* Цветные пиктограммы при скролле (только для НЕАКТИВНЫХ кнопок) */
-            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2022-2025"] svg { stroke: var(--accent-book) !important; }
-            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2026"] svg { stroke: var(--accent-game) !important; }
-            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="steelbooks"] svg { stroke: var(--accent-steelbook) !important; }
-            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="ps-discs"] svg { stroke: var(--accent-ps) !important; }
-            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="all-digital"] svg { stroke: var(--accent-digital) !important; }
+            /* Цветные пиктограммы вкладок при скролле */
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2022-2025"] svg { stroke: var(--accent-book) !important; transform: scale(1.15); }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2026"] svg { stroke: var(--accent-game) !important; transform: scale(1.15); }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="steelbooks"] svg { stroke: var(--accent-steelbook) !important; transform: scale(1.15); }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="ps-discs"] svg { stroke: var(--accent-ps) !important; transform: scale(1.15); }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="all-digital"] svg { stroke: var(--accent-digital) !important; transform: scale(1.15); }
 
-            /* Легкое увеличение пиктограмм при скролле */
-            .nav-tabs.scrolled .tab-btn:not(.active) svg {
-                transform: scale(1.15);
-            }
+            /* Вращение и окраска иконки темы */
+            [data-theme="dark"] .theme-toggle-btn.scrolled .theme-icon-svg { stroke: #fbbf24 !important; transform: scale(1.2) rotate(15deg); }
+            [data-theme="light"] .theme-toggle-btn.scrolled .theme-icon-svg { stroke: #6366f1 !important; transform: scale(1.2) rotate(-15deg); }
+        }
+
+        /* Скрываем десктопную кнопку темы на мобилках */
+        @media (max-width: 599px) {
+            .theme-toggle-btn-desktop { display: none !important; }
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 40px 20px; }
+            .steelbook-header-title { font-size: 3rem; }
+            header p { font-size: 1rem; }
         }
 
         .tab-btn {
@@ -312,7 +361,7 @@
         /* MOBILE BOTTOM NAVIGATION BAR (iOS UITabBar style) */
         @media (max-width: 599px) {
             body { padding-bottom: 80px; }
-            .nav-container {
+            .sticky-nav-wrapper {
                 position: fixed; bottom: 0; left: 0; right: 0; margin: 0;
                 padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
                 background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -511,13 +560,24 @@
         .sortable:hover { background-color: var(--tab-hover); }
         .sort-icon { display: inline-block; margin-left: 4px; font-size: 0.75rem; color: var(--text-muted); }
 
-        /* Стили для плавающей кнопки «Вверх» */
-        .scroll-to-top-btn {
+        /* ИДЕАЛЬНО ВЫРОВНЕННАЯ КНОПКА «ВВЕРХ» */
+        .scroll-wrapper {
             position: fixed;
             bottom: 30px;
-            right: 30px;
-            width: 44px;
-            height: 44px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px); /* Учитываем padding body (20px с каждой стороны) */
+            max-width: 1100px;
+            pointer-events: none; /* Пропускаем клики сквозь обертку */
+            z-index: 1100;
+        }
+
+        .scroll-to-top-btn {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 46px;
+            height: 46px;
             background: var(--nav-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -529,7 +589,7 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: var(--shadow-hover);
-            z-index: 1100;
+            pointer-events: auto; /* Включаем клики для самой кнопки */
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px) scale(0.9);
@@ -557,9 +617,11 @@
         }
 
         @media (max-width: 599px) {
-            .scroll-to-top-btn {
+            .scroll-wrapper {
                 bottom: 90px;
-                right: 20px;
+                width: calc(100% - 24px); /* Padding body 12px с каждой стороны */
+            }
+            .scroll-to-top-btn {
                 width: 40px;
                 height: 40px;
             }
@@ -569,12 +631,21 @@
         @media (max-height: 500px) and (orientation: landscape) {
             body { padding: 10px 16px !important; }
             .steelbook-header-title { font-size: 1.5rem !important; }
-            header { margin-bottom: 5px; }
-            header p { font-size: 0.85rem !important; margin-top: 4px; }
-            .top-bar { top: 0px !important; right: 10px !important; }
-            .nav-container { margin: 10px 0 15px !important; }
+            header { margin-bottom: 15px !important; }
+            
+            .sticky-nav-wrapper { margin: 0 0 15px !important; top: 10px !important; position: sticky !important; }
+            
+            .theme-toggle-btn-desktop { 
+                display: flex !important;
+                width: 38px !important; 
+                height: 38px !important; 
+            }
+            
             .tab-btn { padding: 6px 14px !important; font-size: 0.75rem !important; }
-            .tab-btn svg { width: 14px !important; height: 14px !important; }
+            
+            .scroll-wrapper { bottom: 15px !important; width: calc(100% - 32px) !important; }
+            .scroll-to-top-btn { width: 38px !important; height: 38px !important; }
+            
             .stats-bar { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; margin-bottom: 15px !important; }
             .stat-card { padding: 8px 4px !important; }
             .stat-value { font-size: 1rem !important; }
@@ -615,9 +686,11 @@
     <div class="container">
         <header>
             <div class="top-bar">
-                <button class="theme-toggle-btn interactive-el" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
-                    <span id="theme-icon">☀️</span>
-                    <span id="theme-text">Light</span>
+                <button class="theme-toggle-btn interactive-el" id="theme-toggle-mobile" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <span class="theme-icon-container">
+                        <!-- По умолчанию загружаемся в темной теме, показываем иконку солнца для переключения на светлую -->
+                        <svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </span>
                 </button>
             </div>
             <div class="header-content">
@@ -626,9 +699,9 @@
             </div>
         </header>
 
-        <!-- MODERN NAVIGATION CONTROL BAR -->
-        <nav class="nav-container" aria-label="Media category filter">
-            <div class="nav-tabs">
+        <!-- MODERN NAVIGATION CONTROL BAR & DESKTOP THEME BUTTON В ЕДИНОЙ ОБЕРТКЕ -->
+        <div class="sticky-nav-wrapper">
+            <nav class="nav-tabs" aria-label="Media category filter">
                 <button class="tab-btn interactive-el" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">
                     <svg viewBox="0 0 24 24">
                         <polyline points="21 8 21 21 3 21 3 8"></polyline>
@@ -673,8 +746,14 @@
                     </svg>
                     <span>Digital Games</span>
                 </button>
-            </div>
-        </nav>
+            </nav>
+            
+            <button class="theme-toggle-btn theme-toggle-btn-desktop interactive-el" id="theme-toggle-desktop" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <span class="theme-icon-container">
+                    <svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </span>
+            </button>
+        </div>
 
         <!-- STATS SECTIONS -->
         <div class="stats-bar" id="stats-games-books">
@@ -901,14 +980,17 @@
                 </table>
             </div>
         </div>
+        
+        <!-- Кнопка «Наверх» с идеальным выравниванием -->
+        <div class="scroll-wrapper">
+            <button class="scroll-to-top-btn interactive-el" id="scrollToTopBtn" onclick="scrollToTop()" aria-label="Scroll to top">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+            </button>
+        </div>
+        
     </div>
-
-    <!-- Кнопка «Наверх» -->
-    <button class="scroll-to-top-btn interactive-el" id="scrollToTopBtn" onclick="scrollToTop()" aria-label="Scroll to top">
-        <svg viewBox="0 0 24 24">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
 
     <script>
         const mediaData = {
@@ -1155,6 +1237,10 @@
 
         const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
         const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        
+        // Новые утонченные SVG-иконки для переключателя темы (добавлен класс theme-icon-svg)
+        const sunIcon = `<svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+        const moonIcon = `<svg class="theme-icon-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
 
         function bindAppleInteractions() {
             const interactives = document.querySelectorAll('.interactive-el, .card');
@@ -1207,7 +1293,7 @@
             smoothScrollToTop(850);
         }
 
-        // Поведение кнопки «Вверх» и динамической панели при скролле
+        // Поведение кнопки «Вверх» и динамических панелей при скролле
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY || document.documentElement.scrollTop;
             const scrollBtn = document.getElementById('scrollToTopBtn');
@@ -1220,13 +1306,17 @@
                 }
             }
 
-            // Логика динамического эффекта для навбара (только для десктопа)
+            // Логика динамического эффекта для навбара и кнопки темы (только для десктопа)
             const navTabs = document.querySelector('.nav-tabs');
-            if (navTabs && window.innerWidth >= 600) {
+            const themeBtn = document.querySelector('.theme-toggle-btn-desktop');
+            
+            if (window.innerWidth >= 600) {
                 if (scrollY > 20) {
-                    navTabs.classList.add('scrolled');
+                    if(navTabs) navTabs.classList.add('scrolled');
+                    if(themeBtn) themeBtn.classList.add('scrolled');
                 } else {
-                    navTabs.classList.remove('scrolled');
+                    if(navTabs) navTabs.classList.remove('scrolled');
+                    if(themeBtn) themeBtn.classList.remove('scrolled');
                 }
             }
         });
@@ -1237,8 +1327,11 @@
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', newTheme);
 
-            document.getElementById('theme-icon').textContent = newTheme === 'dark' ? '☀️' : '🌙';
-            document.getElementById('theme-text').textContent = newTheme === 'dark' ? 'Light' : 'Dark';
+            // Обновляем иконку во всех кнопках темы
+            const iconHTML = newTheme === 'dark' ? sunIcon : moonIcon;
+            document.querySelectorAll('.theme-icon-container').forEach(container => {
+                container.innerHTML = iconHTML;
+            });
         }
 
         function toggleAppleDropdown(event) {
@@ -1564,7 +1657,14 @@
         }
 
         // Initialize Default View
+        // Проверяем текущую тему при загрузке, чтобы установить правильную иконку
         document.addEventListener('DOMContentLoaded', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const iconHTML = currentTheme === 'dark' ? sunIcon : moonIcon;
+            document.querySelectorAll('.theme-icon-container').forEach(container => {
+                container.innerHTML = iconHTML;
+            });
+            
             renderFinishedMedia('2026');
             bindAppleInteractions();
             initReveal();
