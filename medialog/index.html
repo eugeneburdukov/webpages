@@ -1068,6 +1068,35 @@
             });
         }
 
+        // --- Функция плавного скролла наверх в стиле Apple ---
+        function smoothScrollToTop(duration = 800) {
+            const startPosition = window.scrollY || window.pageYOffset;
+            if (startPosition === 0) return;
+
+            const startTime = performance.now();
+
+            // Алгоритм easeInOutQuint: плавный разгон и очень мягкое торможение
+            function easeInOutQuint(t) {
+                return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+            }
+
+            function scrollAnimation(currentTime) {
+                const timeElapsed = currentTime - startTime;
+                let progress = timeElapsed / duration;
+
+                if (progress > 1) progress = 1;
+
+                const easeProgress = easeInOutQuint(progress);
+                window.scrollTo(0, startPosition * (1 - easeProgress));
+
+                if (progress < 1) {
+                    requestAnimationFrame(scrollAnimation);
+                }
+            }
+
+            requestAnimationFrame(scrollAnimation);
+        }
+
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
@@ -1181,6 +1210,9 @@
             
             bindAppleInteractions();
             setTimeout(initReveal, 50); // Вызываем анимацию для новых элементов
+            
+            // Запускаем плавный скролл наверх
+            smoothScrollToTop(850);
         }
 
         function renderFinishedMedia(year) {
