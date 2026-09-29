@@ -186,20 +186,12 @@
             header p { font-size: 1rem; }
         }
 
-        /* NAVIGATION MENU - DESKTOP BASE (sticky только на десктопе от 600px) */
+        /* NAVIGATION MENU - DESKTOP BASE */
         .nav-container {
             display: flex;
             justify-content: center;
             margin: 25px 0 35px;
             width: 100%;
-        }
-
-        @media (min-width: 600px) {
-            .nav-container {
-                position: sticky;
-                top: 20px;
-                z-index: 1000;
-            }
         }
 
         .nav-tabs {
@@ -213,6 +205,52 @@
             border: 1px solid var(--nav-border);
             border-radius: 9999px;
             box-shadow: var(--shadow);
+            /* Добавляем плавные переходы для всех меняющихся свойств */
+            transition: background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
+        }
+
+        /* Динамические стили навбара при скролле (только десктоп) */
+        @media (min-width: 600px) {
+            .nav-container {
+                position: sticky;
+                top: 20px;
+                z-index: 1000;
+            }
+            
+            .nav-tabs.scrolled {
+                backdrop-filter: blur(32px) saturate(200%) !important;
+                -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+                /* Светящаяся белая обводка и комбинированная тень */
+                border-color: rgba(255, 255, 255, 0.4) !important;
+                box-shadow: 
+                    0 0 15px rgba(255, 255, 255, 0.15), /* внешнее мягкое свечение */
+                    0 0 5px rgba(255, 255, 255, 0.3),  /* контурное свечение */
+                    0 25px 50px -12px rgba(0, 0, 0, 0.7), /* черная тень внизу для отрыва */
+                    inset 0 0 12px rgba(255, 255, 255, 0.1) /* легкое внутреннее свечение */
+                    !important;
+                background: rgba(15, 23, 42, 0.65) !important; 
+            }
+            
+            [data-theme="light"] .nav-tabs.scrolled {
+                border-color: rgba(15, 23, 42, 0.25) !important;
+                box-shadow: 
+                    0 0 15px rgba(15, 23, 42, 0.1),
+                    0 0 5px rgba(15, 23, 42, 0.15),
+                    0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+                background: rgba(241, 245, 249, 0.85) !important;
+            }
+
+            /* Цветные пиктограммы при скролле (только для НЕАКТИВНЫХ кнопок) */
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2022-2025"] svg { stroke: var(--accent-book) !important; }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2026"] svg { stroke: var(--accent-game) !important; }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="steelbooks"] svg { stroke: var(--accent-steelbook) !important; }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="ps-discs"] svg { stroke: var(--accent-ps) !important; }
+            .nav-tabs.scrolled .tab-btn:not(.active)[data-page="all-digital"] svg { stroke: var(--accent-digital) !important; }
+
+            /* Легкое увеличение пиктограмм при скролле */
+            .nav-tabs.scrolled .tab-btn:not(.active) svg {
+                transform: scale(1.15);
+            }
         }
 
         .tab-btn {
@@ -241,7 +279,7 @@
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
-            transition: inherit;
+            transition: stroke 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.2, 1);
         }
 
         @media (min-width: 600px) {
@@ -1169,15 +1207,27 @@
             smoothScrollToTop(850);
         }
 
-        // Поведение кнопки «Вверх» при скролле
+        // Поведение кнопки «Вверх» и динамической панели при скролле
         window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY || document.documentElement.scrollTop;
             const scrollBtn = document.getElementById('scrollToTopBtn');
-            if (!scrollBtn) return;
             
-            if (window.scrollY > 400) {
-                scrollBtn.classList.add('visible');
-            } else {
-                scrollBtn.classList.remove('visible');
+            if (scrollBtn) {
+                if (scrollY > 400) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Логика динамического эффекта для навбара (только для десктопа)
+            const navTabs = document.querySelector('.nav-tabs');
+            if (navTabs && window.innerWidth >= 600) {
+                if (scrollY > 20) {
+                    navTabs.classList.add('scrolled');
+                } else {
+                    navTabs.classList.remove('scrolled');
+                }
             }
         });
 
