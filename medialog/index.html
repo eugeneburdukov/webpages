@@ -737,6 +737,72 @@
             font-size: 0.75rem;
             color: var(--text-muted);
         }
+
+        /* Оптимизация для смартфонов в альбомной ориентации (Landscape) */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 10px 16px !important;
+            }
+            
+            .steelbook-header-title {
+                font-size: 1.5rem !important; /* Уменьшаем огромный десктопный заголовок */
+            }
+            
+            header {
+                margin-bottom: 5px;
+            }
+
+            header p {
+                font-size: 0.85rem !important;
+                margin-top: 4px;
+            }
+            
+            .top-bar {
+                top: 0px !important;
+                right: 10px !important;
+            }
+
+            .nav-container {
+                margin: 10px 0 15px !important;
+            }
+
+            .tab-btn {
+                padding: 6px 14px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .tab-btn svg {
+                width: 14px !important;
+                height: 14px !important;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(4, 1fr) !important; /* Форсируем 4 карточки в один горизонтальный ряд */
+                gap: 8px !important;
+                margin-bottom: 15px !important;
+            }
+
+            .stat-card {
+                padding: 8px 4px !important;
+            }
+
+            .stat-value {
+                font-size: 1rem !important;
+            }
+
+            .stat-label {
+                font-size: 0.55rem !important;
+                margin-top: 2px;
+            }
+            
+            .section-header {
+                margin: 15px 0 10px !important;
+            }
+            
+            .section-header h2 {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 
