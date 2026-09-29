@@ -21,6 +21,10 @@
             --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
             --header-title: #0f172a;
             
+            /* Apple Guidelines Active/Pressed states (Light) */
+            --pressed-bg: rgba(0, 0, 0, 0.06);
+            --card-pressed-filter: brightness(0.92);
+            
             /* Modern Navigation Menu Variables (Light) */
             --nav-bg: rgba(226, 232, 240, 0.85);
             --nav-border: rgba(203, 213, 225, 0.6);
@@ -28,6 +32,10 @@
             --tab-active-bg: #ffffff;
             --tab-active-text: #0f172a;
             --tab-active-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+
+            /* iOS Mobile Tab Bar Variables (Light) */
+            --mobile-tab-tint: #007aff; /* Apple System Blue */
+            --mobile-tab-inactive: #8e8e93; /* Apple System Gray */
 
             --subtag-bg: #e2e8f0;
             --table-header-bg: #f1f5f9;
@@ -55,6 +63,10 @@
             --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
             --header-title: #f8fafc;
             
+            /* Apple Guidelines Active/Pressed states (Dark) */
+            --pressed-bg: rgba(255, 255, 255, 0.1);
+            --card-pressed-filter: brightness(0.8);
+            
             /* Modern Navigation Menu Variables (Dark) */
             --nav-bg: rgba(21, 29, 42, 0.85);
             --nav-border: rgba(51, 65, 85, 0.7);
@@ -63,13 +75,17 @@
             --tab-active-text: #0b0f17;
             --tab-active-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
 
+            /* iOS Mobile Tab Bar Variables (Dark) */
+            --mobile-tab-tint: #38bdf8; /* Vibrant cyan */
+            --mobile-tab-inactive: #64748b; /* Slate gray */
+
             --subtag-bg: #1e293b;
             --table-header-bg: #0f172a;
         }
 
         * {
             box-sizing: border-box;
-            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -79,6 +95,7 @@
             margin: 0;
             padding: 16px 12px;
             min-height: 100vh;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         .container {
@@ -115,12 +132,16 @@
             font-size: 0.85rem;
             font-weight: 600;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease, background-color 0.3s;
             touch-action: manipulation;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.3s, border-color 0.3s;
         }
 
-        .theme-toggle-btn:active {
-            transform: scale(0.96);
+        .theme-toggle-btn:active,
+        .theme-toggle-btn.is-pressed {
+            transform: scale(0.94) !important;
+            background-color: var(--pressed-bg) !important;
+            border-color: transparent !important;
+            transition: none !important;
         }
 
         .header-content {
@@ -137,7 +158,6 @@
             font-size: 0.95rem;
         }
 
-        /* CUSTOM APPLIED STYLES */
         .steelbook-header-title {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 800;
@@ -160,25 +180,10 @@
         }
 
         @media (min-width: 768px) {
-            body {
-                padding: 40px 20px;
-            }
-
-            .top-bar {
-                position: absolute;
-                top: 0;
-                right: 0;
-                margin-bottom: 0;
-                width: auto;
-            }
-
-            .steelbook-header-title {
-                font-size: 3rem;
-            }
-
-            header p {
-                font-size: 1rem;
-            }
+            body { padding: 40px 20px; }
+            .top-bar { position: absolute; top: 0; right: 0; margin-bottom: 0; width: auto; }
+            .steelbook-header-title { font-size: 3rem; }
+            header p { font-size: 1rem; }
         }
 
         /* NAVIGATION MENU - DESKTOP BASE */
@@ -216,13 +221,10 @@
             border-radius: 9999px;
             cursor: pointer;
             white-space: nowrap;
-            /* Разделяем анимации: быстрая трансформация для клика, плавные цвета */
-            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent; /* Убирает системный серый квадрат при тапе */
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.25s ease, color 0.25s ease, opacity 0.3s;
         }
 
-        /* Единый стиль иконок */
         .tab-btn svg {
             width: 16px;
             height: 16px;
@@ -234,134 +236,89 @@
             transition: inherit;
         }
 
-        /* Эффект легкого вдавливания кнопки при касании */
-        .tab-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* Ограничиваем hover только для устройств с мышью, чтобы он не залипал на смартфонах */
-        @media (hover: hover) {
+        @media (min-width: 600px) {
+            .tab-btn:active,
+            .tab-btn.is-pressed {
+                transform: scale(0.94) !important;
+                background-color: var(--pressed-bg) !important;
+                color: var(--text) !important;
+                transition: none !important;
+            }
             .tab-btn:hover {
                 color: var(--text);
                 background: var(--tab-hover);
             }
-        }
-
-        .tab-btn.active {
-            background: var(--tab-active-bg);
-            color: var(--tab-active-text);
-            box-shadow: var(--tab-active-shadow);
-            font-weight: 700;
+            .tab-btn.active {
+                background: var(--tab-active-bg);
+                color: var(--tab-active-text);
+                box-shadow: var(--tab-active-shadow);
+                font-weight: 700;
+            }
+            .tab-btn.active:active,
+            .tab-btn.active.is-pressed {
+                background-color: var(--tab-active-bg) !important;
+                opacity: 0.85 !important;
+                transform: scale(0.96) !important;
+                transition: none !important;
+            }
         }
 
         @media (min-width: 768px) {
-            .nav-container {
-                margin: 35px 0 45px;
-            }
-
-            .tab-btn {
-                padding: 10px 22px;
-                font-size: 0.9rem;
-                gap: 8px;
-            }
-            
-            .tab-btn svg {
-                width: 18px;
-                height: 18px;
-            }
+            .nav-container { margin: 35px 0 45px; }
+            .tab-btn { padding: 10px 22px; font-size: 0.9rem; gap: 8px; }
+            .tab-btn svg { width: 18px; height: 18px; }
         }
 
-        /* MOBILE BOTTOM NAVIGATION BAR (Screens < 600px) */
+        /* MOBILE BOTTOM NAVIGATION BAR (iOS UITabBar style) */
         @media (max-width: 599px) {
-            body {
-                padding-bottom: 80px;
-            }
-
+            body { padding-bottom: 80px; }
             .nav-container {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                margin: 0;
-                padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
-                background: var(--nav-bg);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border-top: 1px solid var(--nav-border);
-                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-                z-index: 1000;
+                position: fixed; bottom: 0; left: 0; right: 0; margin: 0;
+                padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+                background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+                border-top: 1px solid var(--nav-border); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); z-index: 1000;
             }
-
             .nav-tabs {
-                display: flex;
-                width: 100%;
-                justify-content: space-between;
-                gap: 4px;
-                padding: 0;
-                background: transparent;
-                border: none;
-                border-radius: 0;
-                box-shadow: none;
+                display: flex; width: 100%; justify-content: space-between; gap: 4px; padding: 0;
+                background: transparent; border: none; border-radius: 0; box-shadow: none;
             }
-
             .tab-btn {
-                flex: 1;
-                flex-direction: column;
-                gap: 4px;
-                padding: 8px 2px;
-                font-size: 0.65rem;
-                border-radius: 12px;
-                text-align: center;
-                white-space: normal;
-                line-height: 1.1;
+                flex: 1; flex-direction: column; gap: 4px; padding: 6px 2px;
+                font-size: 0.65rem; border-radius: 0; text-align: center; white-space: normal; line-height: 1.1;
+                background: transparent !important;
+                color: var(--mobile-tab-inactive);
+                box-shadow: none !important;
             }
-
-            .tab-btn svg {
-                width: 22px;
-                height: 22px;
+            .tab-btn svg { width: 24px; height: 24px; }
+            
+            .tab-btn.active {
+                background: transparent !important;
+                color: var(--mobile-tab-tint) !important;
+                font-weight: 600;
             }
+            
+            .tab-btn:active,
+            .tab-btn.is-pressed {
+                transform: scale(0.94) !important;
+                opacity: 0.5 !important;
+                background-color: transparent !important;
+                transition: none !important;
+            }
+            .tab-btn:hover { background: transparent; }
         }
 
         /* STATS BAR */
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;
         }
-
-        @media (min-width: 600px) {
-            .stats-bar {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-                gap: 12px;
-                margin-bottom: 35px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .stats-bar {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 20px;
-                margin-bottom: 50px;
-            }
-        }
+        @media (min-width: 600px) { .stats-bar { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 35px; } }
+        @media (min-width: 768px) { .stats-bar { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 50px; } }
 
         .stat-card {
-            background: var(--card-bg);
-            padding: 12px 8px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            border: 1px solid var(--border);
-            border-bottom: 4px solid var(--border);
+            background: var(--card-bg); padding: 12px 8px; border-radius: 12px;
+            box-shadow: var(--shadow); text-align: center; border: 1px solid var(--border); border-bottom: 4px solid var(--border);
         }
-
-        @media (min-width: 600px) {
-            .stat-card {
-                padding: 16px;
-                border-radius: 14px;
-            }
-        }
+        @media (min-width: 600px) { .stat-card { padding: 16px; border-radius: 14px; } }
 
         .stat-card.games { border-bottom-color: var(--accent-game); }
         .stat-card.books { border-bottom-color: var(--accent-book); }
@@ -369,448 +326,167 @@
         .stat-card.ps-discs { border-bottom-color: var(--accent-ps); }
         .stat-card.digital { border-bottom-color: var(--accent-digital); }
 
-        .stat-value {
-            display: block;
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--text);
-        }
+        .stat-value { display: block; font-size: 1.2rem; font-weight: 800; color: var(--text); }
+        @media (min-width: 600px) { .stat-value { font-size: 1.4rem; } }
+        @media (min-width: 768px) { .stat-value { font-size: 1.8rem; } }
 
-        @media (min-width: 600px) {
-            .stat-value {
-                font-size: 1.4rem;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .stat-value {
-                font-size: 1.8rem;
-            }
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
-            font-weight: 700;
-        }
+        .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; font-weight: 700; }
 
         /* SECTIONS & GRID */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 25px 0 15px;
-            flex-wrap: wrap;
-            gap: 12px;
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin: 25px 0 15px; flex-wrap: wrap; gap: 12px; }
+        @media (min-width: 768px) { .section-header { margin: 35px 0 20px; gap: 15px; } }
+        .section-header-title-group { display: flex; align-items: center; flex-grow: 1; }
+        .section-header h2 { margin: 0; white-space: nowrap; }
+        .line { flex-grow: 1; height: 1px; background: var(--border); margin-left: 15px; }
+
+        /* APPLE-STYLE CUSTOM DROPDOWN (UI MENU) */
+        .platform-filter-container { position: relative; display: flex; align-items: center; gap: 8px; }
+        .apple-dropdown-trigger {
+            background: var(--card-bg); color: var(--text); border: 1px solid var(--border);
+            padding: 7px 14px; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; outline: none; display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02); touch-action: manipulation;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), background-color 0.3s ease, border-color 0.2s ease;
+        }
+        .apple-dropdown-trigger:hover { border-color: var(--text-muted); }
+        
+        .apple-dropdown-trigger:active,
+        .apple-dropdown-trigger.is-pressed {
+            transform: scale(0.94) !important;
+            background-color: var(--pressed-bg) !important;
+            border-color: transparent !important;
+            transition: none !important;
         }
 
-        @media (min-width: 768px) {
-            .section-header {
-                margin: 35px 0 20px;
-                gap: 15px;
-            }
+        .apple-dropdown-trigger svg { width: 14px; height: 14px; stroke: var(--text-muted); stroke-width: 2.5; fill: none; transition: transform 0.2s ease; }
+        .apple-dropdown-trigger.open svg { transform: rotate(180deg); }
+
+        .apple-dropdown-menu {
+            position: absolute; top: calc(100% + 6px); right: 0; background: var(--card-bg);
+            border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-hover);
+            padding: 6px; min-width: 170px; z-index: 1100; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            opacity: 0; visibility: hidden; transform: translateY(-6px);
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+        }
+        .apple-dropdown-menu.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .apple-dropdown-item {
+            display: flex; align-items: center; justify-content: space-between; width: 100%;
+            padding: 8px 12px; background: transparent; border: none; border-radius: 8px;
+            color: var(--text); font-size: 0.85rem; font-weight: 500; text-align: left; cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .apple-dropdown-item:hover { background: var(--tab-hover); }
+        
+        .apple-dropdown-item:active,
+        .apple-dropdown-item.is-pressed {
+            background-color: var(--pressed-bg) !important;
+            transition: none !important;
         }
 
-        .section-header-title-group {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-        }
+        .apple-dropdown-item.selected { font-weight: 600; color: var(--accent-digital); }
+        .apple-dropdown-item .check-icon { font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.15s ease; }
+        .apple-dropdown-item.selected .check-icon { opacity: 1; }
 
-        .section-header h2 {
-            margin: 0;
-            white-space: nowrap;
-        }
-
-        .line {
-            flex-grow: 1;
-            height: 1px;
-            background: var(--border);
-            margin-left: 15px;
-        }
-
-        .platform-filter-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .platform-select {
-            background: var(--card-bg);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        @media (min-width: 480px) {
-            .grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 16px;
-            }
-        }
-
-        @media (min-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 25px;
-            }
-        }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 480px) { .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; } }
+        @media (min-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; } }
 
         .card {
-            position: relative;
-            z-index: 1;
-            background: var(--card-bg);
-            border-radius: 14px;
-            overflow: visible;
-            box-shadow: var(--shadow);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), z-index 0s;
-            display: flex;
-            flex-direction: column;
-            color: var(--text);
-            border: 1px solid var(--border);
+            position: relative; z-index: 1; background: var(--card-bg); border-radius: 14px;
+            overflow: visible; box-shadow: var(--shadow); display: flex; flex-direction: column;
+            color: var(--text); border: 1px solid var(--border); touch-action: manipulation;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), box-shadow 0.5s ease, filter 0.4s ease;
+        }
+        .card:hover { z-index: 10; transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        
+        .card:active,
+        .card.is-pressed {
+            transform: scale(0.96) !important;
+            filter: var(--card-pressed-filter) !important;
+            transition: none !important;
         }
 
-        .card:hover {
-            z-index: 10;
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .stretched-link::after {
-            content: "";
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            z-index: 1;
-        }
-
+        .stretched-link::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; }
         .hidden { display: none !important; }
 
         /* POSTER WRAPPER WITH REALISTIC CSS AURA EFFECT */
         .cover-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 392 / 500;
-            border-top-left-radius: 13px;
-            border-top-right-radius: 13px;
-            isolation: isolate;
+            position: relative; width: 100%; aspect-ratio: 392 / 500;
+            border-top-left-radius: 13px; border-top-right-radius: 13px; isolation: isolate;
         }
-
         .cover-wrapper::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: var(--poster-img);
-            background-size: cover;
-            background-position: center;
-            border-radius: 13px;
-            filter: blur(25px) brightness(1.2) saturate(1.4);
-            -webkit-filter: blur(25px) brightness(1.2) saturate(1.4);
-            opacity: 0;
-            transform: scale(0.92);
-            -webkit-transform: scale(0.92);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            z-index: 0;
-            pointer-events: none;
-            will-change: transform, opacity;
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--poster-img); background-size: cover; background-position: center;
+            border-radius: 13px; filter: blur(25px) brightness(1.2) saturate(1.4); -webkit-filter: blur(25px) brightness(1.2) saturate(1.4);
+            opacity: 0; transform: scale(0.92); -webkit-transform: scale(0.92);
+            transition: opacity 0.4s ease, transform 0.4s ease; z-index: 0; pointer-events: none; will-change: transform, opacity;
         }
-
-        .card:hover .cover-wrapper::before {
-            opacity: 0.8;
-            transform: scale(1.12);
-            -webkit-transform: scale(1.12);
-        }
+        .card:hover .cover-wrapper::before { opacity: 0.8; transform: scale(1.12); -webkit-transform: scale(1.12); }
 
         .cover {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            aspect-ratio: 392 / 500;
-            background: var(--border);
-            object-fit: cover;
-            display: block;
-            border-top-left-radius: 13px;
-            border-top-right-radius: 13px;
-            overflow: hidden;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
+            position: relative; z-index: 1; width: 100%; height: 100%; aspect-ratio: 392 / 500;
+            background: var(--border); object-fit: cover; display: block; border-top-left-radius: 13px;
+            border-top-right-radius: 13px; overflow: hidden; transform: translateZ(0); -webkit-transform: translateZ(0);
         }
 
         .info {
-            position: relative;
-            z-index: 2;
-            padding: 10px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--card-bg);
-            border-bottom-left-radius: 13px;
-            border-bottom-right-radius: 13px;
+            position: relative; z-index: 2; padding: 10px; flex-grow: 1; display: flex; flex-direction: column;
+            background: var(--card-bg); border-bottom-left-radius: 13px; border-bottom-right-radius: 13px;
         }
+        @media (min-width: 768px) { .info { padding: 18px; } }
+        .info strong { display: block; font-size: 0.82rem; margin: 6px 0; line-height: 1.3; }
+        @media (min-width: 768px) { .info strong { font-size: 1rem; margin: 10px 0; } }
 
-        @media (min-width: 768px) {
-            .info { padding: 18px; }
-        }
-
-        .info strong {
-            display: block;
-            font-size: 0.82rem;
-            margin: 6px 0;
-            line-height: 1.3;
-        }
-
-        @media (min-width: 768px) {
-            .info strong {
-                font-size: 1rem;
-                margin: 10px 0;
-            }
-        }
-
-        .tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            align-items: center;
-        }
-
-        .tag {
-            font-size: 0.58rem;
-            font-weight: 800;
-            padding: 2px 5px;
-            border-radius: 4px;
-            color: white;
-            align-self: flex-start;
-        }
-
+        .tag-container { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+        .tag { font-size: 0.58rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; color: white; align-self: flex-start; }
         .tag-game { background: var(--accent-game); }
         .tag-book { background: var(--accent-book); }
         .tag-steelbook { background: var(--accent-steelbook); }
         .tag-ps { background: var(--accent-ps); }
         .tag-switch { background: var(--accent-switch); }
 
-        .sub-tag {
-            font-size: 0.58rem;
-            font-weight: 700;
-            padding: 2px 4px;
-            border-radius: 4px;
-            background: var(--subtag-bg);
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
+        .sub-tag { font-size: 0.58rem; font-weight: 700; padding: 2px 4px; border-radius: 4px; background: var(--subtag-bg); color: var(--text-muted); text-transform: uppercase; }
 
-        .card-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: auto;
-            padding-top: 8px;
-            border-top: 1px dashed var(--border);
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .meta-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .meta-left svg {
-            width: 13px;
-            height: 13px;
-            margin-right: 4px;
-            stroke: currentColor;
-            stroke-width: 2.2;
-            fill: none;
-        }
-
-        .bluray-link {
-            position: relative;
-            z-index: 2;
-            color: var(--accent-steelbook);
-            text-decoration: none;
-            font-size: 0.68rem;
-            font-weight: 700;
-        }
-
+        .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+        .meta-left { display: flex; align-items: center; }
+        .meta-left svg { width: 13px; height: 13px; margin-right: 4px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+        .bluray-link { position: relative; z-index: 2; color: var(--accent-steelbook); text-decoration: none; font-size: 0.68rem; font-weight: 700; }
         .bluray-link:hover { text-decoration: underline; }
-
-        .price-container {
-            margin-top: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .price-usd {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--accent-ps);
-        }
+        .price-container { margin-top: 4px; font-size: 0.75rem; font-weight: 600; color: var(--text); }
+        .price-usd { font-size: 0.75rem; font-weight: 700; color: var(--accent-ps); }
 
         /* TABLE STYLES FOR DIGITAL PURCHASES */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            background: var(--card-bg);
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            -webkit-overflow-scrolling: touch;
-        }
+        .table-responsive { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); -webkit-overflow-scrolling: touch; }
+        .custom-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+        .custom-table th { background-color: var(--table-header-bg); color: var(--text); padding: 10px 12px; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; border-bottom: 2px solid var(--border); }
+        .custom-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+        .custom-table tr:last-child td { border-bottom: none; }
+        .custom-table tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+        .date-col { font-family: monospace; font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+        .title-col { font-weight: 600; }
+        .desc-col { color: var(--text-muted); font-size: 0.8rem; }
+        .price-col { text-align: right; white-space: nowrap; font-weight: 600; }
+        .sortable { cursor: pointer; user-select: none; }
+        .sortable:hover { background-color: var(--tab-hover); }
+        .sort-icon { display: inline-block; margin-left: 4px; font-size: 0.75rem; color: var(--text-muted); }
 
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.85rem;
-        }
-
-        .custom-table th {
-            background-color: var(--table-header-bg);
-            color: var(--text);
-            padding: 10px 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .custom-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .custom-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .custom-table tr:hover td {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
-        .date-col {
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-        }
-
-        .title-col {
-            font-weight: 600;
-        }
-
-        .desc-col {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .price-col {
-            text-align: right;
-            white-space: nowrap;
-            font-weight: 600;
-        }
-
-        /* SORTABLE TABLE HEADERS */
-        .sortable {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .sortable:hover {
-            background-color: var(--tab-hover);
-        }
-
-        .sort-icon {
-            display: inline-block;
-            margin-left: 4px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        /* Оптимизация для смартфонов в альбомной ориентации (Landscape) */
+        /* Оптимизация для смартфонов в альбомной ориентации */
         @media (max-height: 500px) and (orientation: landscape) {
-            body {
-                padding: 10px 16px !important;
-            }
-            
-            .steelbook-header-title {
-                font-size: 1.5rem !important;
-            }
-            
-            header {
-                margin-bottom: 5px;
-            }
-
-            header p {
-                font-size: 0.85rem !important;
-                margin-top: 4px;
-            }
-            
-            .top-bar {
-                top: 0px !important;
-                right: 10px !important;
-            }
-
-            .nav-container {
-                margin: 10px 0 15px !important;
-            }
-
-            .tab-btn {
-                padding: 6px 14px !important;
-                font-size: 0.75rem !important;
-            }
-            
-            .tab-btn svg {
-                width: 14px !important;
-                height: 14px !important;
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(4, 1fr) !important;
-                gap: 8px !important;
-                margin-bottom: 15px !important;
-            }
-
-            .stat-card {
-                padding: 8px 4px !important;
-            }
-
-            .stat-value {
-                font-size: 1rem !important;
-            }
-
-            .stat-label {
-                font-size: 0.55rem !important;
-                margin-top: 2px;
-            }
-            
-            .section-header {
-                margin: 15px 0 10px !important;
-            }
-            
-            .section-header h2 {
-                font-size: 0.8rem;
-            }
+            body { padding: 10px 16px !important; }
+            .steelbook-header-title { font-size: 1.5rem !important; }
+            header { margin-bottom: 5px; }
+            header p { font-size: 0.85rem !important; margin-top: 4px; }
+            .top-bar { top: 0px !important; right: 10px !important; }
+            .nav-container { margin: 10px 0 15px !important; }
+            .tab-btn { padding: 6px 14px !important; font-size: 0.75rem !important; }
+            .tab-btn svg { width: 14px !important; height: 14px !important; }
+            .stats-bar { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; margin-bottom: 15px !important; }
+            .stat-card { padding: 8px 4px !important; }
+            .stat-value { font-size: 1rem !important; }
+            .stat-label { font-size: 0.55rem !important; margin-top: 2px; }
+            .section-header { margin: 15px 0 10px !important; }
+            .section-header h2 { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -820,7 +496,7 @@
     <div class="container">
         <header>
             <div class="top-bar">
-                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <button class="theme-toggle-btn interactive-el" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
                     <span id="theme-icon">☀️</span>
                     <span id="theme-text">Light</span>
                 </button>
@@ -834,7 +510,7 @@
         <!-- MODERN NAVIGATION CONTROL BAR -->
         <nav class="nav-container" aria-label="Media category filter">
             <div class="nav-tabs">
-                <button class="tab-btn" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">
+                <button class="tab-btn interactive-el" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">
                     <svg viewBox="0 0 24 24">
                         <polyline points="21 8 21 21 3 21 3 8"></polyline>
                         <rect x="1" y="3" width="22" height="5"></rect>
@@ -842,7 +518,7 @@
                     </svg>
                     <span>2022–2025</span>
                 </button>
-                <button class="tab-btn active" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">
+                <button class="tab-btn active interactive-el" data-page="2026" onclick="switchPage('2026', 'Finished in 2026', 'A gallery of my completed adventures and stories.')">
                     <svg viewBox="0 0 24 24">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -851,8 +527,7 @@
                     </svg>
                     <span>2026</span>
                 </button>
-                <button class="tab-btn" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">
-                    <!-- Movie Clapper Icon -->
+                <button class="tab-btn interactive-el" data-page="steelbooks" onclick="switchPage('steelbooks', 'Steelbook Collection', 'My boutique physical media and 4K steelbook collection.')">
                     <svg viewBox="0 0 24 24">
                         <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.4-2.2 1.5-2.5l13.5-4c1.1-.3 2.2.4 2.5 1.5z"></path>
                         <path d="m6.2 5.3 3.1 3.9"></path>
@@ -861,7 +536,7 @@
                     </svg>
                     <span>Movie Discs</span>
                 </button>
-                <button class="tab-btn" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game Discs', 'My physical collection of PlayStation and Nintendo games.')">
+                <button class="tab-btn interactive-el" data-page="ps-discs" onclick="switchPage('ps-discs', 'Game Discs', 'My physical collection of PlayStation and Nintendo games.')">
                     <svg viewBox="0 0 24 24">
                         <line x1="6" y1="12" x2="10" y2="12"></line>
                         <line x1="8" y1="10" x2="8" y2="14"></line>
@@ -871,7 +546,7 @@
                     </svg>
                     <span>Game Discs</span>
                 </button>
-                <button class="tab-btn" data-page="all-digital" onclick="switchPage('all-digital', 'Digital Purchases', 'Complete log of digital games purchased across all platforms.')">
+                <button class="tab-btn interactive-el" data-page="all-digital" onclick="switchPage('all-digital', 'Digital Purchases', 'Complete log of digital games purchased across all platforms.')">
                     <svg viewBox="0 0 24 24">
                         <polyline points="8 17 12 21 16 17"></polyline>
                         <line x1="12" y1="12" x2="12" y2="21"></line>
@@ -1048,14 +723,31 @@
                     <h2 class="steelbook-category-header" style="color: var(--accent-digital)">Digital Purchases History</h2>
                     <div class="line"></div>
                 </div>
+                <!-- APPLE-STYLE DROPDOWN REPLACEMENT -->
                 <div class="platform-filter-container">
-                    <label for="platform-filter" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Platform:</label>
-                    <select id="platform-filter" class="platform-select" onchange="filterDigitalPlatform(this.value)">
-                        <option value="all">All Platforms</option>
-                        <option value="ps">PlayStation Store</option>
-                        <option value="nintendo">Nintendo eShop</option>
-                        <option value="steam">Steam</option>
-                    </select>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Platform:</span>
+                    <button class="apple-dropdown-trigger interactive-el" id="platform-dropdown-btn" onclick="toggleAppleDropdown(event)">
+                        <span id="platform-current-label">All Platforms</span>
+                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="apple-dropdown-menu" id="platform-dropdown-menu">
+                        <button class="apple-dropdown-item selected interactive-el" onclick="selectPlatformFilter('all', 'All Platforms', this)">
+                            <span>All Platforms</span>
+                            <span class="check-icon">✓</span>
+                        </button>
+                        <button class="apple-dropdown-item interactive-el" onclick="selectPlatformFilter('ps', 'PlayStation Store', this)">
+                            <span>PlayStation Store</span>
+                            <span class="check-icon">✓</span>
+                        </button>
+                        <button class="apple-dropdown-item interactive-el" onclick="selectPlatformFilter('nintendo', 'Nintendo eShop', this)">
+                            <span>Nintendo eShop</span>
+                            <span class="check-icon">✓</span>
+                        </button>
+                        <button class="apple-dropdown-item interactive-el" onclick="selectPlatformFilter('steam', 'Steam', this)">
+                            <span>Steam</span>
+                            <span class="check-icon">✓</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -1338,6 +1030,25 @@
         const clockIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
         const bookIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
 
+        function bindAppleInteractions() {
+            const interactives = document.querySelectorAll('.interactive-el, .card');
+            interactives.forEach(el => {
+                if (el.dataset.appleBound) return;
+                el.dataset.appleBound = "true";
+
+                const press = () => el.classList.add('is-pressed');
+                const release = () => el.classList.remove('is-pressed');
+
+                el.addEventListener('touchstart', press, { passive: true });
+                el.addEventListener('touchend', release);
+                el.addEventListener('touchcancel', release);
+
+                el.addEventListener('mousedown', press);
+                el.addEventListener('mouseup', release);
+                el.addEventListener('mouseleave', release);
+            });
+        }
+
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
@@ -1347,6 +1058,40 @@
             document.getElementById('theme-icon').textContent = newTheme === 'dark' ? '☀️' : '🌙';
             document.getElementById('theme-text').textContent = newTheme === 'dark' ? 'Light' : 'Dark';
         }
+
+        function toggleAppleDropdown(event) {
+            event.stopPropagation();
+            const btn = document.getElementById('platform-dropdown-btn');
+            const menu = document.getElementById('platform-dropdown-menu');
+            const isOpen = menu.classList.contains('open');
+            
+            menu.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+        }
+
+        function selectPlatformFilter(value, label, targetBtn) {
+            activeDigitalFilter = value;
+            document.getElementById('platform-current-label').textContent = label;
+            
+            document.querySelectorAll('.apple-dropdown-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            if (targetBtn) {
+                targetBtn.classList.add('selected');
+            }
+
+            document.getElementById('platform-dropdown-menu').classList.remove('open');
+            document.getElementById('platform-dropdown-btn').classList.remove('open');
+
+            displayDigitalTable();
+        }
+
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.platform-filter-container')) {
+                document.getElementById('platform-dropdown-menu')?.classList.remove('open');
+                document.getElementById('platform-dropdown-btn')?.classList.remove('open');
+            }
+        });
 
         function switchPage(page, title, subtitle) {
             currentPage = page;
@@ -1376,6 +1121,8 @@
             } else if (page === 'all-digital') {
                 renderAllDigital();
             }
+            
+            bindAppleInteractions();
         }
 
         function renderFinishedMedia(year) {
@@ -1389,7 +1136,7 @@
 
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'card';
+                card.className = 'card interactive-el';
                 card.style.setProperty('--poster-img', `url('${item.cover}')`);
 
                 const isGame = item.type === 'game';
@@ -1443,7 +1190,7 @@
                     totalUsd += item.priceUsd || 0;
 
                     const card = document.createElement('div');
-                    card.className = 'card';
+                    card.className = 'card interactive-el';
                     card.style.setProperty('--poster-img', `url('${item.cover}')`);
 
                     card.innerHTML = `
@@ -1488,7 +1235,7 @@
                     totalSpent += item.priceUsd || 0;
 
                     const card = document.createElement('div');
-                    card.className = 'card';
+                    card.className = 'card interactive-el';
                     card.style.setProperty('--poster-img', `url('${item.cover}')`);
 
                     const isSwitch = item.platform === 'Switch';
@@ -1524,12 +1271,6 @@
             mediaData.nintendo_digital.forEach(i => combinedDigitalData.push({...i, platform_type: 'Nintendo', playtime_hours: i.playtime_hours || 0}));
             mediaData.steam_digital.forEach(i => combinedDigitalData.push({...i, platform_type: i.platform_type || 'Steam', playtime_hours: i.playtime_hours || 0}));
 
-            calculateDigitalStats(combinedDigitalData);
-            displayDigitalTable();
-        }
-
-        function filterDigitalPlatform(platform) {
-            activeDigitalFilter = platform;
             displayDigitalTable();
         }
 
@@ -1557,6 +1298,9 @@
             if (activeDigitalFilter === 'ps') filtered = filtered.filter(i => i.platform_type === 'PlayStation');
             else if (activeDigitalFilter === 'nintendo') filtered = filtered.filter(i => i.platform_type === 'Nintendo');
             else if (activeDigitalFilter === 'steam') filtered = filtered.filter(i => i.platform_type.includes('Steam'));
+
+            // Пересчитываем карточки статистики на основе отфильтрованных данных
+            calculateDigitalStats(filtered);
 
             filtered.forEach(item => {
                 const tr = document.createElement('tr');
@@ -1605,6 +1349,7 @@
         // Initialize Default View
         document.addEventListener('DOMContentLoaded', () => {
             renderFinishedMedia('2026');
+            bindAppleInteractions();
         });
     </script>
 </body>
