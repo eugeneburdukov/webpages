@@ -721,33 +721,58 @@
             .scroll-wrapper::before { display: none; } 
         }
 
+        /* ИЗМЕНЕННЫЙ РАЗДЕЛ ДЛЯ ЛАНДШАФТНОГО РЕЖИМА */
         @media (max-height: 500px) and (orientation: landscape) {
             body { padding: 10px 16px !important; }
-            .steelbook-header-title { font-size: 1.5rem !important; }
-            header { margin-bottom: 15px !important; }
+            .steelbook-header-title { font-size: 1.2rem !important; }
+            header p { font-size: 0.8rem !important; }
+            header { margin-bottom: 10px !important; }
             
             .sticky-nav-wrapper { margin: 0 0 15px !important; top: 10px !important; position: sticky !important; }
             .sticky-nav-wrapper::before { height: 90px !important; } 
             
             .theme-toggle-btn-desktop { 
                 display: flex !important;
-                width: 38px !important; 
-                height: 38px !important; 
+                width: 32px !important; 
+                height: 32px !important; 
                 right: 0 !important;
             }
+            .theme-toggle-btn-desktop svg {
+                width: 16px !important;
+                height: 16px !important;
+            }
             
-            .tab-btn { padding: 6px 14px !important; font-size: 0.75rem !important; }
+            .tab-btn { padding: 4px 10px !important; font-size: 0.7rem !important; }
+            .tab-btn svg { width: 14px !important; height: 14px !important; }
             
-            .scroll-wrapper { bottom: 15px !important; width: calc(100% - 32px) !important; }
+            .scroll-wrapper { bottom: 10px !important; width: calc(100% - 32px) !important; }
             .scroll-wrapper::before { display: none; }
-            .scroll-to-top-btn { width: 38px !important; height: 38px !important; }
+            .scroll-to-top-btn { width: 32px !important; height: 32px !important; }
+            .scroll-to-top-btn svg { width: 16px !important; height: 16px !important; }
             
             .stats-bar { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; margin-bottom: 15px !important; }
-            .stat-card { padding: 8px 4px !important; }
-            .stat-value { font-size: 1rem !important; }
-            .stat-label { font-size: 0.55rem !important; margin-top: 2px; }
-            .section-header { margin: 15px 0 10px !important; }
-            .section-header h2 { font-size: 0.8rem; }
+            .stat-card { padding: 6px 4px !important; border-radius: 8px !important; }
+            .stat-value { font-size: 0.9rem !important; }
+            .stat-label { font-size: 0.5rem !important; margin-top: 2px; }
+            
+            .section-header { margin: 10px 0 8px !important; }
+            .section-header h2 { font-size: 0.75rem !important; }
+            
+            /* Сетка для ландшафта - больше карточек (около 7-8 в ряд) */
+            .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important; gap: 10px !important; }
+            
+            .card { border-radius: 10px !important; }
+            .cover-wrapper { border-top-left-radius: 9px !important; border-top-right-radius: 9px !important; }
+            .cover-wrapper::after { border-width: 3px !important; border-top-left-radius: 10px !important; border-top-right-radius: 10px !important; }
+            .cover { border-top-left-radius: 9px !important; border-top-right-radius: 9px !important; }
+            .info { padding: 6px !important; border-bottom-left-radius: 9px !important; border-bottom-right-radius: 9px !important; }
+            .info strong { font-size: 0.65rem !important; margin: 4px 0 !important; }
+            .tag { font-size: 0.45rem !important; padding: 2px 4px !important; }
+            .sub-tag { font-size: 0.45rem !important; padding: 2px 4px !important; }
+            .card-meta { font-size: 0.55rem !important; padding-top: 4px !important; margin-top: 2px !important; }
+            .card-meta svg { width: 10px !important; height: 10px !important; }
+            .price-container { font-size: 0.6rem !important; margin-top: 2px !important; }
+            .price-usd { font-size: 0.6rem !important; }
         }
 
         .reveal {
