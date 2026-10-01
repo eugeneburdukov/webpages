@@ -804,6 +804,24 @@
             transform: scale(0.96) !important;
             transition: none !important;
         }
+
+        /* Выравнивание кнопки темы вровень с заголовком только для портретной ориентации (смартфоны) */
+        @media (max-width: 599px) and (orientation: portrait) {
+            header {
+                padding: 0 46px; /* Даем место кнопке справа и сохраняем центровку слева */
+            }
+            .top-bar {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: auto;
+                margin-bottom: 0;
+                z-index: 10;
+            }
+            .steelbook-header-title {
+                font-size: 1.45rem; /* Чуть уменьшаем шрифт, чтобы длинные заголовки влезали лучше */
+            }
+        }
     </style>
 </head>
 
