@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Log</title>
     <!-- Imported Google Fonts for Inter & Plus Jakarta Sans -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='neon' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3Cfilter id='glow' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='2.5' flood-color='%2338bdf8' flood-opacity='0.75'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%230b0f17' stroke='%231e293b' stroke-width='2'/%3E%3Cpath d='M10 27 C15 31, 20 28, 24 35 C26 31, 28 32, 28 29 C29 27, 30.5 28, 31 31 L32 29.5 L33 31 C33.5 28, 35 27, 36 29 C36 32, 38 31, 40 35 C44 28, 49 31, 54 27 C50 43, 38 45, 32 47 C26 45, 14 43, 10 27 Z' fill='url(%23neon)' filter='url(%23glow)'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -54,8 +55,8 @@
 
         [data-theme="dark"] {
             /* Dark Theme Variables */
-            --bg: #0b0f17;
-            --card-bg: #151d2a;
+            --bg: #0e1420; /* Обновлено: более светлый сине-черный фон */
+            --card-bg: #161f30; /* Обновлено: слегка осветленные карточки */
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --border: #1e293b;
@@ -68,11 +69,11 @@
             --card-pressed-filter: brightness(0.8);
             
             /* Modern Navigation Menu Variables (Dark) */
-            --nav-bg: rgba(21, 29, 42, 0.85);
+            --nav-bg: rgba(22, 31, 48, 0.85); /* Адаптировано под новый фон */
             --nav-border: rgba(51, 65, 85, 0.7);
             --tab-hover: rgba(255, 255, 255, 0.05);
             --tab-active-bg: #38bdf8;
-            --tab-active-text: #0b0f17;
+            --tab-active-text: #0e1420;
             --tab-active-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
 
             /* iOS Mobile Tab Bar Variables (Dark) */
@@ -80,7 +81,7 @@
             --mobile-tab-inactive: #64748b; /* Slate gray */
 
             --subtag-bg: #1e293b;
-            --table-header-bg: #0f172a;
+            --table-header-bg: #161f30;
         }
 
         * {
@@ -234,7 +235,8 @@
 
         /* ДЕСКТОП И ЛАНДШАФТ ПЛАНШЕТА */
         @media (min-width: 600px) {
-            header { margin-bottom: 45px; }
+            /* Уменьшен отступ между текстом заголовка и навигацией для десктопа */
+            header { margin-bottom: 20px; }
             .top-bar { display: none; }
 
             .sticky-nav-wrapper {
@@ -297,7 +299,7 @@
                     0 0 15px rgba(255, 255, 255, 0.1),
                     inset 0 0 10px rgba(255, 255, 255, 0.1) !important;
                     
-                background: rgba(15, 23, 42, 0.55) !important; 
+                background: rgba(14, 20, 32, 0.65) !important; /* Адаптировано под новый сине-черный фон */
                 color: var(--text) !important;
             }
 
@@ -313,7 +315,7 @@
                 background: rgba(255, 255, 255, 0.7) !important;
             }
 
-            /* Цветные пиктограммы неактивных вкладок при скролле (восстановлено) */
+            /* Цветные пиктограммы неактивных вкладок при скролле */
             .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2022-2025"] svg { stroke: var(--accent-book) !important; transform: scale(1.15); }
             .nav-tabs.scrolled .tab-btn:not(.active)[data-page="2026"] svg { stroke: var(--accent-game) !important; transform: scale(1.15); }
             .nav-tabs.scrolled .tab-btn:not(.active)[data-page="steelbooks"] svg { stroke: var(--accent-steelbook) !important; transform: scale(1.15); }
@@ -406,7 +408,7 @@
             }
         }
 
-        /* MOBILE BOTTOM NAVIGATION BAR (iOS UITabBar style) */
+        /* MOBILE BOTTOM NAVIGATION BAR */
         @media (max-width: 599px) {
             body { padding-bottom: 80px; }
             .sticky-nav-wrapper {
@@ -476,7 +478,7 @@
         .section-header h2 { margin: 0; white-space: nowrap; }
         .line { flex-grow: 1; height: 1px; background: var(--border); margin-left: 15px; }
 
-        /* APPLE-STYLE CUSTOM DROPDOWN (UI MENU) */
+        /* APPLE-STYLE CUSTOM DROPDOWN */
         .platform-filter-container { position: relative; display: flex; align-items: center; gap: 8px; }
         .apple-dropdown-trigger {
             background: var(--card-bg); color: var(--text); border: 1px solid var(--border);
@@ -547,10 +549,22 @@
         .stretched-link::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; }
         .hidden { display: none !important; }
 
-        /* POSTER WRAPPER WITH REALISTIC CSS AURA EFFECT */
+        /* POSTER WRAPPER */
         .cover-wrapper {
             position: relative; width: 100%; aspect-ratio: 392 / 500;
             border-top-left-radius: 13px; border-top-right-radius: 13px; isolation: isolate;
+        }
+        
+        /* Специфичное соотношение сторон для Nintendo Switch */
+        .cover-wrapper.ratio-switch {
+            aspect-ratio: 926 / 1500;
+        }
+
+        /* INNER FRAME OVERLAY TO HIDE WHITE IMAGE BORDERS */
+        .cover-wrapper::after {
+            content: ""; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border: 5px solid var(--card-bg); border-top-left-radius: 14px; border-top-right-radius: 14px;
+            z-index: 2; pointer-events: none; transition: border-color 0.4s ease, background-color 0.4s ease;
         }
         
         .cover-wrapper::before {
@@ -621,7 +635,6 @@
             z-index: 1100;
         }
 
-        /* Аура (Blur Halo) для кнопки "Наверх" */
         .scroll-wrapper::before {
             content: "";
             position: absolute;
@@ -767,7 +780,6 @@
             <div class="top-bar">
                 <button class="theme-toggle-btn interactive-el" id="theme-toggle-mobile" onclick="toggleTheme()" aria-label="Toggle Theme">
                     <span class="theme-icon-container">
-                        <!-- По умолчанию загружаемся в темной теме, показываем иконку солнца для переключения на светлую -->
                         <svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                     </span>
                 </button>
@@ -778,7 +790,6 @@
             </div>
         </header>
 
-        <!-- MODERN NAVIGATION CONTROL BAR & DESKTOP THEME BUTTON В ЕДИНОЙ ОБЕРТКЕ -->
         <div class="sticky-nav-wrapper">
             <nav class="nav-tabs" aria-label="Media category filter">
                 <button class="tab-btn interactive-el" data-page="2022-2025" onclick="switchPage('2022-2025', 'Archives: 2022 - 2025', 'A gallery of my completed adventures and stories.')">
@@ -834,7 +845,6 @@
             </button>
         </div>
 
-        <!-- STATS SECTIONS -->
         <div class="stats-bar" id="stats-games-books">
             <div class="stat-card games">
                 <span class="stat-value" id="game-count">0</span>
@@ -907,7 +917,6 @@
             </div>
         </div>
 
-        <!-- CONTENT CONTAINERS -->
         <div id="section-games-books">
             <div class="section-header">
                 <div class="section-header-title-group">
@@ -1000,7 +1009,6 @@
                     <h2 class="steelbook-category-header" style="color: var(--accent-digital)">Digital Purchases History</h2>
                     <div class="line"></div>
                 </div>
-                <!-- APPLE-STYLE DROPDOWN REPLACEMENT -->
                 <div class="platform-filter-container">
                     <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Platform:</span>
                     <button class="apple-dropdown-trigger interactive-el" id="platform-dropdown-btn" onclick="toggleAppleDropdown(event)">
@@ -1060,7 +1068,6 @@
             </div>
         </div>
         
-        <!-- Кнопка «Наверх» с идеальным выравниванием -->
         <div class="scroll-wrapper">
             <button class="scroll-to-top-btn interactive-el" id="scrollToTopBtn" onclick="scrollToTop()" aria-label="Scroll to top">
                 <svg viewBox="0 0 24 24">
@@ -1130,7 +1137,8 @@
           },
           "game_discs": {
             "switch": [
-              { "title": "The Witcher 3: Wild Hunt Complete Edition", "cover": "images/ps_discs/witcher_3_switch.jpg", "platform": "Switch", "subTag": "Game Card", "priceUsd": 59.99 }
+              { "title": "The Witcher 3: Wild Hunt Complete Edition", "cover": "images/ps_discs/witcher_3_switch.jpg", "platform": "Switch", "subTag": "Game Card", "priceUsd": 59.99 },
+              { "title": "Super Mario Galaxy + Super Mario Galaxy 2", "cover": "images/ps_discs/super_mario_galaxy_1_2.jpg", "platform": "Switch", "subTag": "Game Card", "priceUsd": 57.85 }
             ],
             "ps3": [
             { "title": "The Last of Us", "cover": "images/ps_discs/last_of_us_ps3.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 50.61 },
@@ -1139,7 +1147,11 @@
               { "title": "Assassin's Creed", "cover": "images/ps_discs/assassins_creed.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
               { "title": "Assassin's Creed II", "cover": "images/ps_discs/assassins_creed_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 24.00 },
               { "title": "Uncharted: Drake's Fortune", "cover": "images/ps_discs/uncharted_1.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
-              { "title": "Uncharted 2: Among Thieves", "cover": "images/ps_discs/uncharted_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 }
+              { "title": "Uncharted 2: Among Thieves", "cover": "images/ps_discs/uncharted_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 },
+              { "title": "Killzone Trilogy", "cover": "images/ps_discs/killzone_trilogy.png", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 73.57 },
+              { "title": "LittleBigPlanet: Game of the Year Edition", "cover": "images/ps_discs/little_big_planet_1.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 20.99 },
+              { "title": "LittleBigPlanet 2 Special Edition", "cover": "images/ps_discs/little_big_planet_2.jpg", "platform": "PS3", "subTag": "Physical Disc", "priceUsd": 0 }
+
             ],
             "ps4": [
               { "title": "Red Dead Redemption 2", "cover": "images/ps_discs/rdr2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 33.70 },
@@ -1153,7 +1165,9 @@
               { "title": "Shadow of the Tomb Raider", "cover": "images/ps_discs/shadow_of_the_tomb_raider.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
               { "title": "Assassin's Creed Unity", "cover": "images/ps_discs/ac_unity.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
               { "title": "Injustice 2", "cover": "images/ps_discs/injustice_2.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
-              { "title": "Assassin's Creed Syndicate", "cover": "images/ps_discs/ac_syndicate.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 }
+              { "title": "Assassin's Creed Syndicate", "cover": "images/ps_discs/ac_syndicate.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 59.99 },
+              { "title": "Driveclub", "cover": "images/ps_discs/driveclub.jpg", "platform": "PS4", "subTag": "Physical Disc", "priceUsd": 24.36 }
+
             ],
             "ps5": [
               { "title": "Resident Evil 2", "cover": "images/ps_discs/re2.jpg", "platform": "PS5", "subTag": "Physical Disc", "priceUsd": 19.93 },
@@ -1631,9 +1645,11 @@
 
                     const isSwitch = item.platform === 'Switch';
                     const tagClass = isSwitch ? 'tag-switch' : 'tag-ps';
+                    // Динамически применяем класс ratio-switch, если платформа Switch
+                    const wrapperClass = isSwitch ? 'cover-wrapper ratio-switch' : 'cover-wrapper';
 
                     card.innerHTML = `
-                        <div class="cover-wrapper">
+                        <div class="${wrapperClass}">
                             <img class="cover" src="${item.cover}" alt="${item.title}" loading="lazy">
                         </div>
                         <div class="info">
