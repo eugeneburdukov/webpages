@@ -344,7 +344,7 @@
         /* --- СТИЛИ ДЛЯ ВСТРОЕННЫХ ПРЕВЬЮ (INLINE) --- */
         .preview-gallery-container {
             margin-bottom: 12px;
-            padding-bottom: 0px; /* Убрана режущая линия */
+            padding-bottom: 0px;
             display: flex;
             justify-content: center;
         }
@@ -359,7 +359,7 @@
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid rgba(15, 23, 42, 0.08);
             padding: 6px;
-            border-radius: 14px; /* Идеально сочетается с карточкой */
+            border-radius: 14px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255,255,255,0.9);
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, background 0.4s ease;
         }
@@ -385,12 +385,14 @@
             width: 52px;
             height: 30px;
             object-fit: cover;
-            border-radius: 8px; /* Чуть мягче, чем сама панель */
+            border-radius: 8px;
             cursor: pointer;
             border: 1px solid rgba(0, 0, 0, 0.06);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
-            transform-origin: bottom center; /* Чтобы карточка росла вверх и не перекрывала теги */
+            transform-origin: bottom center;
+            opacity: 0.5; /* Затемняем по умолчанию */
+            filter: brightness(0.5); /* Затемняем по умолчанию */
         }
 
         [data-theme="dark"] .inline-preview-gif {
@@ -404,6 +406,8 @@
             position: relative;
             border-color: rgba(0, 0, 0, 0.15);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            opacity: 1; /* Возвращаем яркость при наведении */
+            filter: brightness(1); /* Возвращаем яркость при наведении */
         }
 
         [data-theme="dark"] .inline-preview-gif:hover {
@@ -413,8 +417,8 @@
 
         /* Эффект легкого затемнения неактивных элементов в панели */
         .preview-gallery-box:hover .inline-preview-gif:not(:hover) {
-            opacity: 0.4;
-            filter: brightness(0.8) blur(1px);
+            opacity: 0.3;
+            filter: brightness(0.4) blur(1px);
             transform: scale(0.92);
         }
 
@@ -609,7 +613,20 @@
           "finished": [
             { "year": "2026", "type": "game", "title": "Resident Evil Requiem", "cover": "images/re_requiem.jpg", "tags": ["PS5", "Digital"], "val": "13h" },
             { "year": "2026", "type": "game", "title": "Alan Wake 2", "cover": "images/alan_wake_2.jpg", "tags": ["PS5", "Physical"], "val": "30h" },
-            { "year": "2026", "type": "game", "title": "Astrobot", "cover": "images/astrobot.jpg", "tags": ["PS5", "Physical"], "val": "26h", "videos": [ { "preview": "videos/Astrobot/astrobot_1_50px.gif", "full": "videos/Astrobot/astrobot_1.mp4" }, { "preview": "videos/Astrobot/astrobot_2_50px.gif", "full": "videos/Astrobot/astrobot_2.mp4" }, { "preview": "videos/Astrobot/astrobot_3_50px.gif", "full": "videos/Astrobot/astrobot_3.mp4" } ] },            { "year": "2026", "type": "game", "title": "Resident Evil Village", "cover": "images/revillage.jpg", "tags": ["PS5", "Digital"], "val": "11h" },
+            { 
+              "year": "2026", 
+              "type": "game", 
+              "title": "Astrobot", 
+              "cover": "images/astrobot.jpg", 
+              "tags": ["PS5", "Physical"], 
+              "val": "26h", 
+              "videos": [ 
+                { "preview": "videos/Astrobot/astrobot_1_50px.gif", "preview_mp4": "videos/Astrobot/astrobot_1_preview.mp4", "full": "videos/Astrobot/astrobot_1.mp4" }, 
+                { "preview": "videos/Astrobot/astrobot_2_50px.gif", "preview_mp4": "videos/Astrobot/astrobot_2_preview.mp4", "full": "videos/Astrobot/astrobot_2.mp4" }, 
+                { "preview": "videos/Astrobot/astrobot_3_50px.gif", "preview_mp4": "videos/Astrobot/astrobot_3_preview.mp4", "full": "videos/Astrobot/astrobot_3.mp4" } 
+              ] 
+            },            
+            { "year": "2026", "type": "game", "title": "Resident Evil Village", "cover": "images/revillage.jpg", "tags": ["PS5", "Digital"], "val": "11h" },
             { "year": "2026", "type": "game", "title": "Reanimal", "cover": "images/reanimal.jpg", "tags": ["PC-Steam", "Digital"], "val": "8h" },
             { "year": "2026", "type": "game", "title": "Silent Hill 2", "cover": "images/sh2.jpg", "tags": ["PS5", "Physical"], "val": "18h" },
             { "year": "2026", "type": "game", "title": "Soma", "cover": "images/soma.jpg", "tags": ["PC-Steam", "Digital"], "val": "12h" },
@@ -1205,6 +1222,9 @@
                         const gifSrc = typeof vid === 'object' ? vid.preview : vid.replace('.mp4', '.gif');
                         const fullSrc = typeof vid === 'object' ? vid.full : vid;
                         
+                        // Берем preview_mp4 из JSON, если он указан. Иначе откатываемся к fullSrc.
+                        const previewMp4Src = (typeof vid === 'object' && vid.preview_mp4) ? vid.preview_mp4 : fullSrc;
+                        
                         const isImage = fullSrc.toLowerCase().endsWith('.png') || 
                                         fullSrc.toLowerCase().endsWith('.jpg') || 
                                         fullSrc.toLowerCase().endsWith('.jpeg');
@@ -1212,7 +1232,7 @@
                         if (isImage) {
                             return `<img src="${gifSrc}" class="inline-preview-gif" onclick="openMediaOverlay('${fullSrc}', true)" onmouseenter="showInlineImage(this, '${fullSrc}')" onmouseleave="hideInlineImage(this)" alt="Image preview">`;
                         } else {
-                            return `<img src="${gifSrc}" class="inline-preview-gif" onclick="openMediaOverlay('${fullSrc}', false)" onmouseenter="playInlineVideo(this, '${fullSrc}')" onmouseleave="stopInlineVideo(this)" alt="Gameplay preview">`;
+                            return `<img src="${gifSrc}" class="inline-preview-gif" onclick="openMediaOverlay('${fullSrc}', false)" onmouseenter="playInlineVideo(this, '${previewMp4Src}')" onmouseleave="stopInlineVideo(this)" alt="Gameplay preview">`;
                         }
                     }).join('');
                     
@@ -1225,7 +1245,6 @@
                     `;
                 }
 
-                // Изменено: videosHtml теперь стоит перед tag-container
                 card.innerHTML = `
                     <div class="cover-wrapper">
                         <img class="cover" src="${item.cover}" alt="${item.title}" loading="lazy">
