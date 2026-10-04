@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N100 Pipeline | Infrastructure Documentation</title>
+    
+    <!-- Google Fonts: Roboto for that clean, standard tech look -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Mermaid.js for the dynamic diagram -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            /* Material 3 Tonal Palette */
+            --m3-primary: #0061A4;
+            --m3-surface: #F8F9FA;
+            --m3-surface-variant: #E1E2EC;
+            --m3-on-surface: #191C1E;
+            --m3-outline: #74777F;
+            --google-blue: #4285F4;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--m3-surface);
+            color: var(--m3-on-surface);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Navigation Style */
+        header {
+            width: 100%;
+            background-color: white;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--m3-surface-variant);
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0;
+            color: var(--m3-on-surface);
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Card Component */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--m3-surface-variant);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--m3-outline);
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        /* Mermaid Responsiveness */
+        .mermaid-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 10px;
+        }
+
+        /* Screenshot Gallery Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .gallery {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .screenshot-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screenshot-item a {
+            text-decoration: none;
+            display: block;
+            cursor: zoom-in;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--m3-surface-variant);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .screenshot-item a:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .screenshot-label {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--m3-on-surface);
+        }
+
+        .footer {
+            margin: 40px 0;
+            font-size: 12px;
+            color: var(--m3-outline);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Automated Content Pipeline & Transcoding Workflow</h1>
+    </header>
+
+    <main class="main-container">
+        
+        <!-- Logic Flow Section -->
+        <div class="card">
+            <span class="section-title">System Architecture Pipeline</span>
+            <div class="mermaid-wrapper">
+                <pre class="mermaid">
+graph TD
+    classDef hunt fill:#E8F0FE,stroke:#4285F4,stroke-width:1px,color:#1967D2;
+    classDef download fill:#FEEFC3,stroke:#FBBC04,stroke-width:1px,color:#B17D06;
+    classDef storage fill:#E6F4EA,stroke:#34A853,stroke-width:1px,color:#137333;
+    classDef process fill:#FCE8E6,stroke:#EA4335,stroke-width:1px,color:#C5221F;
+    classDef view fill:#F3E5F5,stroke:#9C27B0,stroke-width:1px,color:#7B1FA2;
+
+    subgraph Acquire [1. Search & Manage]
+        A[Prowlarr]:::hunt --> B[Radarr / Sonarr]:::hunt
+    end
+
+    subgraph Intake [2. Downloader]
+        B --> C[qBittorrent]:::download
+        C --> D[(SATA: Downloads)]:::storage
+    end
+
+    subgraph Refinery [3. Tdarr GPU Pass]
+        D --> E[(SATA: Library)]:::storage
+        E -.-> F{Tdarr Server}:::process
+        F --> G[N100 QSV Node]:::process
+        G -->|HEVC Transcode| E
+    end
+
+    subgraph Play [4. Media Server]
+        E -- "API Notification" --> H[Jellyfin]:::view
+        H --> I((End Device)):::view
+    end
+
+    Acquire ==> Intake ==> Refinery ==> Play
+                </pre>
+            </div>
+        </div>
+
+        <!-- Screenshots Section -->
+        <div class="card">
+            <span class="section-title">Environment & Processing Status</span>
+            <div class="gallery">
+                
+                <!-- Item 1: gpu1.png -->
+                <div class="screenshot-item">
+                    <a href="images/gpu1.png" target="_blank" title="Click to view full size">
+                        <img src="images/gpu1.png" alt="Integrated Intel" onerror="this.src='https://via.placeholder.com/800x500?text=CasaOS+Dashboard+Missing'">
+                    </a>
+                    <p class="screenshot-label">N100 Integrated Intel</p>
+                </div>
+
+                <!-- Item 2: gpu2.png -->
+                <div class="screenshot-item">
+                    <a href="images/gpu2.png" target="_blank" title="Click to view full size">
+                        <img src="images/gpu2.png" alt="CPU/GPU Loade" onerror="this.src='https://via.placeholder.com/800x500?text=MacBook+Workspace+Missing'">
+                    </a>
+                    <p class="screenshot-label">CPU/GPU Load</p>
+                </div>
+
+                <!-- Item 3: Tdarr.png -->
+                <div class="screenshot-item">
+                    <a href="images/Tdarr.png" target="_blank" title="Click to view full size">
+                        <img src="images/Tdarr.png" alt="Tdarr Processing" onerror="this.src='https://via.placeholder.com/800x500?text=Tdarr+Status+Missing'">
+                    </a>
+                    <p class="screenshot-label">Tdarr GPU Worker Logs</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="footer">
+            Built with Mermaid.js & Material 3 • 2026 Lab Project
+        </div>
+
+    </main>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'neutral',
+            fontFamily: 'Roboto',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'stepChild'
+            }
+        });
+    </script>
+</body>
+</html>
